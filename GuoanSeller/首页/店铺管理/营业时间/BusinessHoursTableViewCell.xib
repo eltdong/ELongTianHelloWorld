@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BusinessHoursTableViewCellID" id="KGk-i7-Jjw" customClass="BusinessHoursTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="367" height="73"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="周一" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9SQ-sk-L9p">
+                        <rect key="frame" x="15" y="27" width="30" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NgN-d6-Z9p">
+                        <rect key="frame" x="50" y="24" width="25" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="9TW-2o-Ofp"/>
+                            <constraint firstAttribute="width" secondItem="NgN-d6-Z9p" secondAttribute="height" multiplier="1:1" id="Rql-2a-4dw"/>
+                        </constraints>
+                        <state key="normal" image="sel_statabg.png">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <state key="selected" image="sel_statacrbg.png"/>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E0a-3M-DXB">
+                        <rect key="frame" x="80" y="24" width="131" height="25"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <state key="normal" title="设置开始时间">
+                            <color key="titleColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O5S-AP-MA2">
+                        <rect key="frame" x="221" y="24" width="131" height="25"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <state key="normal" title="设置结束时间">
+                            <color key="titleColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                    </button>
+                </subviews>
+                <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <constraints>
+                    <constraint firstItem="NgN-d6-Z9p" firstAttribute="height" secondItem="E0a-3M-DXB" secondAttribute="height" id="0BQ-ET-FmU"/>
+                    <constraint firstAttribute="centerY" secondItem="O5S-AP-MA2" secondAttribute="centerY" id="1W1-ns-R5B"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="O5S-AP-MA2" secondAttribute="trailing" constant="7" id="2JE-ro-pgi"/>
+                    <constraint firstItem="NgN-d6-Z9p" firstAttribute="leading" secondItem="9SQ-sk-L9p" secondAttribute="trailing" constant="5" id="6uF-rp-HjD"/>
+                    <constraint firstItem="E0a-3M-DXB" firstAttribute="leading" secondItem="NgN-d6-Z9p" secondAttribute="trailing" constant="5" id="GGt-98-7jY"/>
+                    <constraint firstItem="E0a-3M-DXB" firstAttribute="width" secondItem="O5S-AP-MA2" secondAttribute="width" id="JX9-eL-Xgj"/>
+                    <constraint firstAttribute="centerY" secondItem="NgN-d6-Z9p" secondAttribute="centerY" id="TXU-qV-duq"/>
+                    <constraint firstAttribute="centerY" secondItem="9SQ-sk-L9p" secondAttribute="centerY" id="XnI-Tx-va7"/>
+                    <constraint firstItem="9SQ-sk-L9p" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="7" id="dTq-pJ-Lhv"/>
+                    <constraint firstItem="E0a-3M-DXB" firstAttribute="height" secondItem="O5S-AP-MA2" secondAttribute="height" id="dUl-CU-Vla"/>
+                    <constraint firstAttribute="centerY" secondItem="E0a-3M-DXB" secondAttribute="centerY" id="gya-Kk-hIN"/>
+                    <constraint firstItem="O5S-AP-MA2" firstAttribute="leading" secondItem="E0a-3M-DXB" secondAttribute="trailing" constant="10" id="stz-SL-uzo"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="chooseBtn" destination="NgN-d6-Z9p" id="Evp-6W-Vg1"/>
+                <outlet property="endBtn" destination="O5S-AP-MA2" id="JTy-yx-Q6I"/>
+                <outlet property="preViewBtn" destination="Fzd-HU-RaN" id="gKM-rZ-2Sg"/>
+                <outlet property="selectBtn" destination="NgN-d6-Z9p" id="XTS-Pt-LET"/>
+                <outlet property="startBtn" destination="E0a-3M-DXB" id="m66-g1-aKp"/>
+                <outlet property="weekName" destination="9SQ-sk-L9p" id="yDb-W7-1et"/>
+            </connections>
+            <point key="canvasLocation" x="254.5" y="264.5"/>
+        </tableViewCell>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="86" id="OKG-F6-EVM" customClass="BusinessHoursTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="86"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OKG-F6-EVM" id="lq2-mF-KmR">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="休假时间" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oVd-On-y44">
+                        <rect key="frame" x="15" y="25" width="52" height="16"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="oVd-On-y44" firstAttribute="top" secondItem="lq2-mF-KmR" secondAttribute="top" constant="25" id="feD-5Q-0MF"/>
+                    <constraint firstItem="oVd-On-y44" firstAttribute="leading" secondItem="lq2-mF-KmR" secondAttribute="leading" constant="15" id="hhE-29-aWg"/>
+                </constraints>
+            </tableViewCellContentView>
+            <point key="canvasLocation" x="355" y="407"/>
+        </tableViewCell>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="103" id="twj-nx-0sQ" customClass="BusinessHoursTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="103"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="twj-nx-0sQ" id="9ep-dV-M3I">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LSd-ZI-J1t">
+                        <rect key="frame" x="0.0" y="101" width="320" height="1"/>
+                        <color key="backgroundColor" red="0.94509803921568625" green="0.94509803921568625" blue="0.94509803921568625" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="y8E-yO-8ou"/>
+                        </constraints>
+                    </view>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fzd-HU-RaN">
+                        <rect key="frame" x="50" y="46" width="220" height="35"/>
+                        <color key="backgroundColor" red="0.77647058820000003" green="0.1215686275" blue="0.18039215689999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="35" id="MKZ-c2-LB1"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <state key="normal" title="预览">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="previewBtn:" destination="twj-nx-0sQ" eventType="touchUpInside" id="O5u-fF-mCl"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <constraints>
+                    <constraint firstItem="Fzd-HU-RaN" firstAttribute="leading" secondItem="9ep-dV-M3I" secondAttribute="leading" constant="50" id="Nqv-5q-xuD"/>
+                    <constraint firstAttribute="bottom" secondItem="LSd-ZI-J1t" secondAttribute="bottom" id="QOV-gO-DpN"/>
+                    <constraint firstAttribute="trailing" secondItem="LSd-ZI-J1t" secondAttribute="trailing" id="TbK-qZ-WcG"/>
+                    <constraint firstItem="LSd-ZI-J1t" firstAttribute="leading" secondItem="9ep-dV-M3I" secondAttribute="leading" id="WFO-it-Yig"/>
+                    <constraint firstAttribute="bottom" secondItem="Fzd-HU-RaN" secondAttribute="bottom" constant="21" id="bZV-Ui-z2r"/>
+                    <constraint firstAttribute="trailing" secondItem="Fzd-HU-RaN" secondAttribute="trailing" constant="50" id="l22-7U-ruy"/>
+                </constraints>
+            </tableViewCellContentView>
+            <point key="canvasLocation" x="273" y="567.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="sel_statabg.png" width="25" height="25"/>
+        <image name="sel_statacrbg.png" width="24" height="24"/>
+    </resources>
+</document>

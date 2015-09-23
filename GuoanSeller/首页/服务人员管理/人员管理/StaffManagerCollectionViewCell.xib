@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="StaffManagerCollectionViewCell" id="gTV-IL-0wX" customClass="StaffManagerCollectionViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="137" height="173"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="137" height="173"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uK9-x6-2aR">
+                        <rect key="frame" x="0.0" y="0.0" width="137" height="173"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hc6-89-s5g">
+                                <rect key="frame" x="0.0" y="0.0" width="137" height="151"/>
+                            </imageView>
+                            <view alpha="0.39999999999999963" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rvw-NK-sVd">
+                                <rect key="frame" x="0.0" y="0.0" width="137" height="151"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="娜娜" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GBa-KS-sok">
+                                <rect key="frame" x="0.0" y="159" width="137" height="16"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="elt_noxuanzhong.png" translatesAutoresizingMaskIntoConstraints="NO" id="97o-0Z-r2e">
+                                <rect key="frame" x="111" y="126" width="26" height="26"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="26" id="06Y-3S-qEv"/>
+                                    <constraint firstAttribute="width" constant="26" id="0qN-6U-yYJ"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="rvw-NK-sVd" firstAttribute="top" secondItem="uK9-x6-2aR" secondAttribute="top" id="04A-BH-wTS"/>
+                            <constraint firstAttribute="trailing" secondItem="hc6-89-s5g" secondAttribute="trailing" id="1yT-Qe-nef"/>
+                            <constraint firstItem="hc6-89-s5g" firstAttribute="leading" secondItem="uK9-x6-2aR" secondAttribute="leading" id="8M6-68-mqi"/>
+                            <constraint firstItem="GBa-KS-sok" firstAttribute="leading" secondItem="uK9-x6-2aR" secondAttribute="leading" id="Pnd-Hv-da2"/>
+                            <constraint firstAttribute="trailing" secondItem="rvw-NK-sVd" secondAttribute="trailing" id="YDH-rY-CzP"/>
+                            <constraint firstAttribute="trailing" secondItem="GBa-KS-sok" secondAttribute="trailing" id="cTZ-ca-SXx"/>
+                            <constraint firstItem="hc6-89-s5g" firstAttribute="top" secondItem="uK9-x6-2aR" secondAttribute="top" id="fG0-bl-T4J"/>
+                            <constraint firstItem="rvw-NK-sVd" firstAttribute="height" secondItem="hc6-89-s5g" secondAttribute="height" id="h8q-c4-HdS"/>
+                            <constraint firstItem="rvw-NK-sVd" firstAttribute="leading" secondItem="uK9-x6-2aR" secondAttribute="leading" id="kss-av-tlw"/>
+                            <constraint firstItem="hc6-89-s5g" firstAttribute="height" secondItem="uK9-x6-2aR" secondAttribute="height" multiplier="7:8" id="mmq-uX-Qw4"/>
+                            <constraint firstItem="GBa-KS-sok" firstAttribute="top" secondItem="97o-0Z-r2e" secondAttribute="bottom" constant="7" id="q5t-QO-Cdi"/>
+                            <constraint firstItem="GBa-KS-sok" firstAttribute="top" secondItem="hc6-89-s5g" secondAttribute="bottom" constant="8" id="t9b-7d-LEr"/>
+                            <constraint firstAttribute="trailing" secondItem="97o-0Z-r2e" secondAttribute="trailing" id="yNJ-6h-KRL"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            </view>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="uK9-x6-2aR" secondAttribute="trailing" id="SCl-HT-5Cr"/>
+                <constraint firstAttribute="bottom" secondItem="uK9-x6-2aR" secondAttribute="bottom" id="jDK-3Z-HVK"/>
+                <constraint firstItem="uK9-x6-2aR" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="nnD-Tq-fM3"/>
+                <constraint firstItem="uK9-x6-2aR" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="x6y-dq-yOL"/>
+            </constraints>
+            <connections>
+                <outlet property="blackView" destination="rvw-NK-sVd" id="aNe-zs-1MJ"/>
+                <outlet property="namelabel" destination="GBa-KS-sok" id="1B7-kB-aAl"/>
+                <outlet property="photoImage" destination="hc6-89-s5g" id="ZtW-h3-ux4"/>
+                <outlet property="selectImage" destination="97o-0Z-r2e" id="QEx-CD-f6n"/>
+            </connections>
+            <point key="canvasLocation" x="389.5" y="255.5"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="elt_noxuanzhong.png" width="26" height="26"/>
+    </resources>
+</document>
