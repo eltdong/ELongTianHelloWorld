@@ -40,7 +40,8 @@
         [_tab appearTabBar:nil];
         _tab.tabBar.translucent = NO;
     }
-    // hello github  i'm coming 圣诞节风建设的开发建设的房价数据的风景           
+    // hello github  i'm coming 圣诞节风建设的开发建设的房价数据的风景
+    //第三方奇偶数据封ID接受地分居
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
