@@ -1,0 +1,267 @@
+//
+//  OrderViewController.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/8.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTServiceOrderViewController.h"
+#import "ELTOrderViewCell.h"
+#import "ELTServiceOrderViewCell.h"
+#import "ELTCommodityOrderDetailViewController.h"
+#import "ELTServiceOrderDetailViewController.h"
+
+@interface ELTServiceOrderViewController ()<UITableViewDataSource,UITableViewDelegate,Servicecell>{
+    UIButton *_selectedBtn;//记录当前顶部按钮
+    NSInteger orderType;//订单状态
+    NSInteger _page;//页数
+}
+
+@property (nonatomic,strong) NSMutableArray * dataArray;//订单数据源
+@end
+
+@implementation ELTServiceOrderViewController
+-(void)viewWillAppear:(BOOL)animated{
+   
+       [self downRequest];//数据请求
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    [_buttonOne setTitle:@"全部" forState:UIControlStateNormal];
+    _buttonOne.titleLabel.textAlignment = NSTextAlignmentCenter;
+    _buttonOne.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    
+    [_buttonTwo setTitle:@"未完成" forState:UIControlStateNormal];
+    _buttonTwo.titleLabel.textAlignment = NSTextAlignmentCenter;
+    _buttonTwo.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    
+    [_buttonThree setTitle:@"已完成" forState:UIControlStateNormal];
+    _buttonThree.titleLabel.textAlignment = NSTextAlignmentCenter;
+    _buttonThree.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    
+    [_buttonFour setTitle:@"待评价" forState:UIControlStateNormal];
+    _buttonFour.titleLabel.textAlignment = NSTextAlignmentCenter;
+    _buttonFour.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    
+    self.title = @"我的订单";
+     
+    _page = 1;
+    
+    orderType = 0;//订单状态是全部
+    _dataArray = [NSMutableArray array];
+ 
+    [self drop_down];
+    [self drop_on];
+    
+}
+
+
+#pragma mark -  tableview delegate
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    
+    return _dataArray.count;
+    
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    
+    return 2;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row == 0) {
+        return 35;
+        
+    }else{
+        return 78+SCREENWIDTH / 4.27;
+    }
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    
+    if (indexPath.row == 0) {
+        
+        ELTOrderViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OrderViewCell"];
+        if (!cell) {
+            cell = [[[NSBundle mainBundle]loadNibNamed:@"ELTOrderViewCell" owner:self options:nil]firstObject];
+        }
+        if (_dataArray.count!=0) {
+            cell.model = [_dataArray objectAtIndex:indexPath.section];
+        
+        }
+        return cell;
+    }else{
+        
+        ELTServiceOrderViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ServiceViewCell"];
+        if (!cell) {
+            cell = [[[NSBundle mainBundle]loadNibNamed:@"ELTServiceOrderViewCell" owner:self options:nil]firstObject];
+        }
+        if (_dataArray.count!=0) {
+        cell.model = [_dataArray objectAtIndex:indexPath.section];
+         cell.delegates =self;
+        }
+        
+        return cell;
+    }
+    
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 10;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 0.01;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 10)];
+    view.backgroundColor = UIColorFromRGB(0xf5f5f5);
+    return view;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+
+        ELTMyServiceOrderModel *model = [_dataArray objectAtIndex:indexPath.section];
+        ELTServiceOrderDetailViewController *view = [[ELTServiceOrderDetailViewController alloc] init];
+        view.orderId = model.ID;
+        view.order_status = model.orderStatus;
+        [self.navigationController pushViewController:view animated:YES];
+   
+}
+
+#pragma mark - 数据请求
+- (void)downRequest{
+    
+    [self.indicator startAnimatingActivit];
+    [self.indicator setIndicatorType:ActivityIndicatorLogin];
+    [ELRequestSingle serviceOrderListWithRequest:^(BOOL sucess, id objc) {
+        
+        [self.indicator LoadSuccess];
+            if ([objc isKindOfClass:[NSString class]]) {
+                [self.bgTable.footer noticeNoMoreData];
+                [self showAlertViewWith:objc];
+
+            }else{
+                [_dataArray addObjectsFromArray:objc];
+                
+                if (_dataArray.count == 0) {
+                    [self.bgTable.footer noticeNoMoreData];
+                }else{
+                    [self.bgTable.header endRefreshing];
+                    [self.bgTable.footer endRefreshing];
+                }
+                if(_dataArray.count < 10){
+                    [self.bgTable removeFooter];
+                }
+            }
+        
+        
+            [self.bgTable reloadData];
+           [self.bgTable.header endRefreshing];
+        
+        }  andOrder_id:[NSString stringWithFormat:@"%ld",(long)orderType] andpage:_page] ;
+        
+    }
+    
+    
+
+
+/**
+ * UITableView +   传统
+ */
+- (void)drop_on
+{
+    __weak typeof(self) weakSelf = self;
+    // 添加传统的上拉刷新
+    // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
+    
+    [self.bgTable addLegendFooterWithRefreshingBlock:^{
+        _page ++;
+        [weakSelf.indicator setIndicatorType:ActivityIndicatorLogin];
+        [weakSelf downRequest];
+    }];
+}
+/**
+ * UITableView + 下拉刷新 传统
+ */
+- (void)drop_down
+{
+    __weak typeof(self) weakSelf = self;
+    // 添加传统的下拉刷新
+    // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
+    [self.bgTable addLegendHeaderWithRefreshingBlock:^{
+        _page = 1;
+        [weakSelf.dataArray removeAllObjects];
+        [weakSelf.indicator setIndicatorType:ActivityIndicatorLogin];
+        [weakSelf downRequest];
+        // 马上进入刷新状态
+    }];
+}
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+
+#pragma mark -－ 订单分类点击方法
+- (IBAction)buttonClick:(id)sender {
+    
+    UIButton *button = sender;
+    switch (button.tag) {
+        case 1:
+            orderType = 0;
+            break;
+        case 2:
+            orderType = 10;
+            break;
+        case 3:
+            orderType = 80;
+            break;
+        case 4:
+            orderType = 70;
+            break;
+        default:
+            break;
+    }
+    if (_selectedBtn.tag == button.tag) {
+        return;
+    }else{
+        [button setTitleColor:UIColorFromRGB(0xda2c41) forState:UIControlStateNormal];
+        [_selectedBtn setTitleColor:UIColorFromRGB(0x333333) forState:UIControlStateNormal];
+        _selectedBtn = button;
+        //改变评价分类下的红线frame
+        [UIView animateWithDuration:0.3 animations:^{
+            _line.frame = CGRectMake(button.frame.origin.x, _line.frame.origin.y, _line.frame.size.width, _line.frame.size.height);
+        }];
+        
+        
+    }
+    [_dataArray removeAllObjects];
+    _page = 1;
+    [self downRequest];
+}
+#pragma mark -- Servicecell代理方法，跳转到订单详情
+-(void)serSelectItemAtIndexPath:(ELTMyServiceOrderModel *)model{
+       
+    ELTServiceOrderDetailViewController *view = [[ELTServiceOrderDetailViewController alloc] init];
+    view.orderId = model.ID;
+    view.order_status = model.orderStatus;
+    [self.navigationController pushViewController:view animated:YES];
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    [_dataArray removeAllObjects];
+    _page = 1;
+}
+
+@end

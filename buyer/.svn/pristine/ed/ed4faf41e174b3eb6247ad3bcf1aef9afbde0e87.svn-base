@@ -1,0 +1,43 @@
+//
+//  MainSegmentView.h
+//  GuoanBuyer
+//
+//  Created by 徐润杰 on 15/8/2.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@protocol MainSegmentViewDelegate<NSObject>
+
+@optional
+/** 回调 */
+-(void)segMentChose:(NSInteger)index;
+
+-(void)rightBtn:(UIButton *)button;
+
+@end
+
+@interface ELTMainSegmentView : UIView
+
+@property (nonatomic,weak)id<MainSegmentViewDelegate> delegate;
+
+/**
+ 单选组件
+ 
+ @param  items  按键名称数组  不可为nil
+ @param  normalColor  按键未选中的颜色 可为nil 默认0x333333
+ @param  selectColor  按键选中的颜色 可为nil 默认[UIColor redColor]
+ @param  lineColor    底部下方线的颜色 可为nil  默认[UIColor redColor]
+ @param  frame  组件的frame  不可以nil
+ 
+ */
+-(void)items:(NSArray *)items andNormalFontColor:(UIColor *)normalColor andSelectedColor:(UIColor *)selectColor andLineColor:(UIColor *)lineColor;
+
+#pragma mark -- 对外接口
+/**
+ *  设置选中项
+ */
+-(void)setCurrentIndex:(NSInteger)index;
+
+@end

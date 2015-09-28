@@ -1,0 +1,22 @@
+//
+//  ServicePersonnel.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/6.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface ELTServicePersonnel : ELTBaseModel
+@property (nonatomic ,strong)  NSString *ID;//服务人员id
+@property (nonatomic ,strong)  NSString *name;//人员姓名
+@property (nonatomic ,strong)  NSString *content_desc;//人员简介
+@property (nonatomic ,strong)  NSString *order_num;//服务订单数量
+@property (nonatomic ,strong)  NSString *good_lead;//好评率
+@property (nonatomic ,strong)  NSString *sex;//性别
+@property (nonatomic ,strong)  NSString *revirew_num;//好评率
+@property (nonatomic, strong) NSString * img;
+
+-(instancetype)initDictionary:(NSDictionary *)dic;
+@end

@@ -1,0 +1,27 @@
+//
+//  OrderDetailTwoCell.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/31.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTOrderDetailTwoCell.h"
+
+@implementation ELTOrderDetailTwoCell
+
+- (void)awakeFromNib {
+    // Initialization code
+    self.shopImage.layer.masksToBounds=YES;
+    self.shopImage.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.shopImage.layer.borderWidth= 1.0f;
+    
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end

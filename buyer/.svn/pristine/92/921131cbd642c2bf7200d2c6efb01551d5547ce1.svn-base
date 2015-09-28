@@ -1,0 +1,22 @@
+//
+//  ELTClassModel.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/15.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTClassModel.h"
+
+@implementation ELTClassModel
+-(instancetype)initDictionary:(NSDictionary *)dic{
+    self = [super init];
+    if (self) {
+        self.auto_code = dic[@"auto_code"];
+        self.modules_name =  dic[@"modules_name"];
+        self.type = dic[@"type"];
+
+    }
+    return self;
+}
+@end

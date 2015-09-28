@@ -1,0 +1,24 @@
+//
+//  FVViewController.h
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/21.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "BaseViewController.h"
+#import "BBRShopView.h"
+/**
+ *  商品列表
+ */
+@interface ELTCommodityListViewController : BaseViewController<UITextFieldDelegate>
+{
+    BBRShopView * shopCar;//购物车button
+}
+@property (weak, nonatomic) IBOutlet UICollectionView *collection;//显示商品列表
+@property (strong, nonatomic) IBOutlet UIButton *goTop;//返回top Button
+@property (weak, nonatomic) IBOutlet UIView *barView;//底部view
+@property (nonatomic,copy) NSString *ID;//二级分类编码
+@property (nonatomic,copy) NSString *name;//title
+
+@end

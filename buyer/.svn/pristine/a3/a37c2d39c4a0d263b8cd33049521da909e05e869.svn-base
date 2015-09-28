@@ -1,0 +1,33 @@
+//
+//  JudgeTableViewCell.h
+//  Guoan Test
+//
+//  Created by 王波 on 15/7/31.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "ELTServiceOrderDetailsModel.h"
+/**
+ *  服务人员评价cell
+ */
+@interface ELTServiceJudgeTableViewCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UITextView *textView;//评价
+@property (strong, nonatomic) IBOutlet UILabel *describeLabel;//评价框占位label
+@property (weak, nonatomic) IBOutlet UIImageView *picimage;//商品图
+@property (weak, nonatomic) IBOutlet UILabel *Namelabel;//商品名称
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;//评价图片
+
+@property (weak, nonatomic) IBOutlet UILabel *more;//商品价格
+@property (weak, nonatomic) IBOutlet UIButton *photoBtn;//相机
+
+@property (strong, nonatomic) IBOutlet UIButton *goodBtn;//好评
+@property (strong, nonatomic) IBOutlet UIButton *middleBtn;//中评
+@property (strong, nonatomic) IBOutlet UIButton *badBtn;//差评
+@property (nonatomic,strong) IBOutlet UILabel *servicePersonLabel;//服务人员
+
+@property (nonatomic,strong) ELTServiceOrderDetailsModel *model;//服务模型
+
+-(IBAction)judgeClick:(id)sender;//好中差评点击事件
+
+@end

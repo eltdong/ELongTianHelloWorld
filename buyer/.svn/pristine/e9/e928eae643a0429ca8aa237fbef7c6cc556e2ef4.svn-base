@@ -1,0 +1,34 @@
+//
+//  FVDetailViewController.h
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/21.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "BaseViewController.h"
+#import "ELTCommodityDetailTwoCell.h"
+#import "JCTopic.h"
+#import "StyledPageControl.h"
+#import "BBRShopView.h"
+#import "ELTEvaluateListViewController.h"
+#import "ELTFruitAndVegatableModel.h"
+/**
+ *  商品详情
+ */
+@interface ELTCommodityDetailViewController : BaseViewController<JCTopicDelegate,shop_Sec_delegate>
+{
+    BBRShopView * shopCar;//购物车view
+}
+@property (weak, nonatomic) IBOutlet UIView *bottomBar;//底部view
+@property (nonatomic, strong) UIWebView * mainWebView;//简介
+@property (strong,nonatomic) JCTopic            * Topic;//轮播图
+@property (strong,nonatomic) UIScrollView       * mainScrollView;//轮播图父视图
+@property (nonatomic, retain) StyledPageControl * pageView;//轮播图
+@property (nonatomic, assign) BOOL isShoppingCar;////购物车跳转
+- (IBAction)reduce:(id)sender;//减少商品数量
+- (IBAction)add:(id)sender;//添加商品数量
+@property (weak, nonatomic) IBOutlet UIButton *displayBox;//商品数量
+@property (weak, nonatomic) IBOutlet UITableView *tableView;//评价列表
+@property (nonatomic,strong) ELTFruitAndVegatableModel * detailModel;//商品详情model
+@end

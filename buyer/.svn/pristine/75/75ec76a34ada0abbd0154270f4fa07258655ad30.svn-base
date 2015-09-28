@@ -1,0 +1,43 @@
+//
+//  popupboxView.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/13.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTAddressPopupboxView.h"
+#define cornerRadiusOfView 3.0f
+@implementation ELTAddressPopupboxView
++(ELTAddressPopupboxView *)instanceView{
+    NSArray * nibs = [[NSBundle mainBundle]loadNibNamed:@"ELTAddressPopupboxView" owner:nil options:nil];
+    return nibs[0];
+}
+-(id)initWithCoder:(NSCoder *)aDecoder{
+    if (self = [super initWithCoder:aDecoder]) {
+        /**
+         * 在这里不执行，在awakanib中执行，知乎？
+         */
+//        self.popview.layer.masksToBounds = YES;
+//        self.popview.layer.borderWidth = 20.f;
+//        self.popview.layer.cornerRadius = 1.0f;
+//         self.popview.layer.borderColor = [UIColor yellowColor].CGColor;
+     }
+    return self;
+}
+/**
+ *  新增地址
+ */
+- (IBAction)addAddressBtn:(id)sender {
+    [self removeFromSuperview];
+}
+-(void)awakeFromNib{
+  
+    
+    [self bringSubviewToFront:self.popview];
+    self.popview.layer.masksToBounds = YES;
+    self.popview.layer.cornerRadius = cornerRadiusOfView;
+    self.addAddressBtn.layer.masksToBounds = YES;
+    self.addAddressBtn.layer.cornerRadius = cornerRadiusOfView;
+}
+@end

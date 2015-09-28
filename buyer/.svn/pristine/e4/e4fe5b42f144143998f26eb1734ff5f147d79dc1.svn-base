@@ -1,0 +1,17 @@
+//
+//  SellerListOneCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface ELTSellerListOneCell : UITableViewCell
+/**
+ *  店铺列表cell
+ */
+@property (nonatomic,strong) IBOutlet UILabel *label;
+
+@end

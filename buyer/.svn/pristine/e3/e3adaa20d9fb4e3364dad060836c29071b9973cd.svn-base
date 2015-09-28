@@ -1,0 +1,24 @@
+//
+//  HomeViewController.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/24.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "BaseViewController.h"
+#import "JCTopic.h"
+#import "StyledPageControl.h"
+
+/**
+ *  首页
+ */
+@interface ELTHomeViewController : BaseViewController<JCTopicDelegate>
+
+@property (retain, nonatomic) JCTopic           * Topic;//轮播图
+@property (nonatomic, retain) UIScrollView      * mainScrollView;
+@property (nonatomic, retain) StyledPageControl * pageView;//轮播图上的分业控件
+
+@property (strong, nonatomic) IBOutlet UITableView *bgTable;
+
+@end

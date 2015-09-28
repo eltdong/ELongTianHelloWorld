@@ -1,0 +1,15 @@
+//
+//  WeekTime.h
+//  GuoanBuyer
+//
+//  Created by 易龙天 on 15/9/9.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface ELTWeekTimeModel : ELTBaseModel
+@property (nonatomic, copy) NSString * name;
+@property (nonatomic, copy) NSString * label;
+@property (nonatomic, copy) NSString * date;
+@end

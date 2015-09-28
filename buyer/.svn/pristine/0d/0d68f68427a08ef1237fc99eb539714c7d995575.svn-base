@@ -1,0 +1,34 @@
+//
+//  MyShopCart.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/11.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "MyShopCart.h"
+#import "ELTShopCartCommodityModel.h"
+
+@implementation MyShopCart
+
++(instancetype)myShopCartInitWithDict:(NSDictionary*)dic{
+    
+    return [[self alloc]initWithDic:dic];
+    
+}
+-(instancetype)initWithDic:(NSDictionary *)dict{
+    
+    [self setValuesForKeysWithDictionary:dict];
+    self.totalPrice = [[dict objectForKey:@"totalPrice"]doubleValue];
+    NSMutableArray *array = [NSMutableArray array];
+    for (NSDictionary *dic in _commidyList) {
+        ELTShopCartCommodityModel *model = [ELTShopCartCommodityModel commidyModelInitWithDict:dic];
+        [array addObject:model];
+    }
+    _commidyList = array;
+
+    return self;
+    
+}
+
+@end

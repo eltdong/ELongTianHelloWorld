@@ -1,0 +1,29 @@
+//
+//  EditeOrderFourCell.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTEditeOrderFourCell.h"
+
+@implementation ELTEditeOrderFourCell
+
+- (void)awakeFromNib {
+    // Initialization code
+}
+
+-(void)setModel:(ELTMyShopCart *)model{
+    _model = model;
+    _totalNumPrice.text = [NSString stringWithFormat:@"共%ld件商品",(long)_model.totalsnum];
+    _totalPriceLabel.text = [NSString stringWithFormat:@"¥%@",_model.realPay];
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end

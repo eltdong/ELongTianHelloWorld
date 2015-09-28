@@ -1,0 +1,40 @@
+//
+//  SearchCustomViewTableViewCell.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/14.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTSearchCustomViewTableViewCell.h"
+
+@interface ELTSearchCustomViewTableViewCell ()
+@property (nonatomic,strong) UIButton * selectedBtn;
+@end
+
+
+@implementation ELTSearchCustomViewTableViewCell
+
+- (void)awakeFromNib {
+    // Initialization code
+    self.selectStatusBtn.hidden = YES;
+ }
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+}
+#pragma mark 筛选按钮
+- (IBAction)screeningBtn:(id)sender {
+    if (self.delegate&&[self.delegate respondsToSelector:@selector(getScreening)]) {
+        [self.delegate getScreening];
+    }
+}
+- (IBAction)salesPriorithBtn:(id)sender {
+    self.salesPriorityBtn.selected = !self.salesPriorityBtn.selected;
+    [self.screeningBtn setTitleColor:UIColorFromRGB(0x333333) forState:UIControlStateNormal];
+    [self.selectBtnImg setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+    [self.salesPriorityBtn setTitleColor:UIColorFromRGB(0xda2c41) forState:UIControlStateNormal];
+    if (self.delegate&&[self.delegate respondsToSelector:@selector(getSalesPriority)]) {
+        [self.delegate getSalesPriority];
+    }
+}
+@end

@@ -1,0 +1,15 @@
+//
+//  EditeOrderTwoCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+/**
+ *  填写订单界面cell
+ */
+@interface ELTEditeOrderTwoCell : UITableViewCell
+
+@end

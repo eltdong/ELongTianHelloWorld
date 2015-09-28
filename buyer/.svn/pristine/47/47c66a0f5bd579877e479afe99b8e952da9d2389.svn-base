@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ELTServiceShopDeatilViewController">
+            <connections>
+                <outlet property="collectionView" destination="npj-eu-naf" id="Z6C-Gw-fj4"/>
+                <outlet property="view" destination="1Qr-hD-aem" id="eF5-xo-oBy"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="1Qr-hD-aem">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="npj-eu-naf">
+                    <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="8" minimumInteritemSpacing="8" id="nFc-FZ-0K4">
+                        <size key="itemSize" width="50" height="50"/>
+                        <size key="headerReferenceSize" width="50" height="50"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="F1T-NX-QxN"/>
+                        <outlet property="delegate" destination="-1" id="cSX-2h-z9I"/>
+                    </connections>
+                </collectionView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="npj-eu-naf" firstAttribute="top" secondItem="1Qr-hD-aem" secondAttribute="top" constant="64" id="GuX-NP-7GN"/>
+                <constraint firstItem="npj-eu-naf" firstAttribute="leading" secondItem="1Qr-hD-aem" secondAttribute="leading" id="Ms7-QE-FMA"/>
+                <constraint firstAttribute="trailing" secondItem="npj-eu-naf" secondAttribute="trailing" id="Rzb-TY-cu3"/>
+                <constraint firstAttribute="bottom" secondItem="npj-eu-naf" secondAttribute="bottom" id="kXm-41-la7"/>
+            </constraints>
+            <point key="canvasLocation" x="426" y="397"/>
+        </view>
+    </objects>
+</document>

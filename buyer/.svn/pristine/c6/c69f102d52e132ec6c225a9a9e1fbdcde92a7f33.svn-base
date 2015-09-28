@@ -1,0 +1,23 @@
+//
+//  OrderDetailCommidyModel.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/14.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface ELTCommidyOrderDetailModel : ELTBaseModel
+
+@property (nonatomic,copy) NSString *amount;//数量
+
+@property (nonatomic,copy) NSString *unit_price;//价格
+
+@property (nonatomic,copy) NSString *commodity_id;//id
+
+@property (nonatomic,copy) NSString *content_img;//图片
+
+@property (nonatomic,copy) NSString *commodity_name;//名称
+
+@end

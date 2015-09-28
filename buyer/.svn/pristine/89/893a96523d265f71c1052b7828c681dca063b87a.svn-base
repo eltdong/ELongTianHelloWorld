@@ -1,0 +1,31 @@
+//
+//  EditeOrderFourCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "ELTMyShopCart.h"
+
+@interface ELTEditeOrderFourCell : UITableViewCell
+
+@property (nonatomic,strong) IBOutlet UILabel *noCouponLabel;//没有优惠券
+
+@property (nonatomic,strong) IBOutlet UILabel *userCouponLabel;//优惠券
+
+@property (nonatomic,strong) IBOutlet UIImageView *arrowImage;//箭头
+
+@property (nonatomic,strong) IBOutlet UILabel *carriageLabel;//运费
+
+@property (strong, nonatomic) IBOutlet UILabel *totalPriceLabel;//商品总金额
+
+@property (strong, nonatomic) IBOutlet UILabel *totalNumPrice;//商品数量
+
+@property (nonatomic,strong) ELTMyShopCart *model;
+
+@property (strong, nonatomic) IBOutlet UIButton *couponBtn;//代金券按钮
+
+@property (strong, nonatomic) IBOutlet UITextField *remarkTextField;//备注输入框
+@end

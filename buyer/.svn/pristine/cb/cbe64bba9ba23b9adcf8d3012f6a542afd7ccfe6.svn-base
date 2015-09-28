@@ -1,0 +1,123 @@
+//
+//  ELNavBarSearch.m
+//  TangRen
+//
+//  Created by 易龙天 on 15/6/9.
+//  Copyright (c) 2015年 易龙天. All rights reserved.
+//
+
+#import "ELNavBarSearch.h"
+#import "Const.h"
+@implementation ELNavBarSearch
+{
+    
+}
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame]) {
+        self.frame = frame;
+        
+        _typeBtn = [ELButton buttonWithType:UIButtonTypeSystem];
+        _typeBtn.tag = 99;
+//        [_typeBtn setTitle:@"种类" forState:UIControlStateNormal];
+        [_typeBtn setImage:[UIImage imageNamed:@"typeon"] forState:UIControlStateNormal];
+        _typeBtn.tintColor = [UIColor whiteColor];
+        _typeBtn.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addSubview:_typeBtn];
+
+        _searchText = [[UIImageView alloc]init];
+        _searchText.userInteractionEnabled = YES;
+        _searchText.tag = 98;
+//        _searchText.image = [UIImage imageNamed:@"searchText"];
+        _searchText.backgroundColor = UIColorFromRGB(0xffffff);
+        _searchText.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addSubview:_searchText];
+        
+        _aLabel = [[UILabel alloc]initWithFrame:CGRectMake(23, 0, 200, 45)];
+        _aLabel.text = @"搜索";
+        _aLabel.font = [UIFont fontWithName:nil size:16];
+        _aLabel.center = CGPointMake(SCREENWIDTH / 2, 17);
+        _aLabel.textColor = UIColorFromRGB(0xb4b4b4);
+        [_searchText addSubview:_aLabel];
+        UIImageView * aImgView = [[UIImageView alloc]initWithFrame:CGRectMake(-18, 14, 16, 18)];
+        aImgView.image = [UIImage imageNamed:@"search"];
+        [_aLabel addSubview:aImgView];
+//
+        _sweepBtn = [ELButton buttonWithType:UIButtonTypeSystem];
+        _sweepBtn.tag = 97;
+        [_sweepBtn setTitle:@"我的订单" forState:UIControlStateNormal];
+//        _sweepBtn.titleLabel.font = UIFont(10);
+        _sweepBtn.tintColor = [UIColor whiteColor];
+        _sweepBtn.translatesAutoresizingMaskIntoConstraints = NO;
+//        [_sweepBtn setImage:[UIImage imageNamed:@"sweep"] forState:UIControlStateNormal];
+        
+        [self addSubview:_sweepBtn];
+        
+        [_typeBtn addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [_sweepBtn addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
+        UITapGestureRecognizer * tap_searchText  = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(textFiledClicked:)];
+        [_searchText addGestureRecognizer:tap_searchText];
+    }
+    return self;
+}
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    // 确定子控件的frame（这里得到的self的frame/bounds才是准确的）
+    //typeBtn 代码约束
+    NSLayoutConstraint * typeBtnLeftConstraint = [NSLayoutConstraint constraintWithItem:_typeBtn attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeading multiplier:1.0f constant:10.0f];
+    NSLayoutConstraint * typeBtnTopConstraint = [NSLayoutConstraint constraintWithItem:_typeBtn attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0f constant:12.0f];
+    NSLayoutConstraint* typeBtnBottomConstraint = [NSLayoutConstraint constraintWithItem:_typeBtn attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0f constant:-5.0f];
+    NSLayoutConstraint * typeBtnWidthConstraint = [NSLayoutConstraint constraintWithItem:_typeBtn attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30];
+    typeBtnTopConstraint.active = YES;
+    typeBtnLeftConstraint.active = YES;
+    typeBtnWidthConstraint.active = YES;
+    typeBtnBottomConstraint.active = YES;
+    //sweepBtn 代码约束
+    NSLayoutConstraint * sweepBtnRightConstraint = [NSLayoutConstraint constraintWithItem:_sweepBtn attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1.0f constant:-0.0f];
+    NSLayoutConstraint * sweepBtnTopConstraint = [NSLayoutConstraint constraintWithItem:_sweepBtn attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0f constant:12.0f];
+    NSLayoutConstraint* sweepBtnBottomConstraint = [NSLayoutConstraint constraintWithItem:_sweepBtn attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0f constant:-0.0f];
+    NSLayoutConstraint * sweepBtnWidthConstraint = [NSLayoutConstraint constraintWithItem:_sweepBtn attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:70];
+    sweepBtnRightConstraint.active = YES;
+    sweepBtnTopConstraint.active = YES;
+    sweepBtnBottomConstraint.active = YES;
+    sweepBtnWidthConstraint.active = YES;
+    // searchText 代码约束
+    NSLayoutConstraint * searchTextLeftConstraint;
+    if (self.typeBtnHidden) {
+        _aLabel.center = CGPointMake(200 / 2 + 35, 17);
+        self.typeBtn.hidden = YES;
+       searchTextLeftConstraint = [NSLayoutConstraint constraintWithItem:_searchText attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.0f constant:11];
+    }else{
+        _aLabel.center = CGPointMake(200 / 2 + 35, 17);
+        searchTextLeftConstraint = [NSLayoutConstraint constraintWithItem:_searchText attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:_typeBtn attribute:NSLayoutAttributeTrailing multiplier:1.0f constant:11];
+    }
+    NSLayoutConstraint * searchTextTopConstraint = [NSLayoutConstraint constraintWithItem:_searchText attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0f constant:20.0f];
+    NSLayoutConstraint* searchTextBottomConstraint = [NSLayoutConstraint constraintWithItem:_searchText attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0f constant:-10.0f];
+    NSLayoutConstraint * searchTextRightConstraint = [NSLayoutConstraint constraintWithItem:_searchText attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:_sweepBtn attribute:NSLayoutAttributeLeading multiplier:1.0 constant:-10];
+    searchTextLeftConstraint.active = YES;
+    searchTextTopConstraint.active = YES;
+    searchTextBottomConstraint.active = YES;
+    searchTextRightConstraint.active = YES;
+    
+    
+}
+
+- (void)btnClicked:(id)sender{
+    ELButton * btn = (ELButton *)sender;
+    if (btn.tag == 99) {
+        [self.delegate typeBtnClicked:sender];
+    }else{
+        [self.delegate sweepBtnClicked:sender];
+    }
+}
+- (void)textFiledClicked:(id)sender{
+    [self.delegate searchTextClicked:sender];
+}
+@end

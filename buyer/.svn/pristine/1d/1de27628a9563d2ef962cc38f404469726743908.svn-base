@@ -1,0 +1,234 @@
+//
+//  OrderDetailViewController.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/31.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTCommodityOrderDetailViewController.h"
+#import "ELTOrderDeatilTopCell.h"
+#import "ELTOrderDetailAddCell.h"
+#import "ELTCommodityOrderDetailCell.h"
+#import "ELTOrderDetailCustomCell.h"
+#import "ELTOrderDetailOneCell.h"
+#import "ELTOrderDetailTwoCell.h"
+#import "ELTOrderDetailThreeCell.h"
+#import "ELTOrderDetailCommodityCell.h"
+
+#import "ELTShopDetailViewController.h"
+
+#import "ELTOrderDetailModel.h"
+#import "ELTCommidyOrderDetailModel.h"
+
+@interface ELTCommodityOrderDetailViewController ()<UITableViewDataSource,UITableViewDelegate>{
+    NSArray *_dataArray;
+    ELTOrderDetailModel *_detailModel;
+}
+
+@end
+
+@implementation ELTCommodityOrderDetailViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    self.title = @"订单详情";
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.deleteOrder.layer.masksToBounds=YES;
+    self.deleteOrder.layer.borderColor = [UIColor colorWithRed:153.0/255.0 green:153.0/255.0 blue:153.0/255.0 alpha:1].CGColor;
+    self.deleteOrder.layer.borderWidth= 1.2f;
+    self.deleteOrder.layer.cornerRadius = 5;
+    
+    self.evaluate.layer.masksToBounds=YES;
+    self.evaluate.layer.borderColor = [UIColor colorWithRed:153.0/255.0 green:153.0/255.0 blue:153.0/255.0 alpha:1].CGColor;
+    self.evaluate.layer.borderWidth= 1.2f;
+    self.evaluate.layer.cornerRadius = 5;
+    
+    [self downRequest];
+    [self registerAllKindsCell];
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (indexPath.section == 0) {
+        
+        return 105;
+        
+    }else if (indexPath.section == 1) {
+        
+        if (indexPath.row == 0) {
+            return 30;
+        }else if (indexPath.row == _detailModel.picArray.count + 1){
+            return 75;
+        }else{
+            return 93;
+        }
+        
+    }else if (indexPath.section == 2) {
+        
+        return 80;
+        
+    }else if (indexPath.section == 3) {
+        
+        return 120;
+        
+    }else{
+        
+        return 45;
+        
+    }
+    
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 10;
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 5;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if (section == 1) {
+        return _detailModel.picArray.count + 2;
+    }else{
+        return 1;
+    }
+}
+
+-(void)registerAllKindsCell
+{
+    UINib *oneCell=[UINib nibWithNibName:@"ELTOrderDeatilTopCell" bundle:nil];
+    [self.tableView registerNib:oneCell forCellReuseIdentifier:@"OrderDeatilTopCell"];
+    
+    UINib *twoCell=[UINib nibWithNibName:@"ELTOrderDetailOneCell" bundle:nil];
+    [self.tableView registerNib:twoCell forCellReuseIdentifier:@"OrderDetailOneCell"];
+    
+    UINib *threeCell=[UINib nibWithNibName:@"ELTOrderDetailThreeCell" bundle:nil];
+    [self.tableView registerNib:threeCell forCellReuseIdentifier:@"OrderDetailThreeCell"];
+    
+    UINib *fourCell=[UINib nibWithNibName:@"ELTOrderDetailCommodityCell" bundle:nil];
+    [self.tableView registerNib:fourCell forCellReuseIdentifier:@"OrderDetailCTableViewCell"];
+    
+    UINib *fiveCell=[UINib nibWithNibName:@"ELTOrderDetailAddCell" bundle:nil];
+    [self.tableView registerNib:fiveCell forCellReuseIdentifier:@"OrderDetailAddCell"];
+    
+    UINib *sixCell=[UINib nibWithNibName:@"ELTCommodityOrderDetailCell" bundle:nil];
+    [self.tableView registerNib:sixCell forCellReuseIdentifier:@"OrderDetailCell"];
+    
+    UINib *sevenCell=[UINib nibWithNibName:@"ELTOrderDetailCustomCell" bundle:nil];
+    [self.tableView registerNib:sevenCell forCellReuseIdentifier:@"OrderDetailcustomServiceCell"];
+    
+}
+
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (indexPath.section == 0){
+        
+        ELTOrderDeatilTopCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OrderDeatilTopCell"];
+        cell.model = _detailModel;
+        return cell;
+        
+    }else if(indexPath.section == 1){
+        
+        if (indexPath.row == 0) {
+            
+            ELTOrderDetailOneCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OrderDetailOneCell"];
+            cell.shopNameLabel.text = [NSString stringWithFormat:@"店铺：%@",_detailModel.label];
+            return cell;
+        }else if (indexPath.row == _detailModel.picArray.count + 1){
+            
+            ELTOrderDetailThreeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OrderDetailThreeCell"];
+            cell.totalPriceLabel.text = _detailModel.total_price;
+            cell.discountLabel.text = _detailModel.coupon_id;
+            cell.payLabel.text = _detailModel.amount;
+            return cell;
+            
+        }else{
+            
+            ELTOrderDetailCommodityCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OrderDetailCTableViewCell"];
+            if (_detailModel.picArray) {
+                ELTCommidyOrderDetailModel *model = [_detailModel.picArray objectAtIndex:indexPath.row - 1];
+                [cell.picImage setImageWithURL:[NSURL URLWithString:model.content_img]];
+                cell.nameLabel.text = model.commodity_name;
+                cell.priceLabel.text =[NSString stringWithFormat:@"¥ %@",model.unit_price];
+                cell.countLabel.text = [NSString stringWithFormat:@"x%@",model.amount];
+            }
+            return cell;
+        }
+        
+    }else if(indexPath.section == 2){
+        
+        ELTOrderDetailAddCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OrderDetailAddCell"];
+        cell.nameLabel.text = [NSString stringWithFormat:@"收货人：%@",_detailModel.consignee];
+        cell.telLabel.text = _detailModel.consignee_phone;
+        cell.addLabel.text =[NSString stringWithFormat:@"收货地址：%@",_detailModel.address];
+        return cell;
+        
+    }else if(indexPath.section == 3){
+        
+        ELTCommodityOrderDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OrderDetailCell"];
+        cell.orderIDLabel.text = [NSString stringWithFormat:@"订单编号：%@",_detailModel.ID];
+        cell.beginTimeLabel.text = [NSString stringWithFormat:@"下单时间：%@",_detailModel.create_time];
+        //cell.serviceTimeLabel.text = [NSString stringWithFormat:@"服务时间：%@",model.]
+        cell.remarkLabel.text = [NSString stringWithFormat:@"订单备注：%@",_detailModel.order_remarks];
+        return cell;
+        
+    }else{
+        
+        ELTOrderDetailCustomCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OrderDetailcustomServiceCell"];
+        cell.telLabel.text = [NSString stringWithFormat:@"客服热线：%@",_detailModel.tel];
+        return cell;
+    }
+    
+}
+
+-(IBAction)deleteOrder:(id)sender{
+    
+}
+
+-(IBAction)evaluate:(id)sender{
+//    PingViewController *view = [[PingViewController alloc]init];
+//    [self.navigationController pushViewController:view animated:YES];
+}
+
+-(void)home:(id)sender{
+    ELTShopDetailViewController *view = [[ELTShopDetailViewController alloc]init];
+    [self.navigationController pushViewController:view animated:YES];
+}
+
+-(void)back:(id)sender{
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (void)downRequest{
+    
+    [self.indicator startAnimatingActivit];
+    [ELRequestSingle orderDetailWithRequest:^(BOOL sucess, id objc) {
+        [self.indicator LoadSuccess];
+        _dataArray = objc;
+        _detailModel = [_dataArray firstObject];
+        [self.tableView reloadData];
+    } andID:self.orderId];
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

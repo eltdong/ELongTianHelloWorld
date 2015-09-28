@@ -1,0 +1,34 @@
+//
+//  EshopDateModel.h
+//  GuoanBuyer
+//
+//  Created by 易龙天 on 15/9/10.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface ELTEShopDateModel : ELTBaseModel
+
+/*
+sDate	String	N	开始时间	例如：08:00
+eDate	String	N	结束时间	例如：09:00
+skey	int	N	开始坐标	接口提供
+ekey	int	N	结束坐标	接口提供
+hold	int	N	是否被占用	1:占用  0:未占用
+click	int	N	是否可点击	1:可点击  0:不可点击
+ */
+
+@property (nonatomic, copy) NSString * skey;
+
+@property (nonatomic, copy) NSString * ekey;
+
+@property (nonatomic, copy) NSString *click;
+
+@property (nonatomic, copy) NSString *sDate;
+
+@property (nonatomic, copy) NSString *eDate;
+
+@property (nonatomic, copy) NSString *hold;
+
+@end

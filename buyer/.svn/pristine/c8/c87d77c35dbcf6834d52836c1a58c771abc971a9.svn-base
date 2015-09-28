@@ -1,0 +1,19 @@
+//
+//  MyOrderCollectionViewCell.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/13.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTOrderImageCollectionViewCell.h"
+
+@implementation ELTOrderImageCollectionViewCell
+
+- (void)awakeFromNib {
+    _picImage.layer.masksToBounds =YES;
+    _picImage.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    _picImage.layer.borderWidth = 1.0f;
+}
+
+@end

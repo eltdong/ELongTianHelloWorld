@@ -1,0 +1,352 @@
+//
+//  OrderDetailViewController.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/31.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTServiceOrderDetailViewController.h"
+#import "ELTOrderDeatilTopCell.h"
+#import "ELTOrderDetailAddCell.h"
+#import "ELTCommodityOrderDetailCell.h"
+#import "ELTOrderDetailCustomCell.h"
+#import "ELTOrderDetailOneCell.h"
+#import "ELTServiceOrderDetailTwoCell.h"
+#import "ELTOrderDetailThreeCell.h"
+#import "ELTOrderDetailCommodityCell.h"
+
+#import "ELTShopDetailViewController.h"
+#import "ELTServiceJudgeViewController.h"
+
+#import "OrderDetailModel.h"
+#import "ELTServiceOrderDetailsModel.h"
+
+#import "ELTServiceOrderCell.h"
+#import "ELTServiceShopDeatilViewController.h"
+
+
+@interface ELTServiceOrderDetailViewController ()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UIAlertViewDelegate>{
+    NSMutableArray *_dataArray;
+  
+    ELTServiceOrderDetailsModel *_serviceOrderModel;
+    BOOL isJudge;
+    NSMutableArray *_judgeArray;
+}
+
+@end
+
+@implementation ELTServiceOrderDetailViewController
+
+-(void)viewWillAppear:(BOOL)animated{
+    
+    [self downRequest];
+    if (self.order_status == 70 || self.order_status == 80) {
+        _evaluate.hidden = NO;
+        self.deleteBtnRight.constant = 112;
+        [self.view setNeedsLayout];
+        [self.view layoutIfNeeded];
+    }else{
+        _evaluate.hidden = YES;
+        self.deleteBtnRight.constant = 15;
+        [self.view setNeedsLayout];
+        [self.view layoutIfNeeded];
+    }
+    
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    
+    self.title = @"订单详情";
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.deleteOrder.layer.masksToBounds=YES;
+    self.deleteOrder.layer.borderColor = [UIColor colorWithRed:153.0/255.0 green:153.0/255.0 blue:153.0/255.0 alpha:1].CGColor;
+    self.deleteOrder.layer.borderWidth= 1.2f;
+    self.deleteOrder.layer.cornerRadius = 5;
+    
+    self.evaluate.layer.masksToBounds=YES;
+    self.evaluate.layer.borderColor = [UIColor colorWithRed:153.0/255.0 green:153.0/255.0 blue:153.0/255.0 alpha:1].CGColor;
+    self.evaluate.layer.borderWidth= 1.2f;
+    self.evaluate.layer.cornerRadius = 5;
+    [self registerAllKindsCell];
+    isJudge = NO;
+    
+    if (self.order_status == 70 || self.order_status == 80) {
+        
+    }else{
+        _evaluate.hidden = YES;
+        self.deleteBtnRight.constant = 15;
+        [self.view setNeedsLayout];
+        [self.view layoutIfNeeded];
+    }
+
+}
+
+#pragma mark - tableview Delegate
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (indexPath.section == 0) {
+        
+        return 105;
+        
+    }else if (indexPath.section == 1) {
+        
+        if (indexPath.row == 0) {
+            return 30;
+        }else if (indexPath.row == 1){
+            return 93;
+        }else{
+            return 75;
+        }
+        
+    }else if (indexPath.section == 2) {
+        
+        return 80;
+        
+    }else if (indexPath.section == 3) {
+        
+        return 112+8;
+        
+    }else{
+        
+        return 45;
+        
+    }
+    
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 10;
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 5;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if (section == 1) {
+        return  3;
+    }else{
+        return 1;
+    }
+}
+
+-(void)registerAllKindsCell
+{
+    UINib *oneCell=[UINib nibWithNibName:@"ELTOrderDeatilTopCell" bundle:nil];
+    [self.tableView registerNib:oneCell forCellReuseIdentifier:@"OrderDeatilTopCell"];
+    
+    UINib *twoCell=[UINib nibWithNibName:@"ELTOrderDetailOneCell" bundle:nil];
+    [self.tableView registerNib:twoCell forCellReuseIdentifier:@"OrderDetailOneCell"];
+    
+    UINib *threeCell=[UINib nibWithNibName:@"ELTOrderDetailThreeCell" bundle:nil];
+    [self.tableView registerNib:threeCell forCellReuseIdentifier:@"OrderDetailThreeCell"];
+    
+    UINib *fourCell=[UINib nibWithNibName:@"ELTServiceOrderDetailTwoCell" bundle:nil];
+    [self.tableView registerNib:fourCell forCellReuseIdentifier:@"OrderDetailTwoCell"];
+   
+    
+    UINib *fiveCell=[UINib nibWithNibName:@"ELTOrderDetailAddCell" bundle:nil];
+    [self.tableView registerNib:fiveCell forCellReuseIdentifier:@"OrderDetailAddCell"];
+    
+    UINib *sevenCell=[UINib nibWithNibName:@"ELTOrderDetailCustomCell" bundle:nil];
+    [self.tableView registerNib:sevenCell forCellReuseIdentifier:@"OrderDetailcustomServiceCell"];
+    
+   
+    UINib *ssevenCell=[UINib nibWithNibName:@"ELTServiceOrderCell" bundle:nil];
+    [self.tableView registerNib:ssevenCell forCellReuseIdentifier:@"SearviceOrderCell"];
+    
+}
+
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (indexPath.section == 0){
+        
+        ELTOrderDeatilTopCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OrderDeatilTopCell"];
+        cell.label1.text = @"已提交";
+        cell.label2.text = @"服务中";
+        cell.label3.text = @"已服务";
+        if (_serviceOrderModel) {
+             cell.model = _serviceOrderModel;
+            
+        }
+        return cell;
+        
+    }else if(indexPath.section == 1){
+        
+        
+            if (indexPath.row == 0) {
+                ELTOrderDetailOneCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OrderDetailOneCell"];
+                cell.shopNameLabel.text =_serviceOrderModel.eshop_name ==nil?@"":[NSString stringWithFormat:@"店铺：%@",_serviceOrderModel.eshop_name];
+                return cell;
+            }else if (indexPath.row == 1){
+                
+                ELTServiceOrderDetailTwoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OrderDetailTwoCell"];
+                
+                cell.eshopName.text = _serviceOrderModel.service_name;
+                cell.name.text  =_serviceOrderModel.personal_name ==nil?@"": [NSString stringWithFormat:@"服务人员：%@",_serviceOrderModel.personal_name];
+                cell.time.text = [NSString stringWithFormat:@"服务时长: %@小时",_serviceOrderModel.service_time];
+                
+                [cell.shopImage setImageWithURL:[NSURL URLWithString:_serviceOrderModel.content_img]];
+                return cell;
+            }else{
+                ELTOrderDetailThreeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OrderDetailThreeCell"];
+                cell.totalPriceLabel.text =_serviceOrderModel.price;
+                cell.discountLabel.text =_serviceOrderModel.coupon_price;
+                cell.payLabel.text =_serviceOrderModel.total_price;
+                return cell;
+            }
+        
+        
+        
+    }else if(indexPath.section == 2){
+        
+        ELTOrderDetailAddCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OrderDetailAddCell"];
+        cell.nameLabel.text = [NSString stringWithFormat:@"收货人：%@",_serviceOrderModel.consignee];
+        cell.telLabel.text = _serviceOrderModel.consignee_phone;
+        cell.addLabel.text =_serviceOrderModel.address ==nil?@"":[NSString stringWithFormat:@"收货地址：%@",_serviceOrderModel.address];
+        return cell;
+        
+    }else if(indexPath.section == 3){
+        
+        ELTServiceOrderCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearviceOrderCell"];
+        
+        cell.orderIDLabel.text =[NSString stringWithFormat:@"订单编号：%@",_serviceOrderModel.content_sn];
+        cell.beginTimeLabel.text = [NSString stringWithFormat:@"下单时间：%@",_serviceOrderModel.create_time];
+        cell.serviceTimeLabel.text = _serviceOrderModel.service_time==nil?@"":[NSString stringWithFormat:@"服务时间：%@",_serviceOrderModel.appointment_start_time];
+        cell.remarkLabel.text = [_serviceOrderModel.order_remarks isEqualToString:@""] || _serviceOrderModel.order_remarks == NULL? @"订单备注：": [NSString stringWithFormat:@"订单备注：%@",_serviceOrderModel.order_remarks];
+        return cell;
+        
+    }else{
+        
+        ELTOrderDetailCustomCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OrderDetailcustomServiceCell"];
+        cell.telLabel.text = [NSString stringWithFormat:@"客服热线：%@",_serviceOrderModel.tel];
+        return cell;
+    }
+    
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (indexPath.section == 1 && indexPath.row == 0) {
+        
+        [self.indicator setIndicatorType:ActivityIndicatorLogin];
+        [self.indicator startAnimatingActivit];
+        ELTServiceShopDeatilViewController *view = [[ELTServiceShopDeatilViewController alloc]init];
+        view.shoppe_id = _serviceOrderModel.eshop_id;
+        [ELRequestSingle shopDetailWithRequest:^(BOOL sucess, id objc) {
+            [self.indicator LoadSuccess];
+            view.dataArray = objc;
+            [self.navigationController pushViewController:view animated:YES];
+        } andShoppe_id:_serviceOrderModel.eshop_id];
+        
+    }
+    if (indexPath.section == 4) {
+        
+        NSString *tel = @"工作时间：每天9:00 - 18:00";
+        UIActionSheet *phoneSheet = [[UIActionSheet alloc] initWithTitle:tel delegate:self cancelButtonTitle:@"取消"
+                                                  destructiveButtonTitle:[NSString stringWithFormat:@"客服热线：%@",_serviceOrderModel.tel] otherButtonTitles:nil];
+        [phoneSheet showInView:self.view];
+        
+    }
+    
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 0.01;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 10)];
+    view.backgroundColor = UIColorFromRGB(0xf5f5f5);
+    return view;
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    if (buttonIndex==0){
+        
+        [[UIApplication sharedApplication] openURL:
+         [ NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",_serviceOrderModel.tel]]];
+    }
+}
+
+-(IBAction)deleteOrder:(id)sender{
+    
+    UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"是否删除该订单？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    
+    
+    [alertView show];
+    
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    switch (buttonIndex) {
+        case 0:
+        {
+            
+        }
+            break;
+        case 1:
+        {
+            [ELRequestSingle deleteServiceOrderWithRequest:^(BOOL sucess, id objc) {
+                [self showAlertViewWith:objc];
+                [self.navigationController popViewControllerAnimated:YES];
+                
+            } andOrder_id:_orderId];
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
+
+-(IBAction)evaluate:(id)sender{
+    if (isJudge) {
+        return;
+    }
+    ELTServiceJudgeViewController *view = [[ELTServiceJudgeViewController alloc]init];
+    view.model = [_dataArray firstObject];
+    view.eshop_id = _serviceOrderModel.eshop_id;
+    view.order_id = _serviceOrderModel.Id;
+    view.store_id = @"1";
+    [self.navigationController pushViewController:view animated:YES];
+}
+
+
+-(void)back:(id)sender{
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (void)downRequest{
+    [self.indicator startAnimatingActivit];
+
+        [ELRequestSingle serviceOrderDetails:^(BOOL sucess, id objc) {
+            [self.indicator LoadSuccess];
+            _dataArray = objc;
+            _serviceOrderModel = [_dataArray firstObject];
+            if ([_serviceOrderModel.evaluation_status isEqualToString:@"1"]) {
+                [_evaluate setTitle:@"已评价" forState:UIControlStateNormal];
+                isJudge = YES;
+            }else{
+                [_evaluate setTitle:@"评价" forState:UIControlStateNormal];
+                isJudge = NO;
+            }
+            [self.tableView reloadData];
+        } andId:self.orderId];
+    
+}
+
+@end

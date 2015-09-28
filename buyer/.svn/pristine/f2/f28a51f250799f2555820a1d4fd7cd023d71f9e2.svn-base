@@ -1,0 +1,20 @@
+//
+//  OrderDetailTwoCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/31.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface ELTServiceOrderDetailTwoCell : UITableViewCell
+/**
+ *  服务订单界面cell
+ */
+@property (nonatomic,strong) IBOutlet UIImageView *shopImage;
+@property (weak, nonatomic) IBOutlet UILabel *eshopName;
+@property (weak, nonatomic) IBOutlet UILabel *name;
+@property (weak, nonatomic) IBOutlet UILabel *time;
+
+@end

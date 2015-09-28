@@ -1,0 +1,24 @@
+//
+//  Tools.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/28.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "Tools.h"
+
+@implementation Tools
+
++(CGRect)heightWithContent:(NSString *)content font:(UIFont *)font width:(CGFloat)width{
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc]init];
+    [paragraphStyle setLineSpacing:3.0];
+    NSDictionary *attributes = @{NSFontAttributeName:font, NSParagraphStyleAttributeName:paragraphStyle};
+    CGRect rect = [content boundingRectWithSize:(CGSize){width, CGFLOAT_MAX} options:(NSStringDrawingUsesFontLeading|NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin) attributes:attributes context:NULL];
+    return rect;
+    
+}
+
+
+@end

@@ -1,0 +1,27 @@
+//
+//  OrderDetailViewController.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/31.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "BaseViewController.h"
+
+@interface ELTCommodityOrderDetailViewController : BaseViewController
+
+@property (nonatomic,weak) IBOutlet UITableView *tableView;
+
+@property (weak, nonatomic) IBOutlet UIButton *deleteOrder;
+
+@property (weak, nonatomic) IBOutlet UIButton *evaluate;
+
+@property (nonatomic,copy) NSString *orderId;
+
+@property (nonatomic,assign) NSInteger order_status;
+
+-(IBAction)deleteOrder:(id)sender;
+
+-(IBAction)evaluate:(id)sender;
+
+@end

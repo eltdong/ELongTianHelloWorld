@@ -1,0 +1,17 @@
+//
+//  PhotosModel.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/14.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface PhotosModel : NSObject
+
+@property (nonatomic,copy) NSString *content_img;
+
+@property (nonatomic,copy) NSString *content_value;
+
+@end

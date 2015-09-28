@@ -1,0 +1,276 @@
+//
+//  MyOrderViewController.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/11.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTCommodityOrderViewController.h"
+#import "ELTOrderViewCell.h"
+#import "ELTCommodityOrderViewCell.h"
+#import "ELTCommodityOrderDetailViewController.h"
+
+@interface ELTCommodityOrderViewController ()<UITableViewDataSource,UITableViewDelegate,DDViewcell>{
+    UIButton *_selectedBtn;//记录当前顶部按钮
+    NSInteger orderType;//订单状态
+    NSInteger _page;
+}
+
+@property (nonatomic,strong) NSMutableArray * dataArray;//订单数据源
+@end
+
+@implementation ELTCommodityOrderViewController
+
+-(void)viewWillAppear:(BOOL)animated{
+    
+    [self downRequest];//数据请求
+    
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    [_buttonOne setTitle:@"全部" forState:UIControlStateNormal];
+    _buttonOne.titleLabel.textAlignment = NSTextAlignmentCenter;
+    _buttonOne.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    
+    [_buttonTwo setTitle:@"未完成" forState:UIControlStateNormal];
+    _buttonTwo.titleLabel.textAlignment = NSTextAlignmentCenter;
+    _buttonTwo.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    
+    [_buttonThree setTitle:@"已完成" forState:UIControlStateNormal];
+    _buttonThree.titleLabel.textAlignment = NSTextAlignmentCenter;
+    _buttonThree.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    
+    [_buttonFour setTitle:@"待评价" forState:UIControlStateNormal];
+    _buttonFour.titleLabel.textAlignment = NSTextAlignmentCenter;
+    _buttonFour.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    
+    self.title = @"我的订单";
+    _page = 1;
+    
+    orderType = 0;//订单状态是全部
+    _dataArray = [NSMutableArray array];
+    
+    [self drop_down];
+    [self drop_on];
+}
+
+
+#pragma mark -  tableview delegate
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    
+    return _dataArray.count;
+    
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    
+         return 2;
+    
+  
+   
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row == 0) {
+        return 35;
+        
+    }else{
+        return 78+SCREENWIDTH / 4.27;
+    }
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (indexPath.row == 0) {
+       
+        ELTOrderViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OrderViewCell"];
+        if (!cell) {
+            cell = [[[NSBundle mainBundle]loadNibNamed:@"ELTOrderViewCell" owner:self options:nil]firstObject];
+        }
+        if (_dataArray) {
+        cell.orderModel = [_dataArray objectAtIndex:indexPath.section];
+            
+        }
+        return cell;
+    }else{
+        ELTCommodityOrderViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DDViewCell"];
+       
+        if (!cell) {
+            cell = [[[NSBundle mainBundle]loadNibNamed:@"ELTCommodityOrderViewCell" owner:self options:nil]firstObject];
+            
+        }
+        if (_dataArray) {
+        cell.orderModel = [_dataArray objectAtIndex:indexPath.section];
+        cell.delegate =self;
+                    }
+        return cell;
+    }
+    
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 10;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 0.01;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 10)];
+    view.backgroundColor = UIColorFromRGB(0xf5f5f5);
+    return view;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    ELTCommodityOrderDetailViewController *orderDetail = [[ELTCommodityOrderDetailViewController alloc]init];
+    ELTMyOrderModel *model = [_dataArray objectAtIndex:indexPath.section];
+    orderDetail.orderId = model.ID;
+    orderDetail.order_status = model.orderStatus;
+    [self.navigationController pushViewController:orderDetail animated:YES];
+}
+
+#pragma mark - 数据请求
+- (void)downRequest{
+    
+    [self.indicator startAnimatingActivit];
+    [self.indicator setIndicatorType:ActivityIndicatorLogin];
+    
+    [ELRequestSingle orderListWithRequest:^(BOOL sucess, id objc) {
+            [self.indicator LoadSuccess];
+        
+            if ([objc isKindOfClass:[NSString class]]) {
+                  [self showAlertViewWith:objc];
+                  [self.bgTable.footer noticeNoMoreData];
+                  [self.bgTable.header endRefreshing];
+            }else{
+                
+                if ([_dataArray isEqualToArray:objc]) {
+                    
+                }else{
+                    [_dataArray removeAllObjects];
+                    [_dataArray addObjectsFromArray:objc];
+                }
+                
+                
+                if (_dataArray.count == 0) {
+                    [self.bgTable.footer noticeNoMoreData];
+                }else{
+                    
+                    [self.bgTable.header endRefreshing];
+                    [self.bgTable.footer endRefreshing];
+                }
+                if(_dataArray.count < 10){
+                    [self.bgTable removeFooter];
+                }
+                
+    }
+            
+    [self.bgTable reloadData];
+    [self.bgTable.header endRefreshing];
+
+
+        } andOrder_id:[NSString stringWithFormat:@"%ld",(long)orderType] andPage:[NSString stringWithFormat:@"%ld",(long)_page]];
+}
+
+/**
+ * UITableView +   传统
+ */
+- (void)drop_on
+{
+    __weak typeof(self) weakSelf = self;
+    // 添加传统的上拉刷新
+    // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
+    
+    [self.bgTable addLegendFooterWithRefreshingBlock:^{
+         _page ++;
+        [weakSelf.indicator setIndicatorType:ActivityIndicatorLogin];
+        [weakSelf downRequest];
+    }];
+}
+/**
+ * UITableView + 下拉刷新 传统
+ */
+- (void)drop_down
+{
+    __weak typeof(self) weakSelf = self;
+    // 添加传统的下拉刷新
+    // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
+    [self.bgTable addLegendHeaderWithRefreshingBlock:^{
+        _page = 1;
+        //[weakSelf.dataArray removeAllObjects];
+        [weakSelf.indicator setIndicatorType:ActivityIndicatorLogin];
+        [weakSelf downRequest];
+        // 马上进入刷新状态
+    }];
+}
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+#pragma mark -－ 订单分类点击方法
+- (IBAction)buttonClick:(id)sender {
+    
+    UIButton *button = sender;
+    switch (button.tag) {
+    case 1:
+        orderType = 0;
+        break;
+    case 2:
+        orderType = 10;
+        break;
+    case 3:
+        orderType = 80;
+        break;
+    case 4:
+        orderType = 70;
+        break;
+    default:
+        break;
+    }
+    if (_selectedBtn.tag == button.tag) {
+        return;
+    }else{
+        [button setTitleColor:UIColorFromRGB(0xda2c41) forState:UIControlStateNormal];
+        [_selectedBtn setTitleColor:UIColorFromRGB(0x333333) forState:UIControlStateNormal];
+        _selectedBtn = button;
+        [UIView animateWithDuration:0.3 animations:^{
+            _line.frame = CGRectMake(button.frame.origin.x, _line.frame.origin.y, _line.frame.size.width, _line.frame.size.height);
+        }];
+    }
+    [_dataArray removeAllObjects];
+    _page = 1;
+    [self downRequest];
+}
+#pragma mark-- 跳转订单详情界面
+-(void)selectItemAtIndexPath:(ELTMyOrderModel *)moder{
+    ELTCommodityOrderDetailViewController *orderDetail = [[ELTCommodityOrderDetailViewController alloc]init];
+    orderDetail.orderId = moder.ID;
+    orderDetail.order_status = moder.orderStatus;
+    [self.navigationController pushViewController:orderDetail animated:YES];
+    
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    [_dataArray removeAllObjects];
+    _page = 1;
+}
+@end

@@ -1,0 +1,21 @@
+//
+//  shopCartHead.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/11.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface ELTShopCartHead : UIView
+
+@property (strong, nonatomic) IBOutlet UIButton *shopSelectAll;
+
+@property (strong, nonatomic) IBOutlet UILabel *shopTitleLabel;
+
+@property (strong, nonatomic) IBOutlet UILabel *describLabel;
+
+@property (strong, nonatomic) IBOutlet UIButton *jumpBtn;
+
+@end

@@ -1,0 +1,31 @@
+//
+//  ConfirmReceiptAddressView.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/13.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTConfirmReceiptAddressView.h"
+#define cornerRadiusCustom 3.f
+@implementation ELTConfirmReceiptAddressView
+
++(instancetype)initWithCustomView{
+    NSArray * arr =[[NSBundle mainBundle ]loadNibNamed:@"ELTConfirmReceiptAddressView" owner:nil options:nil];
+    return arr[0];
+}
+-(void)awakeFromNib{
+    self.popView.layer.masksToBounds =YES;
+    self.popView.layer.cornerRadius = cornerRadiusCustom;
+    self.confirmBtn.layer.masksToBounds = YES;
+    self.confirmBtn.layer.cornerRadius =cornerRadiusCustom;
+}
+
+- (IBAction)confirmBtn:(id)sender {
+    [self removeFromSuperview];
+}
+- (IBAction)alertBtn:(id)sender {
+}
+- (IBAction)changeAddressBtn:(id)sender {
+}
+@end

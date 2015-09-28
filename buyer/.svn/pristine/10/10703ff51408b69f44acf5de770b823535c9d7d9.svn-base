@@ -1,0 +1,62 @@
+//
+//  OrderDeatilTopCell.m
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/21.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTOrderDeatilTopCell.h"
+
+
+
+@implementation ELTOrderDeatilTopCell
+
+- (void)awakeFromNib {
+    // Initialization code
+}
+
+-(void)setModel:(ELTOrderDetailModel *)model{
+    
+    _model = model;
+    
+    if ([_model.order_status isEqualToString:@"10"]||[_model.order_status isEqualToString:@"20"]||[_model.order_status isEqualToString:@"30"]) {
+        self.imageOne.image = [UIImage imageNamed:@"elt_stepfoucus.png"];
+        self.arrowOne.image = [UIImage imageNamed:@"elt_steparrow_cr.png"];
+    }
+    else if ([_model.order_status isEqualToString:@"40"]||[_model.order_status isEqualToString:@"45"]||[_model.order_status isEqualToString:@"50"]){
+        self.iamgeTwo.image = [UIImage imageNamed:@"elt_step2foucus.png"];
+        self.arrowTwo.image = [UIImage imageNamed:@"elt_steparrow_cr.png"];
+    }
+    else if([_model.order_status isEqualToString:@"60"]||[_model.order_status isEqualToString:@"65"]){
+        self.imageThree.image = [UIImage imageNamed:@"elt_step3foucus.png"];
+        self.arrowTwo.image = [UIImage imageNamed:@"elt_steparrow_cr.png"];
+    }
+    
+}
+-(void)setSerModel:(ELTServiceOrderDetailsModel *)serModel{
+
+    _serModel = serModel;
+    
+    if ([_serModel.order_status isEqualToString:@"10"]||[_serModel.order_status isEqualToString:@"20"]||[_serModel.order_status isEqualToString:@"30"]) {
+        self.imageOne.image = [UIImage imageNamed:@"elt_stepfoucus.png"];
+        self.arrowOne.image = [UIImage imageNamed:@"elt_steparrow_cr.png"];
+    }
+    else if ([_serModel.order_status isEqualToString:@"40"]||[_serModel.order_status isEqualToString:@"45"]||[_serModel.order_status isEqualToString:@"50"]){
+        self.iamgeTwo.image = [UIImage imageNamed:@"elt_step2foucus.png"];
+        self.arrowTwo.image = [UIImage imageNamed:@"elt_steparrow_cr.png"];
+    }
+    else if([_serModel.order_status isEqualToString:@"60"]||[_serModel.order_status isEqualToString:@"65"]){
+        self.imageThree.image = [UIImage imageNamed:@"elt_step3foucus.png"];
+        self.arrowTwo.image = [UIImage imageNamed:@"elt_steparrow_cr.png"];
+    }
+
+
+}
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end

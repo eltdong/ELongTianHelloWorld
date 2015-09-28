@@ -1,0 +1,25 @@
+//
+//  MyServiceOrder.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/6.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface ELTMyServiceOrderModel : ELTBaseModel
+@property (nonatomic ,copy)  NSString *ID;//订单ID
+@property (nonatomic ,copy)  NSString *content_sn;//订单编号
+@property (nonatomic ,copy)  NSString *create_time;//下单时间
+@property (nonatomic ,copy)  NSString *personal_name;//服务人员姓名（有限资源）
+@property (nonatomic ,copy)  NSString *total_price;//实付款
+@property (nonatomic ,copy)  NSString *order_status;//订单状态
+@property (nonatomic ,assign)  NSInteger orderStatus;//订单状态数字
+@property (nonatomic ,copy)  NSString *service_time;//服务时间范围（服务时间范围)(无限资源)
+@property (nonatomic ,copy)  NSString *service_name;//服务名称
+@property (nonatomic ,copy)  NSString *service_img;//服务列表图
+@property (nonatomic ,copy)  NSString *service_id;//服务ID
+
+-(instancetype)initWithDic:(NSDictionary *)dict;
+@end

@@ -1,0 +1,27 @@
+//
+//  ShopDetail.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/17.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ShopDetail.h"
+
+@implementation ShopDetail
+
++(instancetype)shopDetailmodelInitWithDict:(NSDictionary*)dic{
+    
+    return [[self alloc]initWithDic:dic];
+    
+}
+
+
+-(instancetype)initWithDic:(NSDictionary *)dict{
+    
+    [self setValuesForKeysWithDictionary:dict];
+    return self;
+    
+}
+
+@end

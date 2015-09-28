@@ -1,0 +1,26 @@
+//
+//  ServiceDetailsModel.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/31.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface ELTServiceDetailsModel : ELTBaseModel
+@property (nonatomic ,strong)  NSString *Id;//服务id
+@property (nonatomic ,strong)  NSString *eshopname;//店铺名称
+@property (nonatomic ,strong)  NSString *eshop_id;//店铺id
+@property (nonatomic ,strong)  NSString *unit_price;//服务单价
+@property (nonatomic ,strong)  NSString *promotion_price;//促销价格
+@property (nonatomic ,strong)  NSString *service_time;//服务时长
+@property (nonatomic ,strong)  NSString *service_name;//服务名称
+@property (nonatomic ,strong)  NSString *content_sale;//销量
+@property (nonatomic ,strong)  NSString *content_body;//服务详情
+@property (nonatomic ,strong)  NSArray *content_img; //服务图片
+@property (nonatomic, copy) NSString * serviceper; //服务人员id
+
+@property (nonatomic, copy) NSString * is_limit; //1无限 2 有限
+-(instancetype)initDictionary:(NSDictionary *)dic;
+@end

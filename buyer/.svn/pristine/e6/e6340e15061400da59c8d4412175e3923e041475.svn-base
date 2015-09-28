@@ -1,0 +1,54 @@
+//
+//  ShopModel.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/17.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTShopModel.h"
+
+@implementation ELTShopModel
+
++(instancetype)shopModelInitWithDict:(NSDictionary*)dic{
+    
+    return [[self alloc]initWithDic:dic];
+    
+}
+
+-(instancetype)initWithDic:(NSDictionary *)dict{
+    
+    self = [super init];
+    if (self) {
+        
+    
+        [self setValuesForKeysWithDictionary:dict];
+        _ID = [dict objectForKey:@"id"];
+
+        NSDictionary *dic = [dict objectForKey:@"time"];
+        if (!dic) {
+            _closeTime = @"22:00";
+            _openTime = @"8:00";
+
+            
+        }else{
+            
+            if ([dic isEqual:@""]) {
+                _closeTime = @"22:00";
+                _openTime = @"8:00";
+                
+            }else{
+                _closeTime = [dic objectForKey:@"close_time"];
+                _openTime = [dic objectForKey:@"open_time"];
+            }
+            
+            }
+        
+       
+        
+    }
+    return self;
+    
+}
+
+@end

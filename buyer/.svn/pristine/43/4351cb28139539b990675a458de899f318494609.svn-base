@@ -1,0 +1,509 @@
+//
+//  ShopDeatilViewController.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/31.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTServiceShopDeatilViewController.h"
+#import "ELTMainPullDownView.h"
+#import "ELTShopDetailCollectionViewCell.h"
+#import "ELTSellerDetailViewController.h"
+#import "ELTCommodityDetailViewController.h"
+#import "ELTShopDetailCollectionReusableView.h"
+#import "ELTShopDetailModel.h"
+#import "ELTServiceShopDetailModel.h"
+
+#import "ELTServiceDetailsModel.h"
+#import "ELTServiceDetailViewController.h"
+
+@interface ELTServiceShopDeatilViewController  ()<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,MainSegmentViewDelegate,UITextFieldDelegate,MainPullDownViewDelegate>{
+    NSMutableArray *_buttonNameArray;
+    ELTShopDetailCollectionReusableView *_headerView;
+    ELTMainSegmentView *_segmentView;
+    
+    UIButton *_dianPButton;//店铺详情button
+    UIView *_view;
+    ELTMainPullDownView  *_pullView;
+    
+    NSInteger   _num;//购物车第一次请求的个数；
+    UIButton *_gotopButton;//返回头部按钮；
+    
+    CALayer *_layer;
+    
+    UIView *_bgTopView;
+    UIView *_bgBottomView;
+    
+   ELTServiceShopDetailModel *_shopDetailModel;
+    
+}
+
+@property (nonatomic, strong) UIView * searchView;
+@property (nonatomic, strong) UITextField * searchTextField;
+@property (nonatomic,strong) ELTShopDetailModel    *model;
+@property (nonatomic, assign) NSInteger page;
+@property (nonatomic, copy) NSString * keyword;
+//第几次执行
+@property (nonatomic, assign) NSInteger count;
+
+@property (nonatomic,strong) NSMutableArray *commodityArray;
+
+@property (nonatomic,strong) UIBezierPath *path;//被塞尔曲线  绘制动画执行路线
+@end
+
+@implementation ELTServiceShopDeatilViewController
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    self.searchView.hidden = NO;
+}
+- (void)viewWillDisappear:(BOOL)animated{
+    self.searchView.hidden = YES;
+}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self setDianpu];
+    
+    _count = 0;
+    
+    _buttonNameArray = [NSMutableArray array];
+    self.proArr = [NSMutableArray array];
+    _page = 1;
+    self.auto_code = @"0";
+    _collectionView.dataSource = self;
+    _collectionView.delegate = self;
+    [_collectionView registerNib:[UINib nibWithNibName:@"ELTShopDetailCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"ShopDetailCollectionViewCell"];
+    
+    [self.collectionView registerNib:[UINib nibWithNibName:@"ELTShopDetailCollectionReusableView" bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"ShopDetailCollectionReusableView"];
+    
+    _segmentView = [[ELTMainSegmentView alloc]initWithFrame:CGRectMake(0,  91 + SCREENWIDTH / 2.7, SCREENWIDTH, 40)];
+    _segmentView.backgroundColor = [UIColor whiteColor];
+    _segmentView.delegate = self;
+    
+    _keyword = nil;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"elt_menus"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStyleDone target:self action:@selector(home:)];
+    
+    self.searchView = [[UIView alloc]initWithFrame:CGRectMake(50, 5, SCREENWIDTH - 55 -55 + 15, 30)];
+    self.searchView.backgroundColor = UIColorFromRGB(0xffffff);
+    self.searchView.layer.cornerRadius = 5.0f;
+    [self.navigationController.navigationBar addSubview:self.searchView];
+    UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(7, 5, 20, self.searchView.frame.size.height - 10)];
+    imageView.image = [UIImage imageNamed:@"elt_search_bg3"];
+    [self.searchView addSubview:imageView];
+    UITextField * searchTextField = [[UITextField alloc]initWithFrame:CGRectMake(30,0, self.searchView.frame.size.width - 60, self.searchView.frame.size.height)];
+    searchTextField.backgroundColor = UIColorFromRGB(0xffffff);
+    searchTextField.layer.cornerRadius = 5.0f;
+    searchTextField.font = UIFont(12);
+    searchTextField.placeholder = @"请输入搜索内容";
+    searchTextField.delegate = self;
+    searchTextField.returnKeyType = UIReturnKeySearch;
+    self.searchTextField = searchTextField;
+    [self.searchView addSubview:self.searchTextField];
+    
+#pragma mark - 封装的底部view
+    /*
+    self.mcb = [mycartBar instanceView];
+    self.mcb.frame = self.barView.bounds;
+    self.barView.backgroundColor = [UIColor redColor];
+    self.mcb .vc= self;
+    self.mcb .vcPush = [[ShoppingCarViewController alloc]init];
+    self.mcb .delegate = self;
+    self.mcb.isHiddenOfRDA = NO;
+    [self.barView addSubview:self.mcb ];
+    */
+    self.barView.hidden = YES;
+    [self downRequest];
+    [self drop_on];
+#pragma mark -  返回顶部按钮
+    _gotopButton = [[UIButton alloc] initWithFrame:CGRectMake(SCREENWIDTH-44-3, SCREENHEIGHT-50-44, 44, 44)];
+    [_gotopButton setBackgroundImage:[UIImage imageNamed:@"elt_gotop"] forState:UIControlStateNormal];
+    [_gotopButton addTarget:self action:@selector(backTop) forControlEvents:UIControlEventTouchUpInside];
+    _gotopButton.hidden = YES;
+    [self.view addSubview:_gotopButton];
+    
+    //轮播图
+    _mainScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENWIDTH / 2.7)];
+    _mainScrollView.backgroundColor = [UIColor whiteColor];
+    _Topic = [[JCTopic alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENWIDTH / 2.7)];
+    _Topic.backgroundColor = [UIColor whiteColor];
+    [_mainScrollView addSubview:_Topic];
+    
+    _bgTopView = [[UIView alloc]initWithFrame:CGRectZero];
+    _bgTopView.backgroundColor = [UIColor clearColor];
+    _bgTopView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(singleTap:)];
+    [_bgTopView addGestureRecognizer:singleTapGestureRecognizer];
+    [self.view addSubview:_bgTopView];
+    
+    _bgBottomView = [[UIView alloc]initWithFrame:CGRectZero];
+    _bgBottomView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+    _bgBottomView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(singleTap:)];
+    [_bgBottomView addGestureRecognizer:tap];
+    
+    
+    _pullView = [[ELTMainPullDownView alloc]init];
+    _pullView.delegate = self;
+    
+    
+}
+
+/**
+ * UITableView +   传统
+ */
+- (void)drop_on
+{
+    __weak typeof(self) weakSelf = self;
+    // 添加传统的上拉刷新
+    // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
+    
+    [self.collectionView addLegendFooterWithRefreshingBlock:^{
+        weakSelf.page ++;
+        [weakSelf.indicator setIndicatorType:ActivityIndicatorLogin];
+        [weakSelf downRequest];
+    }];
+}
+/**
+ * UITableView + 下拉刷新 传统
+ */
+- (void)drop_down
+{
+    __weak typeof(self) weakSelf = self;
+    // 添加传统的下拉刷新
+    // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
+    [self.collectionView addLegendHeaderWithRefreshingBlock:^{
+        _page = 1;
+        //        [weakSelf.dataArr removeAllObjects];
+        [weakSelf.indicator setIndicatorType:ActivityIndicatorLogin];
+        [weakSelf downRequest];
+        // 马上进入刷新状态
+    }];
+}
+
+-(void)btnClicked{
+    ELTShoppingCarViewController *view =[[ELTShoppingCarViewController alloc]init];
+    [self.navigationController pushViewController:view animated:YES];
+}
+#pragma mark --返回头部
+- (void)backTop{
+    
+    self.collectionView.contentOffset = CGPointMake(0, 0);
+    
+}
+#pragma mark -- 请求店铺信息
+- (void)downRequest{
+    [self.indicator startAnimatingActivit];
+    [ELRequestSingle serviceShopWithRequest: ^(BOOL sucess, id objc) {
+        
+        [self.indicator LoadSuccess];
+        self.serShopDetailList = (ELTServiceShopDetailModel *)objc;
+        if (_serShopDetailList.proArray.count == 0) {
+         [self showAlertViewWith:@"抱歉，没有数据"];
+            [self.collectionView.header endRefreshing];
+            [self.collectionView removeFooter];
+        }else{
+        
+            if (_serShopDetailList.classArray.count ==0) {
+                _serShopDetailList = _shopDetailModel;
+                [self.proArr removeAllObjects];
+                
+            }else{
+                _shopDetailModel = _serShopDetailList;
+                
+            }
+            
+            
+            for(ELTServiceShopDetailModel * model in self.serShopDetailList.proArray){
+                
+                [self.proArr addObject:model];
+            }
+            _buttonNameArray = [NSMutableArray array];
+            
+            for (ELTServiceShopDetailModel * model in self.serShopDetailList.classArray) {
+                
+                [_buttonNameArray addObject:model.modules_name];
+                
+                
+            }
+            
+            
+            if(_count == 0){
+                [_segmentView items:_buttonNameArray andNormalFontColor:UIColorFromRGB(0x666666) andSelectedColor:UIColorFromRGB(0xda2c41) andLineColor:UIColorFromRGB(0xda2c41)];
+            }
+            _count++;
+            if (self.serShopDetailList.proArray.count == 0) {
+                [self.collectionView.footer noticeNoMoreData];
+            }else{
+                [self.collectionView.header endRefreshing];
+                [self.collectionView.footer endRefreshing];
+            }
+            if(self.serShopDetailList.proArray.count < 10){
+                [self.collectionView removeFooter];
+            }
+
+        
+        }
+        
+        [_collectionView reloadData];
+        
+    } andID:self.shoppe_id andAuto_code:@"0" andPage:[NSString stringWithFormat:@"%ld",(long)_page] andKeyword:_keyword];
+}
+
+
+
+#pragma mark --UICollectionViewDelegateFlowLayout
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return CGSizeMake((SCREENWIDTH - 24)/2, SCREENWIDTH / 1.68);
+    
+}
+
+//定义每个UICollectionView 的 margin
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(8, 8, 8, 8);
+}
+
+
+#pragma mark - collectionViewDelegate
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    if (kind == UICollectionElementKindSectionHeader){
+        _headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"ShopDetailCollectionReusableView" forIndexPath:indexPath];
+    }
+    _model = [_dataArray firstObject];
+    [_headerView addSubview:_mainScrollView];
+    [self createBanner:_model.photoArray];
+    
+    [_headerView.shopImage setImageWithURL:[NSURL URLWithString:_model.content_img]];
+    _headerView.nameLabel.text = _model.name;
+    
+    _headerView.timeLabel.text = _model.openTime==NULL ?[NSString stringWithFormat:@"服务时间 8:00-22:00"]:[NSString stringWithFormat:@"服务时间 %@-%@",_model.openTime,_model.closeTime];
+    //_headerView.timeLabel.text = [NSString stringWithFormat:@"服务时间 %@-%@",_model.openTime,_model.closeTime];
+    _headerView.describeLabel.hidden = YES;
+    _headerView.starImage.hidden = YES;
+    if (![_model.send_price isEqual:[NSNull null]]) {
+    //_headerView.describeLabel.text = [NSString stringWithFormat:@"本店买%.1f元减0.0元",[_model.send_price floatValue]];
+        
+    }else{
+    //_headerView.describeLabel.text = @"本店满0.0元减0.0元";
+    
+    }
+   
+    [_headerView addSubview:_segmentView];
+    return _headerView;
+}
+#pragma mark - 轮播图
+- (void)createBanner:(NSMutableArray *)arr
+{
+    
+    //代理
+    _Topic.JCdelegate = self;
+    //创建数据
+    NSMutableArray * tempArray = arr;
+    _Topic.time = 5;
+    //_Topic.isWidth = YES;
+    _Topic.isURL = YES;
+    _Topic.pics = tempArray;
+    [_Topic upDate];
+    _Topic.userInteractionEnabled = YES;
+    
+    _pageView = [[StyledPageControl alloc]initWithFrame:CGRectMake(_Topic.frame.origin.x+20, _mainScrollView.frame.size.height-20, _Topic.frame.size.width-40, 13)];
+    
+    [_mainScrollView addSubview:_pageView];
+    
+    [_pageView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    
+    [_pageView setPageControlStyle:PageControlStyleThumb];
+    [_pageView setThumbImage:[UIImage imageNamed:@"elt_circle"]];
+    [_pageView setSelectedThumbImage:[UIImage imageNamed:@"elt_circle_cr"]];
+    [_pageView setNumberOfPages:(int)[tempArray count]];
+    [_pageView setCurrentPage:0];
+}
+-(void)currentPage:(int)page total:(NSUInteger)total withscrollview:(JCTopic *)jc
+{
+    if(jc == _Topic){
+        [_pageView setCurrentPage:page];
+    }
+}
+#pragma mark - JCTopDelegate 轮播图点击事件
+- (void)didClick:(id)data withscrollview:(UIScrollView *)jc
+{
+    if(jc == _Topic)
+    {
+        UIButton * btn = (UIButton *)data;DLog(@"+++%ld",(long)btn.tag);
+    }
+    
+}
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
+    
+    return CGSizeMake(SCREENWIDTH, 131 + SCREENWIDTH / 2.7);
+    
+}
+
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
+    return 1;
+}
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    return self.proArr.count;
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    ELTShopDetailCollectionViewCell * item = [collectionView dequeueReusableCellWithReuseIdentifier:@"ShopDetailCollectionViewCell" forIndexPath:indexPath];
+    ELTServiceShopDetailModel * model = [self.proArr objectAtIndex:indexPath.item];
+    item.name.text = model.service_name;
+    
+    item.shoppingCarImg.hidden =YES;
+    
+    item.cartBtn.tag = indexPath.item;
+    item.price.text = model.unit_price;
+    [item.img setImageWithURL:[NSURL URLWithString:model.content_img]];
+    
+    if (self.collectionView.contentOffset.y > SCREENHEIGHT) {
+        _gotopButton.hidden = NO;
+    }else{
+        _gotopButton.hidden = YES;
+    }
+    
+    return item;
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    [self.indicator setIndicatorType:ActivityIndicatorLogin];
+    [self.indicator startAnimatingActivit];
+  
+   ELTServiceShopDetailModel *model = _proArr[indexPath.item];
+    [ELRequestSingle screenRequestWithBlock:^(BOOL sucess, id objc) {
+        [self.indicator LoadSuccess];
+        ELTServiceDetailsModel *detailModel = objc;
+        ELTServiceDetailViewController * md =[[ELTServiceDetailViewController alloc]init];
+        md.model = detailModel;
+        
+        [self.navigationController pushViewController:md animated:YES];
+        
+    } andId:model.Id];
+    
+}
+-(void)segMentChose:(NSInteger)index
+{
+    ELTServiceShopDetailModel * model = [self.serShopDetailList.classArray objectAtIndex:index];
+    self.auto_code = model.auto_code;
+    self.page = 1;
+    [self.proArr removeAllObjects];
+    [self.indicator setIndicatorType:ActivityIndicatorLogin];
+    [self downRequest];
+}
+
+-(void)home:(id)sender{
+    
+    _dianPButton.alpha = 1;
+    
+}
+
+-(void)rightBtn:(UIButton *)button{
+    
+    [self.view addSubview:_pullView];
+    [self.view addSubview:_bgBottomView];
+    [self.view addSubview:_bgTopView];
+    
+    _pullView.dataArray = _buttonNameArray;
+    
+    NSInteger line;
+    if (_buttonNameArray.count % 4 == 0) {
+        line = _buttonNameArray.count / 4;
+    }else{
+        line = _buttonNameArray.count / 4 + 1;
+    }
+    
+    CGRect originalFrame=[_segmentView convertRect:_segmentView.bounds toView:[UIApplication sharedApplication].keyWindow.rootViewController.view];
+    _pullView.frame = CGRectMake(0, originalFrame.origin.y + 40, SCREENWIDTH, line * 30 + 50);
+    _pullView.collectionView.frame = CGRectMake(0, 0, SCREENWIDTH, _pullView.height);
+    _bgTopView.frame = CGRectMake(0, 0, SCREENWIDTH, originalFrame.origin.y + 40);
+    _bgBottomView.frame = CGRectMake(0, _pullView.bottom, SCREENWIDTH, SCREENHEIGHT - _pullView.bottom);
+    [_pullView.collectionView reloadData];
+    
+}
+
+-(void)buttonClick:(NSInteger)num{
+    
+    [_bgBottomView removeFromSuperview];
+    [_bgTopView removeFromSuperview];
+    [_pullView removeFromSuperview];
+    [_segmentView setCurrentIndex:num];
+    
+}
+
+-(void)back:(id)sender{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    
+    _keyword = textField.text;
+    [self.indicator setIndicatorType:ActivityIndicatorLogin];
+    self.page = 1;
+    [textField resignFirstResponder];
+    [self.proArr removeAllObjects];
+    [self downRequest];
+    [_segmentView setCurrentIndex:0];
+    _keyword = nil;
+    textField.text = nil;
+    
+    return YES;
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+- (void)setDianpu{
+    
+    if (! _dianPButton) {
+        _dianPButton = [[UIButton alloc] initWithFrame:CGRectMake(SCREENWIDTH-172/2-4, 66-7, 172/2+4, 65/2)];
+        [_dianPButton setBackgroundImage:[UIImage imageNamed:@"elt_store_bgs"] forState:UIControlStateNormal];
+        [_dianPButton addTarget:self action:@selector(storeButton) forControlEvents:UIControlEventTouchUpInside];
+        _dianPButton.alpha = 0;
+        [self.view addSubview:_dianPButton];
+        
+        UIImageView *storeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, (65/2-14)/2+2, 14, 14)];
+        storeImageView.image = [UIImage imageNamed:@"elt_store_ico"];
+        [_dianPButton addSubview:storeImageView];
+        
+        UILabel *storeLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(storeImageView.frame)+5, (65/2-14)/2+2, 60, 14)];
+        storeLable.text = @"店铺信息";
+        storeLable.font = [UIFont systemFontOfSize:13];
+        storeLable.textColor = [UIColor whiteColor];
+        [_dianPButton addSubview:storeLable];
+    }
+    
+}
+#pragma mark -- 店铺信息信息按钮
+- (void)storeButton{
+    _dianPButton.alpha = 0;
+    ELTSellerDetailViewController * sellerDetailVC = [[ELTSellerDetailViewController alloc]initWithNibName:@"ELTSellerDetailViewController" bundle:nil];
+    sellerDetailVC.shopDetailModel = [_dataArray firstObject];
+    [self.navigationController pushViewController:sellerDetailVC animated:YES];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    [_searchTextField resignFirstResponder];
+}
+
+#pragma mark --_bgView上的点击手势
+- (void)singleTap:(UIGestureRecognizer*)gestureRecognizer
+
+{
+    
+    [_bgBottomView removeFromSuperview];
+    [_bgTopView removeFromSuperview];
+    [_pullView removeFromSuperview];
+    
+}
+
+@end

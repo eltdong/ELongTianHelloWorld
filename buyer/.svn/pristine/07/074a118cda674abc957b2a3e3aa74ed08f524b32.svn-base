@@ -1,0 +1,34 @@
+
+//
+//  AddressModel.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/26.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTAddressModel.h"
+
+@implementation ELTAddressModel
+-(instancetype)initDicyionary:(NSDictionary *)dic{
+    self = [super init];
+    if (self) {
+        self.address = dic[@"address"] == nil?@"":dic[@"address"];
+        self.city_id = dic[@"city_id"] == nil?@"":dic[@"city_id"];
+        self.customer_id = dic[@"customer_id"] == nil?@"":dic[@"customer_id"];
+        self.house_id = dic[@"house_id"] == nil?@"":dic[@"house_id"];
+        self.ID = dic[@"id"] == nil?@"":dic[@"id"];
+        self.mobilephone = dic[@"mobilephone"] == nil?@"":dic[@"mobilephone"];
+        self.name = dic[@"name"] == nil?@"":dic[@"name"];
+        self.province_id = dic[@"province_id"] == nil?@"":dic[@"province_id"];
+        self.town_id = dic[@"town_id"] == nil?@"":dic[@"town_id"];
+        self.village_id = dic[@"village_id"] == nil?@"":dic[@"village_id"];
+        self.zipcode = dic[@"zipcode"] == nil?@"":dic[@"zipcode"];
+        self.county_id = dic[@"county_id"] == nil?@"":dic[@"county_id"];
+        self.default_address_flg = dic[@"default_address_flg"] == nil?@"":dic[@"default_address_flg"];
+        self.main_address_flg = dic[@"main_address_flg"] == nil?@"":dic[@"main_address_flg"];
+        self.tinyvillage_id = dic[@"tinyvillage_id"] == nil?@"":dic[@"tinyvillage_id"];
+    }
+    return self;
+}
+@end

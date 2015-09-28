@@ -1,0 +1,61 @@
+//
+//  SelectServiceTimeSecViewController.h
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/29.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "BaseViewController.h"
+#import "ELTEShopDateModel.h"
+/**
+ *  选择服务时间（有限or无限）
+ */
+typedef void(^myBlock) (NSString * mouth,NSString * week,NSString * day,ELTEShopDateModel * model);
+@interface ELTSelectServiceTimeViewController : BaseViewController<UIPickerViewDelegate,UIPickerViewDataSource>
+@property (weak, nonatomic) IBOutlet UILabel *serviceTimeLable;
+/**
+ *  接收回调的时间段
+ */
+@property (nonatomic,copy) NSString* serviceTime;
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+/**
+ *  滚动条
+ */
+@property (weak, nonatomic) IBOutlet UIView *scrollView;
+
+@property (weak, nonatomic) IBOutlet UIView *scrollViewBotomView;
+- (IBAction)leftBtn:(id)sender;
+- (IBAction)rightBtn:(id)sender;
+
+@property (nonatomic, copy) myBlock block;
+/**
+ *  服务时长
+ */
+@property (weak, nonatomic) IBOutlet UIView *sstView;
+/**
+ *  约束
+ */
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tipview;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *sstview;
+/**
+ *  确定按钮
+ */
+@property (weak, nonatomic) IBOutlet UIButton *DetermineTheChoiceBtn;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *okBtnHeightConstraint;
+- (IBAction)determineTheChoice:(id)sender;
+
+/**
+ *  判断资源有限还是无限 yes 有限  no 无限
+ */
+@property ( nonatomic,assign) BOOL isLimited;
+@property (strong, nonatomic) IBOutlet UIView *bj_view;
+
+@property (nonatomic, copy) NSString * shoppe_id;
+//时长数据源  有限
+@property (nonatomic, strong) NSMutableArray * choosetimeArr;
+//服务id
+@property (nonatomic, copy) NSString * serper_id;
+
+
+@end

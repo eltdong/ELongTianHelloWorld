@@ -1,0 +1,20 @@
+//
+//  SSPTableViewCell.h
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/28.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface ELTSelectServicePersonCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIImageView *iconView;
+@property (strong, nonatomic) IBOutlet UILabel *nameAndSex;
+@property (strong, nonatomic) IBOutlet UILabel *content_desc;
+@property (strong, nonatomic) IBOutlet UILabel *good_lead;
+@property (strong, nonatomic) IBOutlet UILabel *revirew_num;
+@property (strong, nonatomic) IBOutlet UILabel *order_num;
+@property (strong, nonatomic) IBOutlet UIButton *selectBtn;
+
+@end

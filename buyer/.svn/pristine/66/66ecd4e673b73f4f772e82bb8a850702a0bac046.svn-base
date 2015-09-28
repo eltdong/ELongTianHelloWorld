@@ -1,0 +1,75 @@
+//
+//  shopDe_Thir_TableViewCell.m
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTCommodityDetailThreeCell.h"
+#import "BaseViewController.h"
+#import "Radio.h"
+#pragma mark - 评论框的边距宽度
+#define commentEdgeBorderWidth .5f
+@implementation ELTCommodityDetailThreeCell
+
+
+- (void)awakeFromNib {
+    self.all.layer.masksToBounds =YES;
+    self.all.layer.borderColor = UIColorFromRGB(0x666666).CGColor;
+    self.all.layer.borderWidth = commentEdgeBorderWidth;
+    self.all.tag = 2000;
+    
+    self.praise.layer.masksToBounds =YES;
+    self.praise.layer.borderColor = UIColorFromRGB(0x666666).CGColor;
+    self.praise.layer.borderWidth = commentEdgeBorderWidth;
+    self.praise.tag = 2001;
+    
+    self.evaluation.layer.masksToBounds =YES;
+    self.evaluation.layer.borderColor = UIColorFromRGB(0x666666).CGColor;
+    self.evaluation.layer.borderWidth = commentEdgeBorderWidth;
+    self.evaluation.tag = 2002;
+    
+    self.bad.layer.masksToBounds =YES;
+    self.bad.layer.borderColor = UIColorFromRGB(0x666666).CGColor;
+    self.bad.layer.borderWidth = commentEdgeBorderWidth;
+    self.bad.tag = 2003;
+//    self.all.layer.cornerRadius = self.all.frame.size.width;
+    
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+  
+
+    // Configure the view for the selected state
+}
+-(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
+}
+#pragma mark 点击“全部”按钮
+ 
+- (IBAction)allBtn:(id)sender {
+    UIButton * btn = (UIButton *)sender;
+    
+    [self.delegate jumpNextVc:[NSString stringWithFormat:@"%ld",btn.tag - 2000]];
+
+}
+-(void)setRadioArr:(NSMutableArray *)radioArr{
+    _radioArr = radioArr;
+    [self.all setTitle:[self strWithRadioArr:radioArr withTag:0] forState:UIControlStateNormal];
+    [self.praise setTitle:[self strWithRadioArr:radioArr withTag:1] forState:UIControlStateNormal];
+    [self.evaluation setTitle:[self strWithRadioArr:radioArr withTag:2] forState:UIControlStateNormal];
+    [self.bad setTitle:[self strWithRadioArr:radioArr withTag:3] forState:UIControlStateNormal];
+}
+-(NSString *)strWithRadioArr:(NSMutableArray * )radioArr withTag :(NSInteger)tag{
+    Radio * radioModel = [[Radio alloc]init];
+    radioModel = radioArr[tag];
+    
+    if ([radioModel.label isEqualToString:@"全部"]) {
+    return [NSString stringWithFormat:@"%@",radioModel.label];
+    }else{
+    return [NSString stringWithFormat:@"%@(%@)",radioModel.label,radioModel.num];
+    }
+    
+
+}
+@end

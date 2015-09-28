@@ -1,0 +1,21 @@
+//
+//  MainBannerCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/30.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "JCTopic.h"
+#import "StyledPageControl.h"
+
+@interface MainBannerCell : UITableViewCell<JCTopicDelegate>
+
+@property (retain, nonatomic) JCTopic           * Topic;
+@property (nonatomic, retain) UIScrollView      * mainScrollView;
+@property (nonatomic, retain) StyledPageControl * pageView;
+
+@property (nonatomic, retain) NSMutableArray * arr_img;
+
+@end

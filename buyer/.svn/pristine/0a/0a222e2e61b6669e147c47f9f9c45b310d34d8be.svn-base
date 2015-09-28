@@ -1,0 +1,57 @@
+//
+//  shop_First_TableViewCell.m
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/24.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTCommodityDetailOneCell.h"
+#import "ELTShopDetailViewController.h"
+@implementation ELTCommodityDetailOneCell
+-(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
+}
+-(void)setSelected:(BOOL)selected{
+    
+}
+- (void)awakeFromNib {
+    
+    self.eshopnameLabel.userInteractionEnabled = YES;
+   
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+   
+}
+
+-(void)setModel:(ELTFruitAndVegatableModel *)model{
+    _model = model;
+    self.content_nameLabel.text = model.content_name;
+    self.content_priceLabel.text = model.content_preprice;
+    self.content_saleLabel.text = OBJCINT(model.sale);
+    self.eshopnameLabel.text = [NSString     stringWithFormat:@"店铺：%@",model.eshopname];
+    self.reachtimeLabel.text = model.reachtime;
+   
+}
+-(void)setServiceModel:(ELTServiceDetailsModel *)serviceModel{
+    _serviceModel = serviceModel;
+    
+    self.content_nameLabel.text = serviceModel.service_name;
+    self.content_saleLabel.text = OBJCINT(serviceModel.content_sale);
+    self.eshopnameLabel.text = [NSString     stringWithFormat:@"店铺：%@",serviceModel.eshopname];;
+    
+    self.unit_price.text  = [NSString stringWithFormat:@"原价: %@",serviceModel.unit_price];
+    if ([serviceModel.is_limit isEqualToString:@"1"]) {
+        self.reachtimeLabel.text = [NSString stringWithFormat:@"起算时间: %@小时",serviceModel.service_time];
+        self.content_priceLabel.text = [NSString stringWithFormat:@"%@/小时",serviceModel.promotion_price] ;
+    }else{
+    self.reachtimeLabel.text = [NSString stringWithFormat:@"时长: %@小时",serviceModel.service_time];
+        self.content_priceLabel.text = OBJCINT(serviceModel.promotion_price);
+    }
+    
+    self.num.hidden = YES;
+
+}
+@end

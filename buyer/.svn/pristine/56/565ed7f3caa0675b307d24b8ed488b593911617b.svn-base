@@ -1,0 +1,30 @@
+//
+//  ServiceJudgeViewController.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/7.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "BaseViewController.h"
+#import "ELTServiceOrderDetailsModel.h"
+
+/**
+ *  服务评价页面
+ */
+
+@interface ELTServiceJudgeViewController : BaseViewController
+
+@property (nonatomic,strong) IBOutlet UITableView *mainTable;
+
+@property (nonatomic,copy) NSString *eshop_id;//店铺id
+
+@property (nonatomic,copy) NSString *order_id;//订单id
+
+@property (nonatomic,copy) NSString *store_id;//门店id
+
+@property (nonatomic,strong) ELTServiceOrderDetailsModel *model;//店铺数据源
+
+@property (nonatomic,copy) NSString *hidden;//店铺服务态度是否可点
+
+@end

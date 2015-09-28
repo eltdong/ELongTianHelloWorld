@@ -1,0 +1,80 @@
+//
+//  TABViewCell.m
+//  Guoan Test
+//
+//  Created by 王波 on 15/7/22.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTCommodityJudgeViewCell.h"
+
+@interface ELTCommodityJudgeViewCell ()<UITextViewDelegate>{
+    
+    UIButton *_selectBtn;
+    
+}
+@end
+
+@implementation ELTCommodityJudgeViewCell
+
+- (void)awakeFromNib {
+    
+    self.textView.layer.borderColor = [UIColor colorWithRed:245.0/255.0 green:245.0/255.0 blue:245.0/255.0 alpha:1].CGColor;
+    self.textView.layer.borderWidth= 1.2f;
+    self.textView.delegate = self;
+    
+    self.picimage.layer.masksToBounds =YES;
+    self.picimage.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.picimage.layer.borderWidth = 1.0f;
+    
+}
+
+-(void)setModel:(ELTCommidyOrderDetailModel *)model{
+    
+    _model = model;
+    if (!(model.evaluation_content == NULL || [model.evaluation_content isEqualToString:@""])) {
+        _textView.text = model.evaluation_content;
+        _describeLabel.hidden = YES;
+    }else{
+        _describeLabel.hidden = NO;
+    }
+    if (model.evaluation_value == 1) {
+        _goodBtn.selected = YES;
+    }else if(model.evaluation_value == 2){
+        _middleBtn.selected = YES;
+    }else if (model.evaluation_value == 3){
+        _badBtn.selected = YES;
+    }
+    
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+-(IBAction)judgeClick:(id)sender{
+    
+    UIButton *button = sender;
+    button.selected = YES;
+    _selectBtn.selected = NO;
+    _selectBtn = button;
+    _model.evaluation_value = _selectBtn.tag - 200;
+    
+}
+
+- (void)textViewDidChange:(UITextView *)textView{
+    
+    if ([textView.text length] == 0) {
+        _describeLabel.hidden = NO;
+    }
+    else
+    {
+        _describeLabel.hidden = YES;
+    }
+    _model.evaluation_content = textView.text;
+    
+}
+
+@end

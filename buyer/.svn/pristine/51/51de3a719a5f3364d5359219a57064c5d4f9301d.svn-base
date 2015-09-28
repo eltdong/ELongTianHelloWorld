@@ -1,0 +1,26 @@
+//
+//  SSPTableViewCell.m
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/28.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTSelectServicePersonCell.h"
+#import "Const.h"
+@implementation ELTSelectServicePersonCell
+
+- (void)awakeFromNib {
+    // Initialization code
+    self.iconView.layer.masksToBounds = YES;
+    self.iconView.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.iconView.layer.borderWidth = 1.0f;
+    
+}
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end

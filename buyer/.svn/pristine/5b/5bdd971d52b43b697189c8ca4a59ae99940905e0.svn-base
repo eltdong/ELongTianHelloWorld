@@ -1,0 +1,15 @@
+//
+//  PhotosModel.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/14.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface PhotosModel : ELTBaseModel
+
+@property (nonatomic,copy) NSString * content_img;
+
+@end

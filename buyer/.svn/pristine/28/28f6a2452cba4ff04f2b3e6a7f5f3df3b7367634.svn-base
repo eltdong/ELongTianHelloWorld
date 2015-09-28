@@ -1,0 +1,43 @@
+//
+//  mycartBar.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/5.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "BaseViewController.h"
+#import "BBRShopView.h"
+@protocol mycartDelegate <NSObject>
+
+@optional//可选择
+-(void)btnClicked;
+
+@end
+
+
+@interface mycartBar : UIView
+@property (nonatomic,strong) BBRShopView *shopCar;
+#pragma mark - 静态方法创建
++(mycartBar *)instanceView;
+
+@property (nonatomic,assign) id<mycartDelegate>delegate;
+
+#pragma mark - 实现跳转的需要的控制器
+@property (nonatomic,strong) UIViewController *vc ;
+@property (nonatomic,strong) UIViewController *vcPush ;
+#pragma mark - 购物车点击
+//- (IBAction)mycartBtn:(id)sender;
+//+ (NSString*)deviceVersion;
+
+#pragma mark - 加减
+@property (nonatomic,assign) BOOL isHiddenOfRDA;
+@property (weak, nonatomic) IBOutlet UIButton *reduceBtn;
+@property (weak, nonatomic) IBOutlet UIButton *displayBtn;
+@property (weak, nonatomic) IBOutlet UIButton *addBtn;
+- (IBAction)reduceBtn:(id)sender;
+- (IBAction)displayBtn:(id)sender;
+- (IBAction)addBtn:(id)sender;
+
+@end

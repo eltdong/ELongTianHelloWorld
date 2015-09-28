@@ -1,0 +1,122 @@
+//
+//  ELRequestSingle.h
+//  BaoJianIphone
+//
+//  Created by elongtian on 15-3-19.
+//  Copyright (c) 2015年 madongkai. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import "Const.h"
+typedef void (^ELRequestSingleCallBack) (BOOL sucess,id objc);
+
+@interface ELRequestSingle : NSObject
+
+/**列表*/
++ (void)typeRequestWithBlock:(ELRequestSingleCallBack)block andSort:(NSString *)sort andAuto_code:(NSString *)auto_code andPage:(NSString *)page andKeyWord:(NSString *)keyWord;
+
+/**商品详情*/
++(void)typeDetailWithRequest:(ELRequestSingleCallBack)block andid:(NSString *)detailId;
+
+/**商品详情   商品评价*/
++(void)typeDetailWithREquest:(ELRequestSingleCallBack)block andid:(NSString *)typeId andtype:(NSString *)type andPage:(NSString *)page;
+
+/**筛选*/
++ (void)screenRequestWithBlock:(ELRequestSingleCallBack)block andAuto_code:(NSString *)auto_code;
+
+#pragma mark --------------------------------------------
+/**首页轮播图*/
++ (void)homeBanner_or_ADRequest:(ELRequestSingleCallBack) block andXml:(NSString*)xml andImg_type:(NSString*)img_type;
+
+/**首页分类按钮*/
++ (void)classifyRequest:(ELRequestSingleCallBack) block;
+
+/**购物分类展示 ＋ 推荐店铺*/
++ (void)mainClassifyRequest:(ELRequestSingleCallBack) block;
+
+/**服务分类展示 ＋ 推荐店铺*/
++ (void)mainServiceClassifyRequest:(ELRequestSingleCallBack) block auto_code:(NSString *)auto_code;
+
+/**首页推荐店铺*/
++(void)MainShopListWithRecommandRequest:(ELRequestSingleCallBack)block;
+
+/**购物车物品数量*/
++(void)shopCartNumWithRequest:(ELRequestSingleCallBack)block andAuto_code:(NSString *)auto_code;
+
+/**获取地址*/
++ (void)addressWithRequest:(ELRequestSingleCallBack)block;
+
+/**商家列表按时间筛选*/
++(void)shopListWithTimeRequest:(ELRequestSingleCallBack)block;
+
+/**商家列表按推荐筛选*/ 
++(void)shopListWithRecommandRequest:(ELRequestSingleCallBack)block;
+
+/**店铺详情*/
++(void)shopDetailWithRequest:(ELRequestSingleCallBack)block andShoppe_id:(NSString *)shoppe_id;
+
+/**产品列表*/
++ (void)typeListWithRequest:(ELRequestSingleCallBack)block andAuto_code:(NSString *)auto_code andSort:(NSString *)sort andPage:(NSString *)page andUrl:(NSString *)screenUrl andKeyword:(NSString *)keyword;
+
+/**购物车*/
++ (void)ShoppingCartWithRequest:(ELRequestSingleCallBack)block;
+
+/**删除购物车某一商品*/
++(void)deleteShoppingCartRequest:(ELRequestSingleCallBack)block andUid:(NSString *)uid;
+
+/**购物车数量增减*/
++(void)changeTheNumOfShoppingCartRequest:(ELRequestSingleCallBack)block andUid:(NSString *)uid andPid:(NSString *)pid andNum:(NSInteger)num andSele:(BOOL)sele;
+
+/**购物车店铺勾选*/
++(void)shopSelectRequest:(ELRequestSingleCallBack)block andSele:(BOOL)sele andeID:(NSString *)eID;
+
+/**购物车全选*/
++(void)allSelectRequest:(ELRequestSingleCallBack)block andSele:(BOOL)sele;
+
+/**勾选某个商品*/
++(void)commoditySelectRequest:(ELRequestSingleCallBack)block andUid:(NSString *)uid andPid:(NSString *)pid andSele:(BOOL)sele andNum:(NSInteger)num;
+
+/***订单列表*/
++ (void)orderListWithRequest:(ELRequestSingleCallBack)block andOrder_id:(NSString *)order_id andPage:(NSString *)page;
+
+/***删除订单*/
++(void)deleteOrderWithRequest:(ELRequestSingleCallBack)block andOrder_id:(NSString *)order_id;
+
+/***订单详情*/
++ (void)orderDetailWithRequest:(ELRequestSingleCallBack)block andID:(NSString *)ID;
+
+/***提交订单*/
++ (void)submitOrderWithRequest:(ELRequestSingleCallBack)block andStore:(NSString *)store andAddConsignee:(NSString *)addConsignee andAddPhone:(NSString *)addPhone andAddress:(NSString *)address andAddProvince:(NSString *)province andAddCity:(NSString *)city andAddCounty:(NSString *)county andTown:(NSString *)town andVillage:village andTinyVillage:(NSString *)tinyVillage andHouse:(NSString *)house;
+
+/***填写订单*/
++ (void)editeOrderWithRequest:(ELRequestSingleCallBack)block;
+
+/***提交商品订单评价*/
++(void)judgeOrderRequest:(ELRequestSingleCallBack)block andComment:(NSString *)comment;
+
+#pragma mark - 提交服务订单评价
++(void)judgeServiceOrderRequest:(ELRequestSingleCallBack)block andReview:(NSString *)review;
+
+//店铺商品列表
++(void)shopDetailCommodityListWithRequest:(ELRequestSingleCallBack)block andShoppe_id:(NSString *)shoppe_id andAuto_code:(NSString *)auto_code andPage:(NSString *)page andKeyword:(NSString*)keyword;
+#pragma mark - 购物车商品 增删改
++(void)shopCartEditWithRequest:(ELRequestSingleCallBack)block andUid:(NSString *)uid andPid:(NSString *)pid andTask:(NSString *)task andNum:(NSString *)num;
+#pragma mark - 筛选
++ (void)screenRequestWithBlock:(ELRequestSingleCallBack)block andAuto_code:(NSString *)auto_code;
+#pragma mark -买家服务项目列表
++ (void)screenRequestWithBlock:(ELRequestSingleCallBack)block  andAuto_code:(NSString *)auto_code andSort:(NSString *)sort andRow:(NSInteger)row andPage:(NSInteger)page  andKeyWord:(NSString *)keyWord;
+#pragma mark - 买家端服务项目详情
++ (void)screenRequestWithBlock:(ELRequestSingleCallBack)block andId:(NSString *)ID;
+#pragma mark - 买家端服务评价
++ (void)screenRequestWithBlock:(ELRequestSingleCallBack)block andLink_id:(NSString *)link_id andType:(NSInteger)type andPlugin:(NSString *)plugin andRow:(NSInteger)row andPage:(NSInteger)page;
+#pragma mark - 服务人员介绍
++ (void)screenRequestWithBlock:(ELRequestSingleCallBack)block andid:(NSString *)ID;
+#pragma mark - 服务人员评价列表
++ (void)screenRequestWithBlock:(ELRequestSingleCallBack)block andSerper_id:(NSString *)serper_id andType:(NSInteger)type andPlugin:(NSString *)plugin andRow:(NSInteger)row andPage:(NSInteger)page;
+
+/***订单列表*/
++ (void)serviceOrderListWithRequest:(ELRequestSingleCallBack)block andOrder_id:(NSString *)order_id andpage:(NSInteger )page;
++ (void)serviceOrderDetails:(ELRequestSingleCallBack)block andId:(NSString *)ID;
+/***服务店铺*/
++ (void)serviceShopWithRequest:(ELRequestSingleCallBack)block andID:(NSString *)ID andAuto_code:(NSString *)auto_code;
+@end

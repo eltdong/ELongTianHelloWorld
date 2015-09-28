@@ -1,0 +1,34 @@
+//
+//  FruitAndVegatableModel.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/12.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "FruitAndVegatableModel.h"
+
+@implementation FruitAndVegatableModel
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key{
+    if ([key isEqualToString:@"content_sale"]) {
+        if ([value isKindOfClass:[NSString class]]) {
+            _sale = value;
+        }else{
+            _sale = [NSString stringWithFormat:@"%@",[value stringValue]];
+        }
+        
+    }else if([key isEqualToString:@"cartnum"]){
+        if ([value isKindOfClass:[NSDictionary class]]) {
+            _u_id = [value objectForKey:@"u_id"];
+            _amount = [value objectForKey:@"amount"];
+//            if (_amount == NULL) {
+//                _amount = @"0";
+//            }
+        }
+
+    }else if ([key isEqualToString:@"id"]){
+        _fvId = value;
+    }
+
+}
+@end

@@ -1,0 +1,30 @@
+//
+//  EvaluationModel.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/2.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTEvaluationContentModel.h"
+
+
+@implementation ELTEvaluationContentModel
+-(instancetype)initDictionary:(NSDictionary *)dic{
+    self = [super init];
+    if (self) {
+        self.ID = dic[@"id"];
+        self.content_user = dic[@"content_user"];
+        self.evaluation_content = dic[@"evaluation_content"];
+        self.content_img = dic[@"content_img"];
+        self.create_time = dic[@"create_time"];
+        if (![dic[@"review_img"] isEqual:[NSNull null]]) {
+             self.review_img = dic[@"review_img"];
+        }
+        self.label = dic[@"label"];
+        self.value = dic[@"value"];
+        self.num = dic[@"num"];
+    }
+    return self;
+}
+@end

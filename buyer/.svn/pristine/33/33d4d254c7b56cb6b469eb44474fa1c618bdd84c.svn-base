@@ -1,0 +1,30 @@
+//
+//  MSDetailViewController.h
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/21.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//  服务详情
+
+#import "BaseViewController.h"
+#import "ELTShopDetailTableViewCell.h"
+#import "ELTCommodityDetailTwoCell.h"
+#import "JCTopic.h"
+#import "StyledPageControl.h"
+#import "BBRShopView.h"
+#import "ELTServiceDetailsModel.h"
+/**
+ *  服务详情
+ */
+@interface ELTServiceDetailViewController : BaseViewController<shop_Sec_delegate,JCTopicDelegate>
+
+@property (nonatomic, strong) UIWebView * mainWebView;//简介
+@property (nonatomic, retain) StyledPageControl * pageView;//轮播图
+@property (strong,nonatomic) JCTopic            * Topic;//轮播图
+@property (strong,nonatomic) UIScrollView       * mainScrollView;//轮播图
+@property (weak, nonatomic) IBOutlet UITableView *tableView;//基础空间
+@property (weak, nonatomic) IBOutlet UIButton *selectedBtn;//马上预约
+- (IBAction)selectedBtn:(id)sender;
+@property ( nonatomic,assign) BOOL isLimited;// 判断资源有限还是无限  no  无限  yes 有限
+@property (nonatomic ,strong)  ELTServiceDetailsModel *model;//数据源
+@end

@@ -1,0 +1,31 @@
+//
+//  OrderSubscribeViewController.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/29.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//  马上预约 有限资源 yd
+
+#import "BaseViewController.h"
+#import "ELTServiceDetailsModel.h"
+#import "UIImageView+AFNetworking.h"
+#import "shippingAddress.h"
+#import "ELTOrderSuccessViewController.h"
+@interface ELTOrderSubLimitViewController : BaseViewController <UITableViewDataSource,UITableViewDelegate,UIPickerViewDataSource,UIPickerViewDelegate,OrderSuccessViewControllerDelegate>
+
+@property (nonatomic,strong) IBOutlet UITableView *bgTable;
+
+@property (nonatomic,strong) IBOutlet UIButton *bottomButton;
+@property (nonatomic, assign) BOOL isLimited;
+@property (nonatomic, copy) NSString * shoppe_id;
+@property (nonatomic, copy) NSString * price;
+//数据源
+@property (nonatomic ,strong)  ELTServiceDetailsModel * model;
+
+
+- (IBAction)bottomBtn:(id)sender;
+@property (strong, nonatomic) IBOutlet UIPickerView *pickerView;
+
+@property (strong, nonatomic) IBOutlet UIView *pickerView_bjView;
+
+@end

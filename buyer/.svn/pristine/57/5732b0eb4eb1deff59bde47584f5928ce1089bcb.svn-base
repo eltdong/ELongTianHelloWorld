@@ -1,0 +1,18 @@
+//
+//  OrderViewCell.h
+//  Guoan Test
+//
+//  Created by 王波 on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "ELTMyOrderModel.h"
+#import "ELTMyServiceOrderModel.h"
+
+@interface ELTOrderViewCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UILabel *Number;//订单编号
+@property (weak, nonatomic) IBOutlet UILabel *State;//订单状态
+@property (nonatomic,strong) ELTMyOrderModel *orderModel;
+@property (nonatomic ,strong)  ELTMyServiceOrderModel *model;
+@end

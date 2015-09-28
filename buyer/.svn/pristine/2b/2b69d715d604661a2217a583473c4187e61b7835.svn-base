@@ -1,0 +1,242 @@
+//
+//  SellerListViewController.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTSellerListViewController.h"
+#import "ELTSellerListOneCell.h"
+#import "ELTSellerListTwoCell.h"
+#import "ELTShopListModel.h"
+#import "ELTShopModel.h"
+
+#import "ELTShopDetailViewController.h"
+#import "ELTServiceShopDeatilViewController.h"
+
+@interface ELTSellerListViewController ()<UITableViewDataSource,UITableViewDelegate>{
+    NSMutableArray *_dataArray;//数据源
+    NSMutableArray *_timeArray;//按时间筛选
+    NSMutableArray *_recommendArray;//按推荐筛选
+    NSMutableArray *_detailArray;
+}
+@end
+
+@implementation ELTSellerListViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    _dataArray = [[NSMutableArray alloc]init];
+    self.title = @"商家列表";
+    self.bgTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self downTimeRequest];
+}
+
+#pragma mark - tableview Delegate
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if ([_type integerValue] == 20) {
+        if (indexPath.row == 0) {
+            
+            ELTSellerListOneCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SellerListOneCell"];
+            if (!cell) {
+                cell = [[[NSBundle mainBundle]loadNibNamed:@"ELTSellerListOneCell" owner:self options:nil]firstObject];
+            }
+            
+            if (indexPath.section == 0) {
+                cell.label.text = [NSString stringWithFormat:@"%@送达",_time];
+            }else{
+                cell.label.text = @"其他店铺";
+            }
+            return cell;
+            
+        }else{
+            
+            ELTSellerListTwoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SellerListTwoCell"];
+            if (!cell) {
+                cell = [[[NSBundle mainBundle]loadNibNamed:@"ELTSellerListTwoCell" owner:self options:nil]firstObject];
+            }
+            ELTShopModel *model;
+            if (indexPath.section == 0) {
+                
+                model = [_timeArray objectAtIndex:indexPath.row - 1];
+                
+            }else{
+                
+                model = [_recommendArray objectAtIndex:indexPath.row - 1];
+                
+            }
+            [cell.pickImage setImageWithURL:[NSURL URLWithString:model.content_img]];
+            cell.nameLabel.text = model.name;
+            if (model.openTime) {
+                if (![model.openTime isEqual:@"<null>"]) {
+                    cell.timeLabel.text = [NSString stringWithFormat:@"服务时间：%@-%@",model.openTime,model.closeTime];
+                }
+                
+            }else{
+                
+                cell.timeLabel.text = @"服务时间：00:00-00:00";
+            }
+            
+            return cell;
+            
+        }
+    }else{
+        
+        ELTSellerListTwoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SellerListTwoCell"];
+        if (!cell) {
+            cell = [[[NSBundle mainBundle]loadNibNamed:@"ELTSellerListTwoCell" owner:self options:nil]firstObject];
+        }
+        ELTShopModel *model;
+        model = [_timeArray objectAtIndex:indexPath.row];
+        [cell.pickImage setImageWithURL:[NSURL URLWithString:model.content_img]];
+        cell.nameLabel.text = model.name;
+        if (model.openTime) {
+            if (![model.openTime isEqual:@"<null>"]) {
+                cell.timeLabel.text = [NSString stringWithFormat:@"服务时间：%@-%@",model.openTime,model.closeTime];
+            }
+            
+        }else{
+            
+            cell.timeLabel.text = @"服务时间：00:00-00:00";
+        }
+        
+        return cell;
+    }
+    
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if ([_type integerValue] == 20){
+        
+        if (indexPath.row == 0) {
+            return 40;
+        }else{
+            return 80;
+        }
+        
+    }else{
+        return 80;
+    }
+    
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    
+    return _dataArray.count;
+    
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    
+    if ([_type integerValue] == 20) {
+        if (section == 0) {
+            return _timeArray.count + 1;
+        }else{
+            return _recommendArray.count + 1;
+        }
+    }else{
+        return _timeArray.count;
+    }
+    
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    [self.indicator setIndicatorType:ActivityIndicatorLogin];
+    [self.indicator startAnimatingActivit];
+    ELTShopModel *model;
+    
+        if ([_type isEqualToString:@"20"]) {
+            if (indexPath.section == 0) {
+                model = [_timeArray objectAtIndex:indexPath.row-1];
+            }else{
+                model = [_recommendArray objectAtIndex:indexPath.row-1];
+            }
+        }else{
+            model = [_timeArray objectAtIndex:indexPath.row];
+        }
+    
+        if ([_type isEqualToString:@"10"]) {
+            
+            ELTServiceShopDeatilViewController *view = [[ELTServiceShopDeatilViewController alloc]init];
+            view.shoppe_id = model.ID;
+            [ELRequestSingle shopDetailWithRequest:^(BOOL sucess, id objc) {
+                view.dataArray = objc;
+                
+                [self.navigationController pushViewController:view animated:YES];
+                [self.indicator LoadSuccess];
+            } andShoppe_id:model.ID];
+            
+        }else{
+            ELTShopDetailViewController *view = [[ELTShopDetailViewController alloc]init];
+            view.shoppe_id = model.ID;
+            [ELRequestSingle shopDetailWithRequest:^(BOOL sucess, id objc) {
+                
+                _detailArray = objc;
+                view.dataArray = _detailArray;
+                [self.navigationController pushViewController:view animated:YES];
+                [self.indicator LoadSuccess];
+            } andShoppe_id:model.ID];
+            
+        }
+    
+}
+
+#pragma mark - 点击事件
+-(void)back:(id)sender{
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
+}
+
+#pragma mark - 数据请求
+- (void)downTimeRequest{
+    
+    [_dataArray removeAllObjects];
+    [self.indicator startAnimatingActivit];
+    [ELRequestSingle shopListWithTimeRequest:^(BOOL sucess, id objc) {
+        
+        [self.indicator LoadSuccess];
+        _timeArray = objc;
+        [_dataArray addObject:objc];
+        if ([_type integerValue] == 20) {
+            [self downRecommendRequest];
+        }else{
+            [self.bgTable reloadData];
+        }
+    }andType:_type];
+}
+
+-(void)downRecommendRequest{
+    
+    [self.indicator setIndicatorType:ActivityIndicatorLogin];
+    [self.indicator startAnimatingActivit];
+    [ELRequestSingle shopListWithRecommandRequest:^(BOOL sucess, id objc) {
+        [self.indicator LoadSuccess];
+        _recommendArray = objc;
+        [_dataArray addObject:objc];
+        [self.bgTable reloadData];
+    }andType:_type];
+    
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

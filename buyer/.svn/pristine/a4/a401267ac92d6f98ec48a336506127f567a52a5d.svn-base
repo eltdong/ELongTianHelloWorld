@@ -1,0 +1,210 @@
+//
+//  SearchCustomView.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/14.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTSearchCustomView.h"
+#import "ELTSearchCustomViewTableViewCell.h"
+
+@interface ELTSearchCustomView()<SearchCustomViewTableViewCellDelegate>
+@property ( nonatomic,assign) BOOL  isBtn;
+@property (nonatomic, assign) NSInteger count;
+@end
+
+
+@implementation ELTSearchCustomView
+NSInteger selectCount = 555555;
+
++(instancetype)initWithCustomSearchView{
+    NSArray * arr = [[NSBundle mainBundle]loadNibNamed:@"ELTSearchCustomView" owner:nil options:nil];
+    return arr[0];
+}
+-(void)awakeFromNib{
+    /**
+     *  代码写在这里才有效
+     */
+//    self.backgroundColor = [UIColor clearColor];
+    self.count = 0;
+    _bjView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT)];
+    _bjView.hidden = YES;
+    _bjView.backgroundColor = [UIColor blackColor];
+    _bjView.alpha = 0.7;
+    [self addSubview:_bjView];
+    [self bringSubviewToFront:self.tableview];
+    self.tableview.delegate = self;
+    self.tableview.dataSource = self;
+    self.tableview.height = 41.f;
+    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    self.tableviewHeightContraint.constant = self.isBtn?300.f :45.f;
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
+    self.frame  = CGRectMake(0, 64, SCREENWIDTH, 45);
+    self.tableview.scrollEnabled = NO;
+    selectCount = 555555;
+}
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 2;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if (section == 0) {
+        return 1;
+    }
+    else{
+        if (_searchType == SearchCommodityInterface) {
+            return self.isBtn ? 3:0;
+        }else{
+        
+            return self.isBtn ?2:0;
+        }
+        
+    }
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    self.count ++;
+     static NSString * cellid = @"cellId";
+    ELTSearchCustomViewTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellid];
+     if (!cell) {
+        
+        NSArray * arr= [[NSBundle mainBundle]loadNibNamed:@"ELTSearchCustomViewTableViewCell" owner:self options:nil];
+        switch (indexPath.section) {
+            case 0:
+            {
+                cell = arr[0];
+                cell.delegate = self;
+                    if(self.count > 1){
+                    [cell.screeningBtn setTitleColor:UIColorFromRGB(0xC61F2E) forState:UIControlStateNormal];
+                    if(self.isBtn){
+                        [cell.selectBtnImg setBackgroundImage:[UIImage imageNamed:@"elt_upsort"] forState:UIControlStateNormal];
+                    }else{
+                        [cell.selectBtnImg setBackgroundImage:[UIImage imageNamed:@"elt_more"] forState:UIControlStateNormal];
+                    }
+                }
+            }
+                break;
+            case 1:
+            {
+                switch (indexPath.row) {
+                    case 0:
+                    {
+                        cell = arr[1];
+                        [cell.textlabelBtn setTitle:@"价格从低到高" forState:UIControlStateNormal];
+                    
+                    }
+                        break;
+                    case 1:
+                    {
+                        cell = arr[1];
+                        [cell.textlabelBtn setTitle:@"价格高到低" forState:UIControlStateNormal];
+                        
+                    }
+                        break;
+                    case 2:
+                    {
+                        cell = arr[1];
+                        [cell.textlabelBtn setTitle:@"时间最快" forState:UIControlStateNormal];
+                    }
+                        break;
+                    default:
+                        break;
+                }
+            }
+                break;
+            default:
+                break;
+        }
+
+    }
+    if (indexPath.row == selectCount) {
+        cell.selectStatusBtn.hidden = NO;
+        [cell.textlabelBtn setTitleColor:UIColorFromRGB(0xda2c41) forState:UIControlStateNormal];
+    }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    return cell;
+  
+}
+-(CGFloat )tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if (section ==0) {
+        return 0.f;
+    }else
+    {
+        return .0f;
+    }
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 0.0f;
+}
+-(CGFloat)height{
+    return self.isBtn?182.f :45.f;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 46;
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.section !=0) {
+        selectCount = indexPath.row;
+        ELTSearchCustomViewTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"cellId" ];
+        cell.selected = YES;
+        NSString * sort;
+        switch (indexPath.row) {
+            case 0:
+                sort = _searchType ==SearchServiceInterface?@"4" :@"6";
+                break;
+            case 1:
+                sort = _searchType == SearchServiceInterface?@"3": @"5";
+                break;
+            case 2:
+                sort = @"5";
+                break;
+            case 3:
+                sort = @"3";
+                break;
+            default:
+                break;
+        }
+        
+        self.block(sort);
+        [self getScreening];
+    }
+}
+#pragma mark - 筛选
+-(void)getScreening{
+    
+    self.isBtn = !self.isBtn;
+    if (_searchType == SearchCommodityInterface) {
+        self.tableviewHeightContraint.constant = self.isBtn?182.f :45;
+    }else{
+        self.tableviewHeightContraint.constant = self.isBtn?138.f :45.f;
+    }
+    
+    self.frame  = CGRectMake(0, 64, SCREENWIDTH, self.isBtn?182.f :45.f);
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
+    if (self.isBtn) {
+        _bjView.hidden = NO;
+        self.frame  = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT);
+    }else{
+        _bjView.hidden = YES;
+        self.frame  = CGRectMake(0, 64, SCREENWIDTH, self.isBtn?182.f :45.f);
+    }
+    [self.tableview reloadData];
+}
+#pragma mark - 销量优先
+-(void)getSalesPriority{
+    self.isBtn = NO;
+    self.tableviewHeightContraint.constant = self.isBtn?182.f :45.f;
+    self.frame  = CGRectMake(0, 64, SCREENWIDTH, self.isBtn?182.f :45.f);
+    if (self.isBtn) {
+        _bjView.hidden = NO;
+        self.frame  = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT);
+    }else{
+        _bjView.hidden = YES;
+        self.frame  = CGRectMake(0, 64, SCREENWIDTH, self.isBtn?182.f :45.f);
+    }
+    self.block(@"1");
+    selectCount = 555555;
+}
+@end

@@ -1,0 +1,85 @@
+//
+//  MainTimeView.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/25.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "MainTimeView.h"
+
+@implementation MainTimeView
+
+-(void)awakeFromNib{
+    self.buttonOne.layer.masksToBounds =YES;
+    self.buttonOne.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.buttonOne.layer.borderWidth = 1.0f;
+    
+    self.buttonTwo.layer.masksToBounds =YES;
+    self.buttonTwo.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.buttonTwo.layer.borderWidth = 1.0f;
+    
+    self.buttonThree.layer.masksToBounds =YES;
+    self.buttonThree.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.buttonThree.layer.borderWidth = 1.0f;
+    
+    self.buttonFour.layer.masksToBounds =YES;
+    self.buttonFour.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.buttonFour.layer.borderWidth = 1.0f;
+    
+}
+
+- (IBAction)button1:(UIButton *)sender {
+    if (sender.selected ==YES) {
+      
+       
+    }else{
+     sender.selected = YES;
+    self.buttonTwo.selected =NO;
+    self.buttonThree.selected = NO;
+    self.buttonFour.selected = NO;
+        
+    }
+    [self.delegate mainTimeButton:sender];
+}
+- (IBAction)button2:(UIButton *)sender {
+    [self.delegate mainTimeButton:sender];
+    if (sender.selected ==YES) {
+        
+    }else{
+        sender.selected = YES;
+        self.buttonOne.selected =NO;
+        self.buttonThree.selected = NO;
+        self.buttonFour.selected = NO;
+        
+    }
+
+}
+- (IBAction)button3:(UIButton *)sender {
+    [self.delegate mainTimeButton:sender];
+    if (sender.selected ==YES) {
+    }else{
+        sender.selected = YES;
+        self.buttonTwo.selected =NO;
+        self.buttonOne.selected = NO;
+        self.buttonFour.selected = NO;
+        
+    }
+
+}
+
+- (IBAction)button4:(UIButton *)sender {
+    [self.delegate mainTimeButton:sender];
+    if (sender.selected ==YES) {
+        
+    }else{
+        sender.selected = YES;
+        self.buttonTwo.selected =NO;
+        self.buttonThree.selected = NO;
+        self.buttonOne.selected = NO;
+        
+    }
+
+}
+
+@end

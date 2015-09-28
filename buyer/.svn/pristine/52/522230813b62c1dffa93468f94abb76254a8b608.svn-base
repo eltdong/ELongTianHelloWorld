@@ -1,0 +1,87 @@
+//
+//  OrderSuccessViewController.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/1.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTOrderSuccessViewController.h"
+
+@interface ELTOrderSuccessViewController ()
+
+@end
+
+@implementation ELTOrderSuccessViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.view.backgroundColor = UIColorFromRGB(0xf5f5f5);
+    //成功图片
+    self.topImage = [[UIImageView alloc]initWithFrame:CGRectMake(SCREENWIDTH /2 - 40.5, SCREENWIDTH / 3, 81, 81)];
+    self.topImage.image = [UIImage imageNamed:@"elt_success.png"];
+    [self.view addSubview:_topImage];
+    //订单提交成功
+    self.label = [[UILabel alloc]initWithFrame:CGRectMake(_topImage.frame.origin.x, _topImage.bottom + 33, 100, 15)];
+    self.label.font = [UIFont systemFontOfSize:20.0];
+    self.label.text = @"下单成功";
+    self.label.textColor = UIColorFromRGB(0x666666);
+    [self.view addSubview:self.label];
+    //我的订单按钮点击
+    self.firstBtn = [[UIButton alloc]initWithFrame:CGRectMake(50, _label.bottom + 43, SCREENWIDTH - 100, 35)];
+    self.firstBtn.layer.masksToBounds =YES;
+    self.firstBtn.layer.borderColor = UIColorFromRGB(0xda2c41).CGColor;
+    self.firstBtn.layer.borderWidth = 1.0f;
+    self.firstBtn.layer.cornerRadius = 6.0;
+    [self.firstBtn setTitle:@"我的订单" forState:UIControlStateNormal];
+    [self.firstBtn setTitleColor:UIColorFromRGB(0xda2c41) forState:UIControlStateNormal];
+    self.firstBtn.titleLabel.font = [UIFont systemFontOfSize:14.0];
+    [_firstBtn addTarget:self action:@selector(firstClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_firstBtn];
+    //继续购物按钮点击
+    self.secondBtn = [[UIButton alloc]initWithFrame:CGRectMake(50, _firstBtn.bottom + 25, SCREENWIDTH - 100, 35)];
+    self.secondBtn.layer.masksToBounds =YES;
+    self.secondBtn.layer.borderColor = UIColorFromRGB(0x999999).CGColor;
+    [self.secondBtn setTitleColor:UIColorFromRGB(0x666666) forState:UIControlStateNormal];
+    self.secondBtn.titleLabel.font = [UIFont systemFontOfSize:14.0];
+    
+    [self.secondBtn setTitle:@"继续购物" forState:UIControlStateNormal];
+    
+    self.secondBtn.layer.cornerRadius = 6.0;
+    self.secondBtn.layer.borderWidth = 1.0f;
+    [_secondBtn addTarget:self action:@selector(secondClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_secondBtn];
+    
+}
+
+#pragma mark - 点击事件
+-(void)firstClick:(UIButton *)button{
+    
+    [self.delegate first:button];
+}
+
+-(void)secondClick:(UIButton *)button{
+    
+    [self.delegate second:button];
+}
+
+-(void)back:(id)sender{
+    [self.delegate second:sender];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

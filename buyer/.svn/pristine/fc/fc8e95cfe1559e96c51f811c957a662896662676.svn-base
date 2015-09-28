@@ -1,0 +1,21 @@
+//
+//  MainClaCollectionViewCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/26.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+/**
+ *  首页二级分类collectionCell
+ */
+@interface ELTMainClaCollectionViewCell : UICollectionViewCell
+
+@property (strong, nonatomic) IBOutlet UILabel *nameLabel;//分类名称
+
+@property (strong, nonatomic) IBOutlet UILabel *describeLabel;//分类描述
+
+@property (strong, nonatomic) IBOutlet UIImageView *image;//分类图片
+
+@end

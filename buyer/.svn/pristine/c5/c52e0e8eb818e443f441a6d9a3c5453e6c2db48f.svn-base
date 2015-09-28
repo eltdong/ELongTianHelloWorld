@@ -1,0 +1,37 @@
+//
+//  ShopDeatilViewController.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/31.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+#import "BaseViewController.h"
+#import "ELTMainSegmentView.h"
+#import "ELTShopDetailModel.h"
+#import "UIImageView+AFNetworking.h"
+#import "ELTShoppingCarViewController.h"
+#import "mycartBar.h"
+#import "ELTSellerDetailViewController.h"
+#import "JCTopic.h"
+#import "StyledPageControl.h"
+@interface ELTShopDetailViewController : BaseViewController<mycartDelegate,JCTopicDelegate>
+/**
+ *  店铺列表
+ */
+@property (nonatomic,strong) ELTMainSegmentView *segmentView;//服务分类view
+@property (strong, nonatomic) IBOutlet UIView *barView;//底部view
+@property (nonatomic,strong) NSMutableArray *dataArray;//存放商品店铺信息model
+@property (strong, nonatomic) IBOutlet UICollectionView *collectionView;//底层view
+@property (nonatomic, strong) NSMutableArray * proArr;//存放店铺商品分类model
+
+@property (nonatomic, strong) ELTShopDetailModel * shopDetailList;//
+@property (nonatomic, copy) NSString * shoppe_id;//店铺id
+@property (nonatomic, strong)mycartBar * mcb;//购物车view
+/**
+ *  轮播图
+ */
+@property (retain, nonatomic) JCTopic           * Topic;
+@property (nonatomic, retain) UIScrollView      * mainScrollView;
+@property (nonatomic, retain) StyledPageControl * pageView;
+
+@end

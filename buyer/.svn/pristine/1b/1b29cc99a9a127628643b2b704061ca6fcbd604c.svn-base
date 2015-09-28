@@ -1,0 +1,20 @@
+//
+//  ConfirmReceiptAddressView.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/13.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface ELTConfirmReceiptAddressView : UIView
++(instancetype)initWithCustomView;
+@property (weak, nonatomic) IBOutlet UIView *popView;
+@property (weak, nonatomic) IBOutlet UIButton *confirmBtn;
+- (IBAction)confirmBtn:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *alertBtn;
+- (IBAction)alertBtn:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *changeAddressBtn;
+- (IBAction)changeAddressBtn:(id)sender;
+@end

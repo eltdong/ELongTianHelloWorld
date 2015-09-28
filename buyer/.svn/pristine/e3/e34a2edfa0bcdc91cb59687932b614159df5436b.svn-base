@@ -1,0 +1,125 @@
+//
+//  mycartBar.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/5.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "mycartBar.h"
+#import "Const.h"
+
+#import <sys/utsname.h>
+#import <sys/cdefs.h>
+@implementation mycartBar
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
++(mycartBar *)instanceView{
+    NSArray* nibView =  [[NSBundle mainBundle] loadNibNamed:@"mycartBar" owner:nil options:nil];
+    return [nibView objectAtIndex:0];
+}
+
+
+
+-(id)initWithCoder:(NSCoder *)aDecoder{
+    if (self = [super initWithCoder:aDecoder]) {
+// xib 写代码的地方
+        [self createShopcart];
+//        if (!self.isHiddenOfRDA) {
+        
+//        }
+ 
+        
+    }
+    return self;
+}
+
+-(void)createShopcart{
+    
+    
+    
+    self.shopCar = [BBRShopView buttonWithType:UIButtonTypeCustom];
+    CGFloat centerX = 12.5f + 109.f/4.f;
+     CGFloat centerY =  7.25f;
+    self.shopCar.center = CGPointMake(centerX, centerY);
+    self.shopCar.bounds = CGRectMake(0, 0, 54.5f, 54.5f);
+    [self.shopCar setImage:[UIImage imageNamed:@"elt_mycart"] forState:UIControlStateNormal];
+    [self.shopCar setImage:[UIImage imageNamed:@"elt_mycart"] forState:UIControlStateHighlighted];
+    //[self.shopCar.badgeview setBadgeText:@"1"];
+    [self.shopCar addTarget:self action:@selector(shopCarClick) forControlEvents:UIControlEventTouchUpInside];
+    self.shopCar.badgeview.badgeOverlayColor = UIColorFromRGB(0xda2c41);
+    self.shopCar.badgeview.badgeAlignment = JSBadgeViewAlignmentTopRight;
+    self.shopCar.hidden = NO;
+    [self addSubview:self.shopCar];
+    
+    self.reduceBtn.hidden = YES;
+    self.displayBtn .hidden = YES;
+    self.addBtn.hidden = YES;
+    
+    
+}
+-(void)shopCarClick{
+     [self.vc.navigationController pushViewController:self.vcPush animated:YES];
+}
+#pragma mark - 获取当前手机的具体型号
+//+ (NSString*)deviceVersion
+//{
+//    // 需要#import "sys/utsname.h"
+//    struct utsname systemInfo;
+//    uname(&systemInfo);
+//    NSString *deviceString = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+//    
+//    //CLog(@"%@",deviceString);
+//    
+//    if ([deviceString isEqualToString:@"iPhone1,1"])    return @"iPhone 1G";
+//    if ([deviceString isEqualToString:@"iPhone1,2"])    return @"iPhone 3G";
+//    if ([deviceString isEqualToString:@"iPhone2,1"])    return @"iPhone 3GS";
+//    if ([deviceString isEqualToString:@"iPhone3,1"])    return @"iPhone 4";
+//    if ([deviceString isEqualToString:@"iPhone3,2"])    return @"Verizon iPhone 4";
+//    if ([deviceString isEqualToString:@"iPhone4,1"])    return @"iPhone 4S";
+//    if ([deviceString isEqualToString:@"iPhone5,2"])    return @"iPhone 5";
+//}
+- (IBAction)reduceBtn:(id)sender {
+    NSInteger  num1 =  [self.shopCar.badgeview.badgeText integerValue];
+    NSString * strNum1 =[NSString stringWithFormat:@"%ld",num1-1];
+    if ([strNum1 isEqualToString:@"-1"]) {
+        [self.shopCar.badgeview setBadgeText:@"0"];
+        [UIView animateWithDuration:1 animations:^{
+            self.shopCar.badgeview.hidden = YES;
+        }];
+        
+        
+    }else
+    {
+        self.shopCar.badgeview.hidden= NO;
+        [self.shopCar.badgeview setBadgeText:strNum1];
+        [self.displayBtn setTitle:strNum1 forState:UIControlStateNormal];
+    }
+    
+    
+    
+ 
+}
+
+- (IBAction)displayBtn:(id)sender {
+#pragma mark Extensible
+}
+
+- (IBAction)addBtn:(id)sender {
+    NSInteger  num1 =  [self.shopCar.badgeview.badgeText integerValue];
+    NSString * strNum1 =[NSString stringWithFormat:@"%ld",num1+1];
+    self.shopCar.badgeview.hidden= NO;
+
+    [self.shopCar.badgeview setBadgeText:strNum1];
+    
+    [self.displayBtn setTitle:strNum1 forState:UIControlStateNormal];
+    
+}
+
+@end

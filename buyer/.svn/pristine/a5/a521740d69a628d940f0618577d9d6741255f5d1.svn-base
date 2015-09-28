@@ -1,0 +1,78 @@
+//
+//  ShopDetailTwoCell.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/3.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ShopDetailTwoCell.h"
+#import "ShopDetailCollectionViewCell.h"
+
+@implementation ShopDetailTwoCell
+
+- (void)awakeFromNib {
+    // Initialization code
+    self.backgroundColor = [UIColor clearColor];
+    _collectionView.backgroundColor=UIColorFromRGB(0xf5f5f5);
+    _collectionView.dataSource=self;
+    _collectionView.delegate=self;
+    _collectionView.scrollEnabled = NO;
+    // register cell
+    
+    [_collectionView registerNib:[UINib nibWithNibName:@"ShopDetailCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"ShopDetailCollectionViewCell"];
+    
+    self.height = 5*SCREENWIDTH / 1.7 + 50;
+}
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return 10;
+}
+
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
+}
+
+//每个UICollectionView展示的内容
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    ShopDetailCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ShopDetailCollectionViewCell" forIndexPath:indexPath];
+    cell.backgroundColor = [UIColor whiteColor];
+    return cell;
+}
+#pragma mark --UICollectionViewDelegateFlowLayout
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return CGSizeMake((SCREENWIDTH - 20)/2, SCREENWIDTH / 1.7);
+    
+}
+
+//定义每个UICollectionView 的 margin
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(7, 7, 7,7);
+}
+
+#pragma mark --UICollectionViewDelegate
+//UICollectionView被选中时调用的方法
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.delegate didSelect:(NSIndexPath *)indexPath];
+}
+
+//返回这个UICollectionView是否可以被选择
+-(BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end

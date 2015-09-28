@@ -1,0 +1,23 @@
+//
+//  OrderSubLimitedViewController.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/5.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+
+/**
+ *  服务预约 －－－区分无限资源和有限资源
+ */
+#import "BaseViewController.h"
+#import "ELTServiceDetailsModel.h"
+#import "ELTOrderSuccessViewController.h"
+@interface ELTOrderSubUnlimitedViewController : BaseViewController<UIPickerViewDelegate,UIPickerViewDataSource,OrderSuccessViewControllerDelegate>
+@property (strong, nonatomic) IBOutlet UITableView *bgTableView;//基础控件
+@property (strong, nonatomic) IBOutlet UIButton *bottomBtn;//确定按钮
+@property (nonatomic, assign) BOOL isLimited;//区分有限还是无限
+@property (nonatomic ,strong)  ELTServiceDetailsModel * model;//数据源
+@property (strong, nonatomic) IBOutlet UIPickerView *pickerView1;//代金卷pickerView
+@property (strong, nonatomic) IBOutlet UIView *pickerView_bjView;//代金卷pickerView的父视图
+- (IBAction)bottomBtn:(id)sender;
+
+@end

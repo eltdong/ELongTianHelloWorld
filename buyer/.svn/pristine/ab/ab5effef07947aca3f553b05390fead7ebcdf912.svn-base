@@ -1,0 +1,30 @@
+//
+//  SearchCustomView.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/14.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+typedef enum {
+    
+    SearchCommodityInterface,//商品界面
+    
+    SearchServiceInterface//服务界面
+    
+}SearchType;
+
+typedef void (^myBlock)(NSString * sort);
+
+@interface ELTSearchCustomView : UIView<UITableViewDataSource,UITableViewDelegate>
+
++(instancetype)initWithCustomSearchView;
+@property (weak, nonatomic) IBOutlet UITableView *tableview;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableviewHeightContraint;
+
+@property (strong, nonatomic) UIView *bjView;
+@property (nonatomic,strong) UIButton * btn;
+@property (nonatomic ,assign)  SearchType searchType;
+@property (nonatomic, copy) myBlock block;
+@end

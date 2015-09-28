@@ -1,0 +1,26 @@
+//
+//  OrderViewController.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/8.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "BaseViewController.h"
+
+@interface ELTServiceOrderViewController : BaseViewController
+@property (strong, nonatomic) IBOutlet UITableView *bgTable;
+
+@property (strong, nonatomic) IBOutlet UIButton *buttonOne;//全部
+
+@property (strong, nonatomic) IBOutlet UIButton *buttonTwo;//未完成
+
+@property (strong, nonatomic) IBOutlet UIButton *buttonThree;//已完成
+
+@property (strong, nonatomic) IBOutlet UIButton *buttonFour;//已评价
+
+@property (strong, nonatomic) IBOutlet UIView *line;//线
+
+- (IBAction)buttonClick:(id)sender;
+@property (nonatomic ,assign)  NSInteger currentIndex;
+@end

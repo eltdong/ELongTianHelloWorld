@@ -1,0 +1,33 @@
+//
+//  OrderSuccessViewController.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/1.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "BaseViewController.h"
+
+@protocol OrderSuccessViewControllerDelegate <NSObject>
+
+@optional
+
+-(void)first:(UIButton *)button;
+
+-(void)second:(UIButton *)button;
+
+@end
+
+@interface ELTOrderSuccessViewController : BaseViewController
+
+@property (nonatomic,strong) UIImageView *topImage;
+
+@property (nonatomic,strong) UILabel *label;
+
+@property (nonatomic,strong) UIButton *firstBtn;
+
+@property (nonatomic,strong) UIButton *secondBtn;
+
+@property (nonatomic, assign) id<OrderSuccessViewControllerDelegate>delegate;
+
+@end

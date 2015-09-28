@@ -1,0 +1,349 @@
+//
+//  ServiceJudgeViewController.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/7.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTServiceJudgeViewController.h"
+#import "ELTServiceJudgeTableViewCell.h"
+#import "ZLPhoto.h"
+#import "LxGridView.h"
+#import "ELTServiceOrderDetailsModel.h"
+#import "ELTJudgeImageCollectionViewCell.h"
+
+@interface ELTServiceJudgeViewController ()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,ZLPhotoPickerBrowserViewControllerDelegate,ZLPhotoPickerBrowserViewControllerDataSource>{
+}
+
+@property (nonatomic , strong) NSMutableArray *assets;//图片数据源
+@property (nonatomic, strong) LxGridView * gridView;//选择照片页面
+
+@property (strong,nonatomic) ZLCameraViewController *cameraVc;//照相机
+
+@end
+
+@implementation ELTServiceJudgeViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    self.title = @"评价订单";
+    
+    [self.mainTable registerNib:[UINib nibWithNibName:@"ELTServiceJudgeTableViewCell" bundle:nil] forCellReuseIdentifier:@"JudgeTableViewCell"];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"提交" style:UIBarButtonItemStyleDone target:self action:@selector(loadClick)];
+}
+
+#pragma mark --UITableViewDelegate
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    ELTServiceJudgeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JudgeTableViewCell"];
+    cell.model = _model;
+    [cell.picimage setImageWithURL:[NSURL URLWithString:_model.content_img]];
+    cell.Namelabel.text = _model.service_name;
+    cell.more.text = _model.price;
+    cell.servicePersonLabel.text = _model.personal_name;
+    [cell.photoBtn addTarget:self action:@selector(photoClick:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.collectionView registerNib:[UINib nibWithNibName:@"ELTJudgeImageCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"Example2CollectionViewCell"];
+    if (_model.array) {//通过判断有无图片，来返回高度
+        cell.collectionView.height = (SCREENWIDTH - 60) / 3;
+    }else{
+        cell.collectionView.height = 0;
+    }
+    cell.collectionView.delegate = self;
+    cell.collectionView.dataSource = self;
+    cell.collectionView.scrollEnabled = NO;
+    return cell;
+}
+
+#pragma mark - tableview 代理
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return 1;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (_model.array) {
+        return 275 + (SCREENWIDTH - 60) / 3;
+    }else{
+        return 260;
+    }
+}
+
+#pragma mark - 点击出现actionsheet
+-(void)photoClick:(UIButton *)button{
+    
+    UIActionSheet *myActionSheet = [[UIActionSheet alloc]initWithTitle:nil
+                                                              delegate:self
+                                                     cancelButtonTitle:@"取消"
+                                                destructiveButtonTitle:nil
+                                                     otherButtonTitles:@"打开照相机",@"从手机相册获取",nil];
+    
+    [myActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+    
+}
+
+#pragma mark - actionsheetDelegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex)
+    {
+        case 0:  //打开照相机拍照
+            [self openCamera];
+            break;
+        case 1:  //打开本地相册
+            [self openLocalPhoto];
+            break;
+    }
+}
+
+#pragma mark - 打开照相机
+- (void)openCamera{
+    ZLCameraViewController *cameraVc = [[ZLCameraViewController alloc] init];
+    // 拍照最多个数
+    if (_model.review_img.count >= 3) {
+        cameraVc.maxCount = 0;
+    }else{
+        cameraVc.maxCount = 3 - _model.review_img.count;
+    }
+    [cameraVc showPickerVc:self];
+    __weak typeof(self) weakSelf = self;
+    
+    cameraVc.callback = ^(NSArray *cameras){
+        _model.array = cameras;//从该回调中取出拍出的照片
+        
+        [weakSelf uploadImage];//上传图片
+        
+    };
+    
+}
+
+- (void)openLocalPhoto{
+    
+    ZLPhotoPickerViewController *pickerVc = [[ZLPhotoPickerViewController alloc] init];
+    // 最多能选3张图片
+    if (_model.review_img.count >= 3) {
+        pickerVc.maxCount = 0;
+    }else{
+        pickerVc.maxCount = 3 - _model.review_img.count;
+    }
+    pickerVc.status = PickerViewShowStatusCameraRoll;
+    [pickerVc showPickerVc:self];
+    
+    __weak typeof(self) weakSelf = self;
+    pickerVc.callBack = ^(NSArray *assets){
+        
+        _model.array = assets;//从该回调中取出选取的照片
+        
+        [weakSelf uploadImage];//上传图片
+        
+    };
+}
+
+- (void)back:(id)sender{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - collectionviewDelegate
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return _model.review_img.count;//根据长传图片返回的url返回cell个数
+}
+
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
+}
+
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return CGSizeMake((SCREENWIDTH - 60)/3, (SCREENWIDTH - 60)/3);
+    
+}
+
+//每个UICollectionView展示的内容
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    ELTJudgeImageCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Example2CollectionViewCell" forIndexPath:indexPath];
+    cell.backgroundColor = [UIColor whiteColor];
+    ZLPhotoAssets *photo = [_model.review_img objectAtIndex:indexPath.item];
+    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:(NSString *)photo]];
+    return cell;
+    
+}
+#pragma mark --UICollectionViewDelegateFlowLayout
+
+//定义每个UICollectionView 的 margin
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(0, 15, 15, 15);
+}
+
+#pragma mark - <UICollectionViewDelegate>
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    // 图片游览器
+    ZLPhotoPickerBrowserViewController *pickerBrowser = [[ZLPhotoPickerBrowserViewController alloc] init];
+    
+    pickerBrowser.delegate = self;
+    pickerBrowser.dataSource = self;
+    // 是否可以删除照片
+    pickerBrowser.editing = YES;
+    // 当前分页的值
+    // pickerBrowser.currentPage = indexPath.row;
+    // 传入组
+    pickerBrowser.currentIndexPath = indexPath;
+    // 展示控制器
+    [pickerBrowser showPickerVc:self];
+}
+
+#pragma mark - <ZLPhotoPickerBrowserViewControllerDataSource>
+- (NSInteger)numberOfSectionInPhotosInPickerBrowser:(ZLPhotoPickerBrowserViewController *)pickerBrowser{
+    return 1;
+}
+
+- (NSInteger)photoBrowser:(ZLPhotoPickerBrowserViewController *)photoBrowser numberOfItemsInSection:(NSUInteger)section{
+    
+    return _model.review_img.count;//根据长传图片返回的url返回cell个数
+    
+}
+
+#pragma mark - 每个组展示什么图片,需要包装下ZLPhotoPickerBrowserPhoto
+- (ZLPhotoPickerBrowserPhoto *)photoBrowser:(ZLPhotoPickerBrowserViewController *)pickerBrowser photoAtIndexPath:(NSIndexPath *)indexPath{
+    
+    id imageObj = [_model.review_img objectAtIndex:indexPath.item];
+    ZLPhotoPickerBrowserPhoto *photo = [ZLPhotoPickerBrowserPhoto photoAnyImageObjWith:imageObj];
+    // 包装下imageObj 成 ZLPhotoPickerBrowserPhoto 传给数据源
+    ELTServiceJudgeTableViewCell *cell = (ELTServiceJudgeTableViewCell *)[self.mainTable cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    ELTJudgeImageCollectionViewCell *collectionCell = (ELTJudgeImageCollectionViewCell *)[cell.collectionView cellForItemAtIndexPath:indexPath];
+    // 缩略图
+    if ([imageObj isKindOfClass:[ZLPhotoAssets class]]) {
+        photo.asset = imageObj;
+    }else if ([imageObj isKindOfClass:[NSString class]]){
+        photo.photoURL = [NSURL URLWithString:imageObj];
+    }
+    photo.toView = collectionCell.imageView;
+    photo.thumbImage = collectionCell.imageView.image;
+    return photo;
+    
+}
+
+/**
+ *  看大图时，进行删除操作
+ *
+ *  @param photoBrowser
+ *  @param indexPath
+ */
+- (void)photoBrowser:(ZLPhotoPickerBrowserViewController *)photoBrowser removePhotoAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (indexPath.row> [_model.review_img count]) return;
+    [_model.review_img removeObjectAtIndex:indexPath.row];
+    ELTServiceJudgeTableViewCell *cell = (ELTServiceJudgeTableViewCell *)[self.mainTable cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    [cell.collectionView reloadData];
+    [_mainTable reloadData];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/**
+ *  上传图片，得到图片的url
+ */
+-(void)uploadImage{
+    
+    self.indicator.frame = CGRectMake(0, NAVHEIGHT, SCREENWIDTH, SCREENHEIGHT - NAVHEIGHT);
+    [self.indicator setIndicatorType:ActivityIndicatorLogin];
+    [self.indicator startAnimatingActivit];
+    NSMutableArray * imgArr = [NSMutableArray array];
+    NSMutableDictionary * imgDic = [NSMutableDictionary dictionary];
+    for (int i = 0; i < _model.array.count; i++) {
+        UIImage * modify_image;
+        // 判断类型来获取Image
+        ZLPhotoAssets *asset = _model.array[i];
+        if ([asset isKindOfClass:[ZLPhotoAssets class]]) {
+            modify_image = asset.thumbImage;
+        }else if ([asset isKindOfClass:[NSString class]]){
+            [imgArr addObject:asset];
+        }else if([asset isKindOfClass:[UIImage class]]){
+            modify_image = (UIImage *)asset;
+        }else if ([asset isKindOfClass:[ZLCamera class]]){
+            modify_image = [asset thumbImage];
+        }
+        if (![asset isKindOfClass:[NSString class]]) {
+            [imgDic setObject:modify_image forKey:[NSString stringWithFormat:@"content_img_%d",i + 1]];
+        }
+    }
+    [ELHttpRequestOperation getTokenAndTime];
+    
+    NSString * url = [NSString stringWithFormat:@"%@%@",HTTP,@"&method=save&app_com=com_appcenter&task=uploadimg"];
+    ELHttpRequestOperation *sharedClient = nil;
+    sharedClient = [ELHttpRequestOperation manager];
+    [sharedClient setResponseSerializer:[AFHTTPResponseSerializer serializer]];
+    [sharedClient setRequestSerializer:[AFHTTPRequestSerializer serializer]];
+    [[sharedClient responseSerializer] setAcceptableContentTypes:[NSSet setWithObject:@"text/html"]];
+    [sharedClient POST:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        NSArray * valueArr = [imgDic allValues];
+        NSArray * keyArr = [imgDic allKeys];
+        for(int i = 0 ;i<keyArr.count; i++){
+            [formData appendPartWithFileData:UIImageJPEGRepresentation(valueArr[i], 1.0) name:keyArr[i] fileName:[NSString stringWithFormat:@"%@.jpg",keyArr[i]]  mimeType:@"image/jpg"];
+        }
+    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        JSONDecoder * json = [[JSONDecoder alloc]init];
+        NSDictionary * dic1 = [json objectWithData:responseObject];
+        if ([[dic1 objectForKey:@"status"] integerValue] == 1) {
+            [self.indicator LoadSuccess];
+            [_model.review_img addObjectsFromArray:[dic1 objectForKey:@"datalist"]];
+            ELTServiceJudgeTableViewCell *cell = (ELTServiceJudgeTableViewCell *)[self.mainTable cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+            [cell.collectionView reloadData];
+            
+            [self.mainTable reloadData];
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+    
+}
+
+/**
+ *  点击完成，请求评价接口，
+ */
+-(void)loadClick{
+    
+    [self.indicator startAnimatingActivit];
+    NSDictionary *dic;
+    if (_model.review_img.count) {
+        dic = @{@"order_id":_order_id,@"store_id":_store_id,@"eshop_id":_eshop_id,@"link_id":_model.service_id,@"evaluation_content":_model.evaluation_content,@"review_img":_model.review_img,@"evaluation_value":[NSString stringWithFormat:@"%.ld",(long)_model.evaluation_value],@"service_personnal_id":_model.service_personal_id};
+    }else{
+        dic = @{@"order_id":_order_id,@"store_id":_store_id,@"eshop_id":_eshop_id,@"link_id":_model.service_id,@"evaluation_content":_model.evaluation_content,@"evaluation_value":[NSString stringWithFormat:@"%.ld",(long)_model.evaluation_value]};
+    }
+    if (!_model.evaluation_value) {//只有选好中差评后才能提交评价
+        [self showAlertViewWith:@"亲，评价订单必须选好中差评哦！"];
+        [self.indicator LoadSuccess];
+        return;
+    }
+    
+    NSString *arrayString = [dic JSONString];//转化json字符串
+    NSString * comment = [CommonFunc base64StringFromText:arrayString];//base64加密
+    
+    [ELRequestSingle judgeServiceOrderRequest:^(BOOL sucess, id objc) {
+        
+        if ([[objc objectForKey:@"status"]integerValue] == 0) {
+            [self showAlertViewWith:[objc objectForKey:@"msg"]];
+        }else{
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    } andReview:comment];
+    
+}
+
+@end

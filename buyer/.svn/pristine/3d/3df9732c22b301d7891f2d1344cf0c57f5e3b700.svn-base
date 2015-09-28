@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="DDViewCell" rowHeight="212" id="KGk-i7-Jjw" customClass="ELTCommodityOrderViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="319" height="178"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="共6件商品" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jdv-F7-TG3">
+                        <rect key="frame" x="15" y="10" width="60" height="16"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2015-02-03 12:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZJT-4l-JfZ">
+                        <rect key="frame" x="15" y="149" width="100" height="15"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="¥" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UC4-q3-Tt5">
+                        <rect key="frame" x="261" y="150" width="7" height="15"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" red="0.94920691290000003" green="0.077616003789999999" blue="0.033676609849999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3.50" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qif-hR-jaD">
+                        <rect key="frame" x="270" y="145" width="34" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.94920691290000003" green="0.077616003789999999" blue="0.033676609849999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="elt_samllarrow1.png" translatesAutoresizingMaskIntoConstraints="NO" id="jdA-h6-roI">
+                        <rect key="frame" x="294" y="13" width="10" height="10"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="10" id="Qfb-Fu-V85"/>
+                            <constraint firstAttribute="height" constant="10" id="dHB-Ag-23U"/>
+                        </constraints>
+                    </imageView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="utx-0I-tva">
+                        <rect key="frame" x="0.0" y="176" width="319" height="1"/>
+                        <color key="backgroundColor" red="0.94509803920000002" green="0.94509803920000002" blue="0.94509803920000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="aTA-8r-h4e"/>
+                        </constraints>
+                    </view>
+                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="5yy-o7-Ezb">
+                        <rect key="frame" x="15" y="36" width="289" height="101"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="CWv-eM-K90">
+                            <size key="itemSize" width="50" height="50"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                    </collectionView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="实付款：" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VSQ-gJ-cbZ">
+                        <rect key="frame" x="213" y="149" width="48" height="15"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3X6-ap-lYC">
+                        <rect key="frame" x="23" y="36" width="289" height="101"/>
+                        <state key="normal">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="uibutton:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="6wK-Hf-ViS"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="ZJT-4l-JfZ" firstAttribute="leading" secondItem="jdv-F7-TG3" secondAttribute="leading" id="2Br-y2-dRm"/>
+                    <constraint firstItem="5yy-o7-Ezb" firstAttribute="height" secondItem="3X6-ap-lYC" secondAttribute="height" id="5wY-KI-kpj"/>
+                    <constraint firstAttribute="trailing" secondItem="Qif-hR-jaD" secondAttribute="trailing" constant="15" id="9P9-Sc-ZUy"/>
+                    <constraint firstItem="utx-0I-tva" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Gyl-OA-C30"/>
+                    <constraint firstItem="jdv-F7-TG3" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="K4D-fl-3m2"/>
+                    <constraint firstItem="Qif-hR-jaD" firstAttribute="leading" secondItem="UC4-q3-Tt5" secondAttribute="trailing" constant="2" id="KLo-LU-zeh"/>
+                    <constraint firstAttribute="bottom" secondItem="utx-0I-tva" secondAttribute="bottom" id="Kws-dK-XHn"/>
+                    <constraint firstAttribute="trailing" secondItem="utx-0I-tva" secondAttribute="trailing" id="Lli-ID-hAv"/>
+                    <constraint firstAttribute="trailing" secondItem="jdA-h6-roI" secondAttribute="trailing" constant="15" id="Vp9-R7-MRY"/>
+                    <constraint firstAttribute="trailing" secondItem="5yy-o7-Ezb" secondAttribute="trailing" constant="15" id="cDe-H5-i51"/>
+                    <constraint firstItem="3X6-ap-lYC" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="15" id="cHB-Xo-iNm"/>
+                    <constraint firstItem="UC4-q3-Tt5" firstAttribute="leading" secondItem="VSQ-gJ-cbZ" secondAttribute="trailing" id="dHo-Al-ueD"/>
+                    <constraint firstItem="5yy-o7-Ezb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="gh3-c8-MyU"/>
+                    <constraint firstItem="5yy-o7-Ezb" firstAttribute="top" secondItem="3X6-ap-lYC" secondAttribute="top" id="jup-ke-ZEX"/>
+                    <constraint firstItem="jdv-F7-TG3" firstAttribute="centerY" secondItem="jdA-h6-roI" secondAttribute="centerY" id="oxP-7q-yZk"/>
+                    <constraint firstItem="jdv-F7-TG3" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="q7X-Bh-Zse"/>
+                    <constraint firstItem="ZJT-4l-JfZ" firstAttribute="bottom" secondItem="Qif-hR-jaD" secondAttribute="bottom" constant="-2" id="sAJ-AN-Gj4"/>
+                    <constraint firstItem="UC4-q3-Tt5" firstAttribute="bottom" secondItem="Qif-hR-jaD" secondAttribute="bottom" constant="-1" id="ss0-lE-NHJ"/>
+                    <constraint firstItem="VSQ-gJ-cbZ" firstAttribute="bottom" secondItem="ZJT-4l-JfZ" secondAttribute="bottom" id="tVv-Xr-4Ta"/>
+                    <constraint firstItem="utx-0I-tva" firstAttribute="top" secondItem="ZJT-4l-JfZ" secondAttribute="bottom" constant="12.5" id="ufd-mY-3Z4"/>
+                    <constraint firstItem="ZJT-4l-JfZ" firstAttribute="top" secondItem="5yy-o7-Ezb" secondAttribute="bottom" constant="12" id="waj-nK-9fg"/>
+                    <constraint firstItem="5yy-o7-Ezb" firstAttribute="width" secondItem="3X6-ap-lYC" secondAttribute="width" id="xZb-05-lmt"/>
+                    <constraint firstItem="5yy-o7-Ezb" firstAttribute="top" secondItem="jdv-F7-TG3" secondAttribute="bottom" constant="10" id="xd9-Fx-eyG"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="collectionView" destination="5yy-o7-Ezb" id="j3k-jp-74f"/>
+                <outlet property="numLabel" destination="jdv-F7-TG3" id="P2Y-tD-Xu3"/>
+                <outlet property="priceLabel" destination="Qif-hR-jaD" id="lyM-Od-jH7"/>
+                <outlet property="timeLabel" destination="ZJT-4l-JfZ" id="JZZ-Zf-vlW"/>
+            </connections>
+            <point key="canvasLocation" x="561.5" y="339"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="elt_samllarrow1.png" width="10" height="10"/>
+    </resources>
+</document>

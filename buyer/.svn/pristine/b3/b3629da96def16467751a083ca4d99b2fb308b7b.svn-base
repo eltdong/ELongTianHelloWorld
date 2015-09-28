@@ -1,0 +1,23 @@
+//
+//  SellerDetailViewController.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "BaseViewController.h"
+#import "ELTShopDetailModel.h"
+
+@interface ELTSellerDetailViewController : BaseViewController
+
+@property (nonatomic,strong) IBOutlet UIImageView *pickImage;//店铺图片
+
+@property (strong, nonatomic) IBOutlet UILabel *nameLabel;//店铺名称
+
+@property (strong, nonatomic) IBOutlet UILabel *saleCountLabel;//店铺销量
+
+@property (strong, nonatomic) IBOutlet UILabel *addressLabel;//店铺地址
+
+@property (strong,nonatomic) ELTShopDetailModel *shopDetailModel;
+@end

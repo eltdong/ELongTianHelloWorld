@@ -1,0 +1,68 @@
+//
+//  MainThreeCell.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/29.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTMainThreeCell.h"
+#import "ELTMainClaCollectionViewCell.h"
+#import "ELTClassifyModel.h"
+
+@implementation ELTMainThreeCell
+
+//- (void)awakeFromNib {
+//    
+//    [_collecyionView registerNib:[UINib nibWithNibName:@"MainClaCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"MainClaCollectionViewCell"];
+//    
+//}
+//
+//-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+//{
+//    return _dataArray.count;
+//}
+//
+//-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+//{
+//    return 1;
+//}
+//
+//-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+//    
+//    
+//    
+//}
+//
+////每个UICollectionView展示的内容
+//-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    ClassifyModel *model = [_dataArray objectAtIndex:indexPath.item];
+//    NSLog(@"%@",_dataArray);
+//    MainClaCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MainClaCollectionViewCell" forIndexPath:indexPath];
+////    cell.nameLabel.text = model
+//    cell.backgroundColor = [UIColor whiteColor];
+//    return cell;
+//}
+//#pragma mark --UICollectionViewDelegateFlowLayout
+//
+////定义每个UICollectionView 的 margin
+//-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+//{
+//    return UIEdgeInsetsMake(0, 0, 0, 0);
+//}
+//
+//#pragma mark --UICollectionViewDelegate
+//-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    
+//    
+//}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end

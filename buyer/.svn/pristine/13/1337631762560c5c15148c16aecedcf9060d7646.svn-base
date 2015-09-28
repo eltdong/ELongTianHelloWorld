@@ -1,0 +1,19 @@
+//
+//  ServiceReivew.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/6.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface ELTServiceReivew : ELTBaseModel
+@property (nonatomic,copy) NSString * evaluation_content;//商品评论
+@property (nonatomic,copy) NSString * content_user;// 用户
+@property (nonatomic,copy) NSString * ID;//服务人员id
+@property (nonatomic,copy) NSString * create_time;//评价时间
+@property (nonatomic,copy) NSString * content_img;
+@property (nonatomic, strong) NSArray * review_img;
+-(instancetype)initDictionary:(NSDictionary *)dic;
+@end

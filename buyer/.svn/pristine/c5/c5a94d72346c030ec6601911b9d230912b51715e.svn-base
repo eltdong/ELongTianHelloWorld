@@ -1,0 +1,24 @@
+//
+//  shopCratFoot.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/11.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+/**
+ *  购物车页面  区尾
+ */
+@interface ELTShopCratFoot : UIView
+
+@property (strong, nonatomic) IBOutlet UILabel *totalPriceLabel;//总金额
+
+@property (strong, nonatomic) IBOutlet UILabel *describeLabel;//满十元起送
+
+@property (weak, nonatomic) IBOutlet UILabel *couponLabel;//代金券显示label
+
+@property (weak, nonatomic) IBOutlet UIButton *couponBtn;//代金券点击按钮
+
+@end

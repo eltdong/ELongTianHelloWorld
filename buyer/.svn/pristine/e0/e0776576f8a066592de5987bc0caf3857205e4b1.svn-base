@@ -1,0 +1,17 @@
+//
+//  ELTMainCollectionViewCell.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/19.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTMainCollectionViewCell.h"
+
+@implementation ELTMainCollectionViewCell
+
+- (void)awakeFromNib {
+    // Initialization code
+}
+
+@end

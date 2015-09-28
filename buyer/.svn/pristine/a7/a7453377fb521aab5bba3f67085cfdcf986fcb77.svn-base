@@ -1,0 +1,15 @@
+//
+//  OrderDetailOneCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/14.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface ELTOrderDetailOneCell : UITableViewCell
+
+@property (strong, nonatomic) IBOutlet UILabel *shopNameLabel;
+
+@end

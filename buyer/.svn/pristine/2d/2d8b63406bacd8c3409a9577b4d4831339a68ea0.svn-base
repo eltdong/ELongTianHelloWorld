@@ -1,0 +1,21 @@
+//
+//  SSTSCollectionViewCell.m
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/29.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTSelectTimeCollectionViewCell.h"
+
+@implementation ELTSelectTimeCollectionViewCell
+
+- (void)awakeFromNib {
+    // Initialization code
+}
+- (IBAction)time:(id)sender {
+    if ([self.delegate respondsToSelector:@selector(btnClicked:)]) {
+        [self.delegate btnClicked:(UIButton*)sender];
+    }
+}
+@end

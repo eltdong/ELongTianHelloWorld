@@ -1,0 +1,61 @@
+//
+//  MainScrollCell.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/30.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "MainScrollCell.h"
+
+#define MULTI_VIEW_TAG 100
+
+
+@implementation MainScrollCell
+
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier item:(NSArray *)items  arrayData:(NSMutableArray *)dataArray{
+    
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        
+        self.backgroundColor = [UIColor greenColor];
+        self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - SCREENWIDTH / 2.7 - 80)];
+//        _scrollView.userInteractionEnabled = YES;
+    
+        
+        [self.contentView addSubview:_scrollView];
+        
+        for (int i=0; i<items.count; i++)
+        {
+            MainMultiView *view = [[MainMultiView alloc]initWithFrame:CGRectMake(SCREENWIDTH*i, 0, SCREENWIDTH, _scrollView.height)];
+            
+            view.tag = MULTI_VIEW_TAG + i;
+            view.userInteractionEnabled = YES;
+            if (i == 0) {
+                view.backgroundColor = [UIColor yellowColor];
+            }else if(i == 1){
+                view.backgroundColor = [UIColor redColor];
+            }
+            
+            
+            [_scrollView addSubview:view];
+        
+        }
+        _scrollView.contentSize = CGSizeMake(items.count * SCREENWIDTH,0);
+    }
+    return self;
+    
+}
+
+
+- (void)awakeFromNib {
+    // Initialization code
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end

@@ -1,0 +1,18 @@
+//
+//  SellerListViewController.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "BaseViewController.h"
+
+@interface ELTSellerListViewController : BaseViewController
+/**
+ *  店铺列表界面
+ */
+@property (nonatomic,strong) IBOutlet UITableView *bgTable;
+@property (nonatomic ,copy)  NSString *time;
+@property (nonatomic ,copy)  NSString *type;//区分是服务店铺还是商品店铺
+@end

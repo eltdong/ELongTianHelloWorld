@@ -1,0 +1,42 @@
+//
+//  ShopListModel.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/17.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTShopListModel.h"
+#import "ELTShopModel.h"
+
+@implementation ELTShopListModel
+
++(instancetype)shopListmodelInitWithDict:(NSDictionary*)dic{
+    
+    return [[self alloc]initWithDic:dic];
+    
+}
+
+
+-(instancetype)initWithDic:(NSDictionary *)dict{
+    
+    [self setValuesForKeysWithDictionary:dict];
+    NSMutableArray *timeShop = [NSMutableArray array];
+    for (NSDictionary *dic in _timeshop) {
+        ELTShopModel *model = [ELTShopModel shopModelInitWithDict:dic];
+        [timeShop addObject:model];
+    }
+    _timeshop = timeShop;
+    
+    NSMutableArray *recommend = [NSMutableArray array];
+    for (NSDictionary *dic in _recommend) {
+        ELTShopModel *model = [ELTShopModel shopModelInitWithDict:dic];
+        [recommend addObject:model];
+    }
+    _recommend = recommend;
+    
+    return self;
+    
+}
+
+@end

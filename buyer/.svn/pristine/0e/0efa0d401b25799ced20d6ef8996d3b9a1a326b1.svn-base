@@ -1,0 +1,614 @@
+//
+//  FVDetailViewController.m
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/21.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTCommodityDetailViewController.h"
+
+#import "ELTCommodityDetailOneCell.h"
+#import "ELTCommodityDetailTwoCell.h"
+#import "ELTCommodityDetailThreeCell.h"
+//#import "shopDe_four_TableViewCell.h"
+#import "ELTCommodityDetailFourCell.h"
+#import "ELTCommodityListViewController.h"
+#import "ELTServicePersonDetailFourCell.h"
+#import "ELTShoppingCarViewController.h"
+#import "mycartBar.h"
+
+#import "ELTPhotosModel.h"
+#pragma makr - 数据模型
+#import "ELTCommodityDetailModel.h"
+#import "ELTReivewModel.h"
+#import "ELTRadio.h"
+#import "ELTEvaluateListCenterViewController.h"
+#import "ELTShopDetailTableViewCell.h"
+#import "ELTShopDetailViewController.h"
+
+
+@interface ELTCommodityDetailViewController ()<UITableViewDataSource,UITableViewDelegate,shop_Sec_delegate,sdtDelegate,mycartDelegate,UIWebViewDelegate>{
+    NSString * _uid;
+}
+@property ( nonatomic,assign) BOOL isClicked;
+@property (nonatomic,strong) NSMutableArray * evaDataArr;
+@property (nonatomic,assign) CGFloat webViewHeght;//webview的高度
+
+@property (nonatomic, assign) NSInteger num;
+
+
+@end
+
+@implementation ELTCommodityDetailViewController
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [ELRequestSingle typeDetailWithRequest:^(BOOL sucess, id objc) {
+        ELTFruitAndVegatableModel * model = objc[0];
+        
+        if (model.amount == NULL) {
+            model.amount = @"0";
+        }
+        [_displayBox setTitle:model.amount forState:UIControlStateNormal];
+        _num=[_displayBox.titleLabel.text integerValue];
+    } andid:self.detailModel.fvId];
+    
+    [self downRequestShopCartNum];
+}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    self.tableView.backgroundColor= UIColorFromRGB(0xf5f5f5);
+    _mainWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 0)];
+    _mainWebView.delegate = self;
+    _mainWebView.scrollView.bounces = NO;
+    _mainWebView.scrollView.showsHorizontalScrollIndicator = NO;
+    _mainWebView.scrollView.scrollEnabled = NO;
+    [_mainWebView sizeToFit];
+    [self.indicator startAnimatingActivit];
+    
+    NSString * xml = [NSString stringWithFormat:@"<div id=\"webview_content_wrapper\">%@</div>",self.detailModel.content_mbody];
+   
+    [_mainWebView loadHTMLString:xml baseURL:nil];
+    
+    self.title = @"商品详情";
+    self.isClicked = NO;
+    [self createUI];
+    [self createShopcart];
+    [self.view bringSubviewToFront:self.bottomBar];
+    [self downRequestShopCartNum];
+    _num = [self.detailModel.amount integerValue];
+    [_displayBox setTitle:[NSString stringWithFormat:@"%ld",(long)_num ] forState:UIControlStateNormal];
+    
+    self.mainScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 210)];
+    _Topic = [[JCTopic alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 210)];
+}
+-(void)createShopcart{
+
+    
+    
+    shopCar = [BBRShopView buttonWithType:UIButtonTypeCustom];
+    
+    CGFloat centerX = 12.5f + 109.f/4.f;
+    CGFloat centerY =  self.bottomBar.frame.size.height - (13.f + 109.f/4.f);
+    shopCar.center = CGPointMake(centerX, centerY);
+    shopCar.bounds = CGRectMake(0, 0, 54.5f, 54.5f);
+    
+    [shopCar setImage:[UIImage imageNamed:@"elt_mycart"] forState:UIControlStateNormal];
+    [shopCar.badgeview setBadgeText:@"1"];
+    [shopCar addTarget:self action:@selector(shopCarClick) forControlEvents:UIControlEventTouchUpInside];
+    shopCar.badgeview.badgeOverlayColor = UIColorFromRGB(0xda2c41);
+    shopCar.badgeview.badgeAlignment = JSBadgeViewAlignmentTopRight;
+    shopCar.hidden = NO;
+    [self.bottomBar addSubview:shopCar];
+    
+}
+
+-(void)back:(id)sender{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+-(void)createUI{
+    self.webViewHeght  = 0.f;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.showsVerticalScrollIndicator = NO;
+    
+//    self.detailModel = [[FruitAndVegatableModel alloc]init];
+    [self downRequestWithSort];
+    self.evaDataArr = [NSMutableArray array];
+    [self downRequestWithEvaluation];
+    
+//    mycartBar *mc = [mycartBar instanceView];
+//    [self.bottomBar addSubview:mc];
+//    mc.delegate = self;
+//    mc.frame =self.bottomBar.bounds;
+
+}
+#pragma mark 购物车调转
+//-(void)btnClicked{
+//    ShoppingCarViewController *view = [[ShoppingCarViewController alloc]init];
+//    [self.navigationController pushViewController:view animated:YES];
+//}
+#pragma mark - 数据请求
+- (void)downRequestWithSort{
+    
+   
+}
+#pragma mark - 评价的数据请求
+-(void)downRequestWithEvaluation{
+    [ELRequestSingle typeDetailWithREquest:^(BOOL sucess, id objc) {
+        _evaDataArr = objc;
+        
+         [self.tableView reloadData];
+    } andid:_detailModel.fvId andtype:@"0" andPage:@"1"];
+}
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 2 ;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    switch (section) {
+        case 0:
+        {
+            return 3;
+        }
+            break;
+        case 1:
+        {
+            
+            
+            if (_isClicked) {
+                ELTCommodityDetailModel * cdModel = [[ELTCommodityDetailModel alloc]init];
+                cdModel =  self.evaDataArr[0];
+                NSInteger num = OBJC(cdModel.review)?cdModel.review.count+1:2;
+                
+             
+                return num;
+            }
+            else{
+                return 1;
+            }
+        }
+            break;
+        default:{
+            return 0;
+        }
+            break;
+    }
+
+}
+-(UITableViewCell * )tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+   
+    switch (indexPath.section) {
+        case 0:
+        {
+            switch (indexPath.row) {
+                case 0:
+                {
+                    ELTShopDetailTableViewCell * cell = [[[NSBundle mainBundle] loadNibNamed:@"ELTShopDetailTableViewCell" owner:self options:nil]lastObject];
+                    
+                    [cell addSubview:_mainScrollView];
+                    if (self.detailModel.show_img !=nil ) {
+                        NSMutableArray * arr = [NSMutableArray array];
+                        for (ELTPhotosModel * photomodel in self.detailModel.show_img) {
+                            NSString * url = photomodel.content_img;
+                             [arr addObject:url];
+                        }
+                        [self createBanner:arr];
+                    }
+                    
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    return cell;
+                }
+                    break;
+                case 1:
+                {
+                    ELTCommodityDetailOneCell * cell = [[[NSBundle mainBundle]loadNibNamed:@"ELTCommodityDetailOneCell" owner:self options:nil]lastObject];
+                    cell.vc = self;
+                    if (self.detailModel) {
+                        cell.model = self.detailModel;
+                    }
+                    [cell.storeBtn addTarget:self action:@selector(storeBtnClick) forControlEvents:UIControlEventTouchUpInside];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    return cell;
+                }
+                    break;
+                case 2:
+                {
+                    
+                   
+                    ELTCommodityDetailTwoCell * cell = [ELTCommodityDetailTwoCell tabbleViewCell:tableView];
+                    if (self.isClicked) {
+                        cell.isYesOrNO = self.isClicked;
+                    }
+                    cell.delegate = self;
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    return cell;
+
+                }
+                    break;
+                default:
+                    return 0;
+                    break;
+            }
+
+        }
+            break;
+         case 1:
+        {
+            
+            if (!self.isClicked)
+                
+            {
+                switch (indexPath.row) {
+                    case 0:
+                    {
+                        ELTShopDetailTableViewCell * cell = [[[NSBundle mainBundle] loadNibNamed:@"ELTShopDetailTableViewCell" owner:self options:nil]lastObject];
+                        [cell addSubview:_mainWebView];
+                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                        return cell;
+                    }
+                        break;
+                        
+                    default:
+                    {
+                        return 0;
+                    }
+                        break;
+                }
+            }
+            else
+                
+            {
+                switch (indexPath.row) {
+                    case 0:
+                    {
+                        
+                        ELTCommodityDetailThreeCell * cell = [[[NSBundle mainBundle]loadNibNamed:@"ELTCommodityDetailThreeCell" owner:self options:nil]lastObject];
+                        cell.delegate = self;
+                        if (self.evaDataArr) {
+                            ELTCommodityDetailModel * cdModel = [[ELTCommodityDetailModel alloc]init];
+                            cdModel = self.evaDataArr[0];
+                            cell.radioArr = cdModel.radio;
+                        }
+                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                         return cell;
+                    }
+                        break;
+                        
+                    default:
+                    {
+                        static  NSString * cellId = @"SDFF";
+                        ELTCommodityDetailFourCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId ];
+                        if (!cell) {
+                            cell = [[ELTCommodityDetailFourCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+                        }
+                        ELTCommodityDetailModel * cdModel = [[ELTCommodityDetailModel alloc]init];
+                        cdModel = self.evaDataArr[0];
+                        
+                        
+                        cell.reviewModel = cdModel.review[indexPath.row-1];
+                        
+                        
+                        
+                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                        return cell;
+                    }
+                        break;
+                }
+            }
+       
+        }
+            break;
+        default:
+        {
+            return 0;
+        }
+            break;
+    }
+
+}
+
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSLog(@"%@",self.detailModel.content_name);
+    
+    CGRect rect = [Tools heightWithContent:self.detailModel.content_name font:UIFont(14.0) width:SCREENWIDTH - 30];
+    switch (indexPath.section) {
+        case 0:
+        {
+            switch (indexPath.row) {
+                case 0:
+                    return 210 ;
+                    break;
+                case 1:
+                    return rect.size.height + 115;
+                    break;
+                case 2:
+                    return 35;
+                    break;
+                default:
+                    return 0;
+                    break;
+            }
+
+        }
+            break;
+        case 1:
+        {
+            if (!self.isClicked) {
+                switch (indexPath.row) {
+                    case 0:
+                    {
+                        return _mainWebView.frame.size.height + 40;
+                    }
+                        break;
+                        
+                    default:
+                    {
+                        return 0;
+                    }
+                        break;
+                }
+            }
+            else{
+                switch (indexPath.row) {
+                    case 0:
+                    {
+                        return 41.5;
+                    }
+                        break;
+                        
+                    default:
+                    {
+                        UITableViewCell *cell = [self tableView: tableView cellForRowAtIndexPath:indexPath ];
+                        return cell.frame.size.height + 20;
+                    }
+                        break;
+                }
+
+            }
+ 
+        }
+            break;
+        default:
+        {
+            return 0;
+        }
+            break;
+    }
+    
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.section==1&&indexPath.row!=0) {
+        ELTEvaluateListCenterViewController * commentList = [[ELTEvaluateListCenterViewController alloc]init];
+        commentList.shopID = self.detailModel.fvId;
+        commentList.btnType = @"0";
+        commentList.evaluationType =   EvaluationCommodity;
+        [self.navigationController pushViewController:commentList animated:YES];
+
+    }
+}
+- (void)storeBtnClick {
+    
+    [self.indicator setIndicatorType:ActivityIndicatorLogin];
+    [self.indicator startAnimatingActivit];
+    ELTShopDetailViewController *view = [[ELTShopDetailViewController alloc]init];
+    
+    [ELRequestSingle shopDetailWithRequest:^(BOOL sucess, id objc) {
+        [self.indicator LoadSuccess];
+        NSMutableArray * detailArray = objc;
+        view.dataArray = detailArray;
+        view.shoppe_id = _detailModel.shoppe_id;
+        
+        [self.navigationController pushViewController:view animated:YES];
+        
+    } andShoppe_id:_detailModel.shoppe_id];
+}
+
+
+#pragma mark - webviewDelegate
+-(void)webViewDidStartLoad:(UIWebView *)webView{
+    //[self.indicator startAnimatingActivit];
+   
+
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    
+    //获取页面高度（像素）
+    NSString * clientheight_str = [webView stringByEvaluatingJavaScriptFromString: @"document.body.offsetHeight"];
+    float clientheight = [clientheight_str floatValue];
+    //设置到WebView上
+    webView.frame = CGRectMake(0, 0, self.view.frame.size.width, clientheight);
+    //获取WebView最佳尺寸（点）
+    CGSize frame = [webView sizeThatFits:webView.frame.size];
+    //获取内容实际高度（像素）
+    NSString * height_str= [webView stringByEvaluatingJavaScriptFromString: @"document.getElementById('webview_content_wrapper').offsetHeight + parseInt(window.getComputedStyle(document.getElementsByTagName('body')[0]).getPropertyValue('margin-top'))  + parseInt(window.getComputedStyle(document.getElementsByTagName('body')[0]).getPropertyValue('margin-bottom'))"];
+    float height = [height_str floatValue];
+    //内容实际高度（像素）* 点和像素的比
+    height = height * frame.height / clientheight;
+    //再次设置WebView高度（点）
+    webView.frame = CGRectMake(0, 0, self.view.frame.size.width, height);
+    
+    [self.tableView reloadData];
+    [self.indicator LoadSuccess];
+//     
+
+}
+#pragma mark 轮播图
+- (void)createBanner:(NSMutableArray *)arr
+{
+    
+    _Topic.backgroundColor = [UIColor whiteColor];
+    //代理
+    _Topic.JCdelegate = self;
+    //创建数据
+    NSMutableArray * tempArray = arr;
+    _Topic.time = 5;
+    _Topic.pics = tempArray;
+#pragma mark - 判断url
+    _Topic.isURL = YES;
+    //_Topic.isWidth = YES;
+    [_Topic upDate];
+    _Topic.userInteractionEnabled = YES;
+    [_mainScrollView addSubview:_Topic];
+    
+//    UIView * page_bjView = [[UIView alloc]initWithFrame:CGRectMake(0, _mainScrollView.frame.size.height-13, _Topic.frame.size.width, 13)];
+//    //    page_bjView.backgroundColor = [UIColor lightGrayColor];
+//    page_bjView.alpha = 0.3;
+//    [_mainScrollView addSubview:page_bjView];
+    
+    _pageView = [[StyledPageControl alloc]initWithFrame:CGRectMake(_Topic.frame.origin.x+20, _mainScrollView.frame.size.height-13, _Topic.frame.size.width-40, 13)];
+    
+    [_mainScrollView addSubview:_pageView];
+    
+    [_pageView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    
+    [_pageView setPageControlStyle:PageControlStyleThumb];
+    [_pageView setThumbImage:[UIImage imageNamed:@"circles"]];
+    [_pageView setSelectedThumbImage:[UIImage imageNamed:@"circle_cr"]];
+    [_pageView setNumberOfPages:(int)[tempArray count]];
+    [_pageView setCurrentPage:0];
+}
+-(void)currentPage:(int)page total:(NSUInteger)total withscrollview:(JCTopic *)jc
+{
+    if(jc == _Topic)
+    {
+        [_pageView setCurrentPage:page];
+    }
+}
+- (void)didClick:(id)data withscrollview:(UIScrollView *)jc
+{
+    if(jc == _Topic)
+    {
+        UIButton * btn = (UIButton *)data;
+        DLog(@"+++%ld",(long)btn.tag);
+        //        NSDictionary * dic = [self.pics objectAtIndex:btn.tag-1];
+        switch (btn.tag) {
+            case 1:
+            {
+                
+            }
+                break;
+            case 2:
+            {
+                
+            }
+                break;
+            case 3:
+            {
+                
+            }
+                break;
+            case 4:
+            {
+                
+            }
+                break;
+                
+            default:
+                break;
+        }
+        
+    }
+    else
+    {
+        
+    }
+}
+
+#pragma mark - 详情和评论
+-(void)btnClicked:(BOOL )isYesOrNo{
+   
+    self.isClicked  = isYesOrNo;
+    NSIndexSet *indexSet=[[NSIndexSet alloc]initWithIndex:1];
+   [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
+   
+}
+#pragma mark - 评价按钮全部的点击事件
+-(void)jumpNextVc:(NSString*)str{
+    
+    ELTEvaluateListCenterViewController * commentList = [[ELTEvaluateListCenterViewController alloc]init];
+    commentList.shopID = _detailModel.fvId;
+    commentList.btnType = str;
+    commentList.evaluationType =   EvaluationCommodity;
+    
+    [self.navigationController pushViewController:commentList animated:YES];
+}
+- (IBAction)reduce:(id)sender {
+    
+    if (_num > 0) {
+        [self.displayBox  setTitle:[NSString stringWithFormat:@"%ld",(long)--_num] forState:UIControlStateNormal];
+        [self downShoppingCar:0];
+    }
+    
+}
+
+- (IBAction)add:(id)sender {
+    
+    [self.displayBox  setTitle:[NSString stringWithFormat:@"%ld",(long)++_num] forState:UIControlStateNormal];
+    [self downShoppingCar:1];
+
+}
+#pragma mark - 购物车增删改
+- (void)downShoppingCar:(NSInteger)count{
+//    count == 0 减
+//    count == 1 加
+    ELTFruitAndVegatableModel * model = self.detailModel;
+    //NSInteger shopCarNum = [shopCar.badgeview.badgeText integerValue];
+    
+    NSInteger  num = [self.displayBox.titleLabel.text integerValue];
+    NSString * task;
+    
+    NSString * pid;
+    if (count == 0 && num == 0) {
+        task = @"del";
+        _uid = self.detailModel.u_id;
+        pid = nil;
+    }else if(count == 1){
+        task = @"add_detail";
+        _uid = nil;
+        pid = model.fvId;
+    }else{
+        task = @"edit";
+        _uid = model.u_id;
+        pid = model.fvId;
+    }
+    [self.indicator setIndicatorType:ActivityIndicatorLogin];
+    [self.indicator startAnimatingActivit];
+    [ELRequestSingle shopCartEditWithRequest:^(BOOL sucess, id objc) {
+        [self.indicator LoadSuccess];
+        //[self showAlertViewWith:@"修改成功"];
+        self.detailModel.u_id = [[objc objectForKey:@"datalist"] objectForKey:@"uid"];
+        [self downRequestShopCartNum];
+    } andUid:_uid andPid:pid andTask:task andNum:[NSString stringWithFormat:@"%ld",(long)num]];
+}
+#pragma mark - 请求购物车数量
+-(void)downRequestShopCartNum{
+    
+    [ELRequestSingle shopCartNumWithRequest:^(BOOL sucess, id objc) {
+        
+        [shopCar.badgeview setBadgeText:objc];
+        if ([objc integerValue] == 0) {
+            shopCar.badgeview.hidden = YES;
+        }else{
+            shopCar.badgeview.hidden = NO;
+        }
+    } andAuto_code:@"10001001"];
+    
+}
+#pragma mark   购物车 8.3
+-(void)shopCarClick{
+    
+    ELTShoppingCarViewController *view = [[ELTShoppingCarViewController alloc]init];
+    
+    [self.navigationController pushViewController:view animated:YES];
+}
+
+@end

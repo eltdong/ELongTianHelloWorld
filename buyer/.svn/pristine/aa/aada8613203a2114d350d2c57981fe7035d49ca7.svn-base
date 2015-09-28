@@ -1,0 +1,33 @@
+//
+//  SearchCustomViewTableViewCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/14.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+/**
+ *   服务列表界面和商品列表界面筛选cell
+ */
+@protocol SearchCustomViewTableViewCellDelegate <NSObject>
+
+-(void)getScreening;
+-(void)getSalesPriority;
+@end
+
+
+@interface ELTSearchCustomViewTableViewCell : UITableViewCell
+#pragma mark  - first yd
+- (IBAction)screeningBtn:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *screeningBtn;//筛选
+@property (weak, nonatomic) IBOutlet UIButton *salesPriorityBtn;//销量优先
+- (IBAction)salesPriorithBtn:(id)sender;
+
+#pragma mark - second yd
+@property (weak, nonatomic) IBOutlet UIButton *selectStatusBtn;//对勾
+@property (weak, nonatomic) IBOutlet UIButton *textlabelBtn;//价格从高到低
+@property (strong, nonatomic) IBOutlet UIButton *selectBtnImg;//倒三角
+
+@property (nonatomic,assign) id<SearchCustomViewTableViewCellDelegate>delegate;
+@end

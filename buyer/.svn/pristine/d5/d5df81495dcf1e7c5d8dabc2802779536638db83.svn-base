@@ -1,0 +1,68 @@
+//
+//  ShopDetailModel.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/22.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ShopDetailModel.h"
+
+@implementation ShopDetailModel
+
++(instancetype)shopDetailInitWithDict:(NSDictionary*)dic{
+    return [[self alloc]initWithDic:dic];
+}
++(instancetype)shopListInitWithDict:(NSDictionary*)dic{
+    return [[self alloc]initWithDicList:dic];
+}
+-(instancetype)initWithDic:(NSDictionary *)dict{
+    
+    self = [super init];
+    if (self) {
+        _ID = [dict objectForKey:@"id"];
+        _name = dict[@"name"];
+        _content_img = dict[@"content_img"];
+        
+        _send_price = dict[@"send_price"];
+        
+        _sale_num = dict[@"sale_num"];
+        _address = dict[@"address"];
+        
+        NSDictionary *dic = [dict objectForKey:@"time"];
+        if (![dic isEqual:@""]) {
+            _openTime = [dic objectForKey:@"open_time"];
+            _closeTime = [dic objectForKey:@"close_time"];
+        }
+       
+
+        NSMutableArray *array = [NSMutableArray array];
+        _show = dict[@"show"];
+        
+        if (![_show isEqual:@""]) {
+            for (NSDictionary *photoDic in _show) {
+                NSString *url = [photoDic objectForKey:@"content_img"];
+                [array addObject:url];
+            }
+ 
+        }
+                _photoArray = array;
+    }
+    return self;
+    
+}
+-(instancetype)initWithDicList:(NSDictionary *)dict{
+    
+    self = [super init];
+    if (self) {
+        [self setValuesForKeysWithDictionary:dict];
+    
+    }
+    return self;
+    
+}
+
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key{
+    
+}
+@end

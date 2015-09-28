@@ -1,0 +1,19 @@
+//
+//  OrderDetailAddCell.h
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/21.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface ELTOrderDetailAddCell : UITableViewCell
+
+@property (strong, nonatomic) IBOutlet UILabel *nameLabel;
+
+@property (strong, nonatomic) IBOutlet UILabel *telLabel;
+
+@property (strong, nonatomic) IBOutlet UILabel *addLabel;
+
+@end

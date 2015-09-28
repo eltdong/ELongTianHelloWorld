@@ -1,0 +1,24 @@
+//
+//  MassageCollectionViewCell.h
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/28.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+@class ELTServiceModel;
+#import "ServiceShopDetailModel.h"
+
+@interface ELTServiceListCollectionViewCell : UICollectionViewCell
+@property (nonatomic ,strong)  ELTServiceModel *model;
+@property (nonatomic ,strong)  ServiceShopDetailModel *SerModel;
+@property (weak, nonatomic) IBOutlet UILabel *title;
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *ShopLabel;
+@property (weak, nonatomic) IBOutlet UILabel *SaleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *PriceLabel;
+@property (weak, nonatomic) IBOutlet UILabel *PriceLables;
+@property (weak, nonatomic) IBOutlet UIImageView *ShowImage;
+
+@end

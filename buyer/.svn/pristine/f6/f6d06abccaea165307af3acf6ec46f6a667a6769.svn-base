@@ -1,0 +1,42 @@
+//
+//  ServiceOrderDetailsModel.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/8.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface ELTServiceOrderDetailsModel : ELTBaseModel
+@property (nonatomic ,copy)  NSString *Id;//订单ID
+@property (nonatomic ,copy)  NSString *eshop_id;//店铺ID
+@property (nonatomic ,copy)  NSString *eshop_name;//店铺名称
+@property (nonatomic ,copy)  NSString *personal_name;//服务人员姓名
+@property (nonatomic ,copy)  NSString *service_personal_id;//服务人员id
+@property (nonatomic ,copy)  NSString *coupon_price;//代金卷优惠价格
+@property (nonatomic ,copy)  NSString *order_status;//订单状态
+@property (nonatomic ,copy)  NSString *total_price;//应付金额
+@property (nonatomic ,copy)  NSString *price;//交易价格
+@property (nonatomic ,copy)  NSString *consignee;//收货人姓名
+@property (nonatomic ,copy)  NSString *consignee_phone;//收货人电话
+@property (nonatomic ,copy)  NSString *address;//收货完整地址
+@property (nonatomic ,copy)  NSString *content_sn;//订单编号
+@property (nonatomic ,copy)  NSString *create_time;//下单时间
+@property (nonatomic ,copy)  NSString *order_remarks;//订单备注
+@property (nonatomic ,copy)  NSString *appointment_start_time;//预约开始时间
+@property (nonatomic ,copy)  NSString *end_time;//预约结束时间
+@property (nonatomic ,copy)  NSString *tel;//客服热线
+@property (nonatomic ,copy)  NSString *service_time;//服务时间范围（无限资源）
+
+@property (nonatomic ,copy)  NSString *service_id;//服务项目ID
+@property (nonatomic ,copy)  NSString *service_name;//服务名称
+@property (nonatomic ,copy)  NSString *content_img;//服务列表图
+@property (nonatomic ,copy)  NSString *evaluation_status;//评价标识
+
+@property (nonatomic,strong) NSArray *array;//评价页面图片
+@property (nonatomic,strong) NSMutableArray *review_img;//服务器返回的图片路径
+@property (nonatomic,copy) NSString *evaluation_content;//评价内容
+@property (nonatomic,assign) NSInteger evaluation_value;//评价数值 好评：1  中评：2  差评：3
+
+@end

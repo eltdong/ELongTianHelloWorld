@@ -1,0 +1,38 @@
+//
+//  OrderViewCell.m
+//  Guoan Test
+//
+//  Created by 王波 on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+#import "ELTOrderViewCell.h"
+
+@implementation ELTOrderViewCell
+
+- (void)awakeFromNib {
+    
+    
+    
+}
+
+-(void)setOrderModel:(ELTMyOrderModel *)orderModel{
+    
+    _orderModel = orderModel;
+    _Number.text = _orderModel.content_sn;
+    _State.text = _orderModel.order_status;
+    
+}
+-(void)setModel:(ELTMyServiceOrderModel *)model{
+    _model= model;
+    _Number.text = model.content_sn;
+    _State.text = model.order_status;
+
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end

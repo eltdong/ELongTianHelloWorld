@@ -1,0 +1,36 @@
+//
+//  EditeOrderThreeCell.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTEditeOrderThreeCell.h"
+
+@implementation ELTEditeOrderThreeCell
+
+- (void)awakeFromNib {
+    // Initialization code
+    
+    self.image.layer.masksToBounds =YES;
+    self.image.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.image.layer.borderWidth = 1.0f;
+}
+
+-(void)setModel:(ELTShopCartCommodityModel *)model{
+    _model = model;
+    _Name.text = _model.content_name;
+    _price.text = [NSString stringWithFormat:@"¥ %@",_model.content_preprice];
+    [_image setImageWithURL:[NSURL URLWithString:_model.content_img]];
+    _Number.text = [NSString stringWithFormat:@"X%ld",(long)_model.count];
+}
+
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end

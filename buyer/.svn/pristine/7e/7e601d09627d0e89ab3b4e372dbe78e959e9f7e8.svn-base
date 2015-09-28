@@ -1,0 +1,45 @@
+//
+//  EvaluationAll.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/2.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTEvaluationListModel.h"
+#import "ELTEvaluationContentModel.h"
+#import "ELTRadio.h"
+
+@implementation ELTEvaluationListModel
+-(instancetype)initDictionary:(NSDictionary *)dic{
+    self = [super init];
+    if (self) {
+        if (![dic[@"review"] isEqual:[NSNull null]]) {
+             self.review =  [self addReview:dic[@"review"]];
+           
+        }
+   
+    self.radio = [self addRadio:dic[@"radio"]];
+    }
+    return self;
+}
+-(NSMutableArray *)addReview:(NSArray *)arr{
+    NSMutableArray *array = [NSMutableArray array];
+          for (NSDictionary *dic in arr) {
+            ELTEvaluationContentModel *model = [[ELTEvaluationContentModel alloc] initDictionary:dic];
+            [array addObject:model];
+            
+        }
+    
+    return array;
+}
+-(NSMutableArray *)addRadio:(NSArray *)arr{
+    NSMutableArray *array = [NSMutableArray array];
+    for (NSDictionary *dic in arr) {
+        ELTRadio *model = [[ELTRadio alloc] init];
+        [model setValuesForKeysWithDictionary:dic];
+        [array addObject:model];
+    }
+    return array;
+}
+@end

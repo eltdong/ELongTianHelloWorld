@@ -1,0 +1,19 @@
+//
+//  OrderDetailSCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/17.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface ELTCommodityOrderDetailCell : UITableViewCell
+
+@property (strong, nonatomic) IBOutlet UILabel *orderIDLabel;//订单编号
+
+@property (strong, nonatomic) IBOutlet UILabel *beginTimeLabel;//下单时间
+
+@property (strong, nonatomic) IBOutlet UILabel *remarkLabel;//订单备注
+
+@end

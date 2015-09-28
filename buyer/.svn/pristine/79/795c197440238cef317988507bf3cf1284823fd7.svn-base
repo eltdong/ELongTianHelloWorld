@@ -1,0 +1,19 @@
+//
+//  EditeOrderHeader.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/21.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface ELTEditeOrderHeader : UIView
+
+@property (strong, nonatomic) IBOutlet UIImageView *image;
+
+@property (strong, nonatomic) IBOutlet UILabel *shopTitleLabel;
+
+@property (strong, nonatomic) IBOutlet UILabel *describLabel;
+
+@end

@@ -1,0 +1,91 @@
+//
+//  shop_Sec_TableViewCell.m
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTCommodityDetailTwoCell.h"
+#import "BaseViewController.h"
+#import <UIKit/UIDynamicBehavior.h>
+@implementation ELTCommodityDetailTwoCell
+/**
+ *  去掉cell的高亮状态
+ */
+-(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
+ }
+-(void)setValue:(id)value forUndefinedKey:(NSString *)key{
+    
+}
+- (void)awakeFromNib {
+    self.introduction.selected = YES;
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
++(instancetype)tabbleViewCell:(UITableView *)tableView{
+    static NSString * cellID = @"shopSecCell";
+    [tableView registerNib:[UINib nibWithNibName:@"ELTCommodityDetailTwoCell" bundle:nil] forCellReuseIdentifier:cellID];
+    ELTCommodityDetailTwoCell * cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    if (!cell) {
+        cell = [[[NSBundle mainBundle]loadNibNamed:@"ELTCommodityDetailTwoCell" owner:self options:nil]lastObject];
+    }
+    if (cell.isYesOrNO) {
+        CGFloat underlineX= (CGFloat)cell.underLine.frame.size.width;
+        CGFloat underlineY= cell.underLine.frame.origin.y;
+        CGFloat underlineWidth = cell.underLine.frame.size.width;
+        CGFloat underlineHeight = cell.underLine.frame.size.height;
+          cell.underLine.frame=CGRectMake(underlineX,underlineY,underlineWidth,underlineHeight);
+    }
+    return cell;
+}
+- (IBAction)introduction:(id)sender {
+    UIButton *button = sender;
+    if (button.selected) {
+        return;
+    }
+    self.evaluation.selected = self.introduction.selected;
+    self.introduction.selected = !self.introduction.selected;
+    
+    
+    if ((int)self.underLine.frame.origin.x) {
+        CGFloat underlineX= 0;
+        CGFloat underlineY= self.underLine.frame.origin.y;
+        CGFloat underlineWidth = self.underLine.frame.size.width;
+        CGFloat underlineHeight = self.underLine.frame.size.height;
+        [UIView animateWithDuration:0.5 animations:^{
+          self.underLine.frame=CGRectMake(underlineX,underlineY,underlineWidth,underlineHeight);
+        }];
+    }
+    self.isYesOrNO = NO;
+    if ([self.delegate respondsToSelector:@selector(btnClicked:)]) {
+        [self.delegate btnClicked:NO];
+    }
+  
+}
+
+- (IBAction)evaluation:(id)sender {
+     UIButton *button = sender;
+    if (button.selected) {
+        return;
+    }
+    self.introduction.selected = self.evaluation.selected;
+    self.evaluation.selected = !self.evaluation.selected;
+    CGFloat underlineX= (CGFloat)self.underLine.frame.size.width;
+    CGFloat underlineY= self.underLine.frame.origin.y;
+    CGFloat underlineWidth = self.underLine.frame.size.width;
+    CGFloat underlineHeight = self.underLine.frame.size.height;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.underLine.frame=CGRectMake(underlineX,underlineY,underlineWidth,underlineHeight);
+    }completion:nil];
+    self.isYesOrNO = YES;
+    if ([self.delegate respondsToSelector:@selector(btnClicked:)]) {
+        [self.delegate btnClicked:YES];
+    }
+    
+}
+@end

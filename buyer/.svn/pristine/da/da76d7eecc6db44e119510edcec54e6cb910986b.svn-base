@@ -1,0 +1,13 @@
+//
+//  WeekTime.m
+//  GuoanBuyer
+//
+//  Created by 易龙天 on 15/9/9.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTWeekTimeModel.h"
+
+@implementation ELTWeekTimeModel
+
+@end

@@ -1,0 +1,35 @@
+//
+//  commidyModel.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/11.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTShopCartCommodityModel.h"
+
+@implementation ELTShopCartCommodityModel
+
+-(void)setValue:(id)value forUndefinedKey:(NSString *)key{
+    
+    
+}
+
++(instancetype)commidyModelInitWithDict:(NSDictionary*)dic{
+    
+    return [[self alloc]initWithDic:dic];
+    
+}
+-(instancetype)initWithDic:(NSDictionary *)dict{
+    
+    self = [super init];
+    if (self) {
+        [self setValuesForKeysWithDictionary:dict];
+        _select = [[dict objectForKey:@"sele"]boolValue];
+        _count = [[dict objectForKey:@"amount"]integerValue];
+    }
+    return self;
+    
+}
+
+@end

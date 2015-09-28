@@ -1,0 +1,22 @@
+
+//
+//  EvaluationRadio.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/2.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTEvaluationClassifyModel.h"
+
+@implementation ELTEvaluationClassifyModel
+-(instancetype)initDictionary:(NSDictionary *)dic{
+    self = [super init];
+    if (self) {
+        self.label = dic[@"label"];
+        self.value = dic[@"value"];
+        self.num = dic[@"num"];
+    }
+    return self;
+}
+@end

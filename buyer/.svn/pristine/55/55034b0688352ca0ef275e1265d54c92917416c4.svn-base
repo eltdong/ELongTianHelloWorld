@@ -1,0 +1,175 @@
+//
+//  ServeIntroViewController.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/28.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTServicePersonDetailViewController.h"
+#import "ELTServicePersonDetailOneCell.h"
+#import "ELTServicePersonDetailTwoCell.h"
+#import "ELTServicePersonDetailFourCell.h"
+#import "ELTServicePersonDetailThreeCell.h"
+
+#import "ELTOrderSubLimitViewController.h"
+#import "ServiceDetailModel.h"
+#import "ELTEvaluateListCenterViewController.h"
+
+@interface ELTServicePersonDetailViewController ()<ServeIntro>
+{
+    ServiceDetailModel *_serModel;
+}
+@property (nonatomic,copy)NSMutableArray *dataArr;//评价数据源
+@end
+
+@implementation ELTServicePersonDetailViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    self.title= @"服务人员介绍";
+    _dataArr = [NSMutableArray array];
+    [self downRequest];
+}
+#pragma mark - 评价数据
+- (void)downRequest{
+    [self.indicator startAnimatingActivit];
+    
+    [ELRequestSingle screenRequestWithBlock:^(BOOL sucess, id objc) {
+        [self.indicator LoadSuccess];
+      
+       _serModel = objc;
+     
+        [self.bgTable reloadData];
+    } andSerper_id:self.model.ID andType:0 andPlugin:@"com_shopService" andRow:10 andPage:1];
+
+
+}
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    
+    return 2;
+    
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    
+    if (section == 0) {
+        return 2;
+    }else{
+        
+         return  OBJC(_serModel.review)?_serModel.review.count+1:2;
+    }
+    
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (indexPath.section == 0 && indexPath.row == 0) {
+        return 80;
+    }else if (indexPath.section == 1 && indexPath.row == 0){
+        return 74;
+    }else{
+        UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+        return cell.frame.size.height;
+    }
+    
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    
+    return 10;
+    
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (indexPath.section == 0) {
+        
+        if (indexPath.row == 0) {
+            
+            ELTServicePersonDetailOneCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ServeIntroOneCell"];
+            if (!cell) {
+                cell = [[[NSBundle mainBundle]loadNibNamed:@"ELTServicePersonDetailOneCell" owner:self options:nil]lastObject];
+            }
+            cell.Model = _model;
+            return cell;
+            
+        }else{
+            ELTServicePersonDetailTwoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ServeIntroTwoCell"];
+            if (!cell) {
+                cell = [[ELTServicePersonDetailTwoCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ELTServicePersonDetailTwoCell"];
+            }
+            cell.workExperienceLabel.text = [NSString stringWithFormat:@"                %@",_model.content_desc];
+            [cell heightWithContent:[NSString stringWithFormat:@"%@",_model.content_desc]];
+            return cell;
+        }
+    }else{
+        
+        if (indexPath.row == 0) {
+            
+            ELTServicePersonDetailThreeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ServeIntroThreeCell"];
+            if (!cell) {
+                cell = [[[NSBundle mainBundle]loadNibNamed:@"ELTServicePersonDetailThreeCell" owner:self options:nil]lastObject];
+            }
+            
+            if (_serModel.radio) {
+               cell.radioArr = _serModel.radio;   
+            }
+           cell.delegate = self;
+            
+            return cell;
+            
+        }else{
+            
+            ELTServicePersonDetailFourCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ServeIntroFourCell"];
+            if (!cell) {
+                cell = [[ELTServicePersonDetailFourCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ELTServicePersonDetailFourCell"];
+            }
+           
+            if (_serModel) {
+                ServiceReivew *serModel = _serModel.review[indexPath.row -1];
+                
+                cell.serviceModel = serModel;
+            }
+            
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cell;
+        
+    }
+    }
+    
+}
+
+-(void)home:(id)sender{
+    
+//    OrderSubscribeViewController *view = [[OrderSubscribeViewController alloc]init];
+//    [self.navigationController pushViewController:view animated:YES];
+    
+}
+
+-(void)back:(id)sender{
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+-(void)serveIntro:(NSInteger)num{
+    
+    NSLog(@"%ld",num);
+    ELTEvaluateListCenterViewController *view = [[ELTEvaluateListCenterViewController alloc] init];
+    view.shopID = _model.ID;
+    view.btnType = [NSString stringWithFormat:@"%ld",num];
+    view.evaluationType = Evaluationpeople;
+    [self.navigationController pushViewController:view animated:YES];
+    
+}
+
+
+@end

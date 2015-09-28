@@ -1,0 +1,87 @@
+//
+//  DDViewCell.m
+//  Guoan Test
+//
+//  Created by 王波 on 15/7/21.
+//  Copyright (c) 2015年 掌上世纪. All rights reserved.
+//
+
+#import "ELTCommodityOrderViewCell.h"
+#import "ELTOrderImageCollectionViewCell.h"
+
+@interface ELTCommodityOrderViewCell()<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
+
+@end
+
+@implementation ELTCommodityOrderViewCell
+
+- (void)awakeFromNib {
+    
+    _collectionView.dataSource=self;
+    _collectionView.delegate=self;
+    _collectionView.scrollEnabled = YES;
+    
+    [_collectionView registerNib:[UINib nibWithNibName:@"ELTOrderImageCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"MyOrderCollectionViewCell"];
+    _collectionView.scrollEnabled = NO;
+    
+}
+
+-(void)setOrderModel:(ELTMyOrderModel *)orderModel{
+    
+    _orderModel = orderModel;
+    _priceLabel.text = _orderModel.amount;
+    _numLabel.text = [NSString stringWithFormat:@"共%ld件商品",(long)_orderModel.num];
+    _timeLabel.text = orderModel.create_time;
+    [_collectionView reloadData];
+    
+}
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return _orderModel.content_img.count;
+}
+
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
+}
+
+//每个UICollectionView展示的内容
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    ELTOrderImageCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MyOrderCollectionViewCell" forIndexPath:indexPath];
+        [cell.picImage setImageWithURL:[NSURL URLWithString:[_orderModel.content_img objectAtIndex:indexPath.item]]];
+    
+    return cell;
+}
+#pragma mark --UICollectionViewDelegateFlowLayout
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return CGSizeMake((SCREENWIDTH - 60)/4, SCREENWIDTH / 4.27);
+    
+}
+
+//定义每个UICollectionView 的 margin
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(0, 0, 0, 0);
+}
+
+#pragma mark --UICollectionViewDelegate
+//UICollectionView被选中时调用的方法
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+- (IBAction)uibutton:(UIButton *)sender {
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(selectItemAtIndexPath:)]) {
+        [self.delegate selectItemAtIndexPath:_orderModel];
+    }
+}
+@end

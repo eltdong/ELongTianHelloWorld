@@ -1,0 +1,357 @@
+//
+//  OrderSubLimitedViewController.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/5.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTOrderSubUnlimitedViewController.h"
+#import "ELTOrderSubscribeOneCell.h"
+#import "ELTEditeOrderOneCell.h"
+#import "ELTOrderSubscribeTwoCell.h"
+#import "ELTSelectServiceTimeViewController.h"
+#import "ELTFillOrderViewController.h"
+#import "ELTAddress.h"
+#import "ELTDiscountCoupon.h"
+#import "ELTServiceOrderViewController.h"
+#define CELL_TAG 65465455
+#define STR @"请选择代金券"
+@interface ELTOrderSubUnlimitedViewController (){
+    NSArray *_imageArray;
+    NSArray *_labelNameArray;
+    
+    NSMutableArray * _pickerViewDataArr;
+    NSString * _serviceTime;
+    NSString * _serviceId;
+    NSString * _mouth;
+    NSString * _week;
+    NSString * _day;
+    BOOL _isVouchers;
+}
+@end
+
+@implementation ELTOrderSubUnlimitedViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    self.title = @"服务预约";
+    self.bottomBtn.layer.cornerRadius = 6.0;
+    _imageArray = @[@"elt_addr_icos2.png",@"elt_clocks.png",@"elt_yhq_ico.png",@"elt_bz.png"];
+    _labelNameArray = @[@"预约时间",@"请选择代金券"];
+    [self downRequestPickerView];
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (indexPath.section == 0) {
+        
+        return 90;
+        
+    }else{
+        
+        return 50;
+        
+    }
+    
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    if (section == 3) {
+        return 0;
+    }
+    return 10;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 0.1;
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    
+    return 4;
+    
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    
+    return 1;
+    
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (indexPath.section == 0) {
+        
+        ELTEditeOrderOneCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EditeOrderOneCell"];
+        if (!cell) {
+            cell = [[[NSBundle mainBundle]loadNibNamed:@"ELTEditeOrderOneCell" owner:self options:nil]lastObject];
+        }
+        cell.iconImage.image = [UIImage imageNamed:[_imageArray objectAtIndex:indexPath.section]];
+        cell.nameLabel.text = [ELTAddress sharedAddress].AddressModel.name;
+        cell.telLabel.text = [ELTAddress sharedAddress].AddressModel.mobilephone;
+        cell.addLabel.text = [ELTAddress sharedAddress].AddressModel.address;
+        return cell;
+        
+    }else if(indexPath.section == 3){
+        
+            ELTOrderSubscribeTwoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OrderSubscribeTwoCell"];
+            if (!cell) {
+                cell = [[[NSBundle mainBundle]loadNibNamed:@"ELTOrderSubscribeTwoCell" owner:self options:nil]lastObject];
+            }
+            cell.iconImage.image = [UIImage imageNamed:[_imageArray objectAtIndex:indexPath.section]];
+        cell.tag = CELL_TAG +3;
+            return cell;
+    }else{
+            
+        ELTOrderSubscribeOneCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OrderSubscribeOneCell"];
+        if (!cell) {
+            cell = [[[NSBundle mainBundle]loadNibNamed:@"ELTOrderSubscribeOneCell" owner:self options:nil]lastObject];
+        }
+        cell.image.image = [UIImage imageNamed:[_imageArray objectAtIndex:indexPath.section]];
+        cell.label.text = [_labelNameArray objectAtIndex:indexPath.section - 1];
+        if (indexPath.section == 1) {
+            cell.tag = CELL_TAG;
+        }
+        if (indexPath.section == 2) {
+            if(_isVouchers){
+                cell.vouchers.hidden = YES;
+            }else{
+                cell.vouchers.hidden = NO;
+            }
+            cell.tag = CELL_TAG +1;
+        }
+        return cell;
+        
+        }
+    
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (indexPath.section == 1) {
+        
+//        SelectServiceTimeSecViewController *view = [[SelectServiceTimeSecViewController alloc]init];
+//        [self.navigationController pushViewController:view animated:YES];
+        ELTSelectServiceTimeViewController * ssts = [[ELTSelectServiceTimeViewController alloc] init];
+        //        ssts.serviceTime = self.serviceTime;
+        ssts.isLimited = self.isLimited;
+        ssts.shoppe_id = self.model.eshop_id;
+        ssts.block = ^(NSString * mouth,NSString * week,NSString * day,ELTEShopDateModel * model){
+            _mouth = mouth;
+            _week = week;
+            _day = day;
+            ELTOrderSubscribeOneCell *cell = (ELTOrderSubscribeOneCell *)[_bgTableView viewWithTag:CELL_TAG];
+//            cell.label.textAlignment = NSTextAlignmentRight;
+            cell.label.text = [NSString stringWithFormat:@"%@(%@)     %@",mouth,week,day];
+        };
+        [self.navigationController pushViewController:ssts animated:YES];
+        
+    }
+    if (indexPath.section == 2 && _isVouchers) {
+        [self.indicator setIndicatorType:ActivityIndicatorLogin];
+        [self downRequestPickerView];
+        [UIView animateWithDuration:1 animations:^{
+            self.pickerView_bjView.hidden = NO;
+            [self createUIPickerView];
+        }];
+    }
+    
+}
+
+-(void)back:(id)sender{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+#pragma mark - 确定按钮 yd
+- (IBAction)bottomBtn:(id)sender {
+    NSString * time = [NSString stringWithFormat:@"%@ %@",_mouth,_day];
+    if (_mouth == nil) {
+      
+        [self showAlertViewWith:@"请选择时间"];
+        return;
+    }
+//    NSDateFormatter *inputFormatter= [[NSDateFormatter alloc] init];
+////    [inputFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+//    [inputFormatter setLocale:[NSLocale currentLocale]];
+//    [inputFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+//    
+//    NSDate*inputDate = [inputFormatter dateFromString:time];
+//    
+//    NSLog(@"date= %@", inputDate);
+    NSNumber * total_price;
+    if(_serviceTime == nil || [_serviceTime isEqualToString:STR]){
+        total_price = [NSNumber numberWithDouble:[self.model.promotion_price doubleValue]];
+    }else{
+        total_price = [NSNumber numberWithDouble:[self.model.promotion_price doubleValue] - [_serviceTime doubleValue]];
+    }
+    
+    NSNumber * price = [NSNumber numberWithDouble:[self.model.promotion_price doubleValue]];
+    
+    ELTOrderSubscribeTwoCell * cell = (ELTOrderSubscribeTwoCell *)[_bgTableView viewWithTag:CELL_TAG + 3];
+    NSString * str;
+    if ([cell.remarkField.text isEqualToString:@""]) {
+        str = @"无";
+    }else{
+        str = cell.remarkField.text;
+    }
+    
+    
+    NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                 [NSNumber numberWithInt:[self.model.eshop_id intValue]],@"service[eshop_id]",
+                                 [ELTAddress sharedAddress].AddressModel.address,@"service[address]",
+                                 time,@"service[appointment_start_time]",
+                                 self.model.service_time,@"service[service_time]",
+                                 [ELTAddress sharedAddress].AddressModel.name,@"service[consignee]",
+                                 [ELTAddress sharedAddress].AddressModel.mobilephone,@"service[consignee_phone]",
+                                 str,@"service[order_remarks]",//备注
+                                 total_price,@"service[total_price]",
+                                 price,@"service[price]",
+                                 [NSNumber numberWithInt:[self.model.Id intValue]],@"derdetail[service_id]",
+                                 price,@"derdetail[price]",
+                                 self.model.eshopname,@"derdetail[service_name]",
+                                 @"infiniteorder",@"task",
+                                 nil];
+    
+    
+     ELTOrderSubscribeOneCell *cell1 = (ELTOrderSubscribeOneCell *)[_bgTableView viewWithTag:CELL_TAG+1];
+    if ([cell1.label.text isEqualToString:STR]) {
+    }else{
+        [dic setObject:[NSNumber numberWithInt:[_serviceId intValue]] forKey:@"service[coupon_id]"];
+    }
+    
+    [ELRequestSingle infiniteorderRequestWithBlock:^(BOOL sucess, id objc) {
+        if (objc != nil) {
+            [self.view makeToast:objc];
+            ELTOrderSuccessViewController *view = [[ELTOrderSuccessViewController alloc]init];
+            view.delegate = self;
+            [self.navigationController pushViewController:view animated:YES];
+        }
+    } andDic:dic];
+   
+}
+#pragma mark - OrderSuccessViewControllerDelegate
+-(void)first:(UIButton *)button{
+    
+    ELTServiceOrderViewController *view = [[ELTServiceOrderViewController alloc]init];
+    view.currentIndex = 1;
+    [self.navigationController pushViewController:view animated:YES];
+    
+}
+-(void)second:(UIButton *)button{
+    [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 4] animated:YES];
+}
+
+
+#pragma mark - 代金券pickerView 相关方法
+
+- (void)downRequestPickerView{
+    [self.indicator startAnimatingActivit];
+    [ELRequestSingle getCouponListRequestBlock:^(BOOL sucess, id objc) {
+        [self.indicator LoadSuccess];
+        _pickerViewDataArr = objc;
+        if (_pickerViewDataArr.count > 0) {
+            
+            [self createUIPickerView];
+            _isVouchers = YES;
+            ELTOrderSubscribeOneCell * cell = (ELTOrderSubscribeOneCell *)[_bgTableView viewWithTag:CELL_TAG + 1];
+            cell.vouchers.hidden = YES;
+            [self createUIPickerView];
+        }else{
+           _isVouchers = NO;
+        }
+    } andShoppe_id:self.model.eshop_id andPrice:self.model.promotion_price];
+    
+}
+
+
+-(void)createUIPickerView{
+    //    _pickerViewDataArr = [NSMutableArray array];
+    //    NSArray * arr =@[@"2小时",@"2.5小时",@"3小时",@"3.5小时",@"4小时"];
+    //    //    NSArray * arr1 =@[@"2",@"2.5",@"3",@"3.5",@"4"];
+    //    [_pickerViewDataArr addObjectsFromArray:arr];
+    _serviceTime = STR;
+    self.pickerView1.delegate = self;
+    self.pickerView1.dataSource = self;
+    
+    [self.pickerView1 reloadAllComponents];
+    
+    self.view.backgroundColor = UIColorFromRGB(0xf5f5f5);
+    
+}
+
+#pragma pickerDelegate
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
+    return 1;
+}
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
+    return _pickerViewDataArr.count + 1;
+}
+- (NSString *)pickerView:(UIPickerView *)pickerView
+             titleForRow:(NSInteger)row
+            forComponent:(NSInteger)component {
+    //    if (component == 0)
+    //        return [self.breadTypes objectAtIndex:row];//设置第一列的内容(数组的self不能少)
+    //    return [self.fillingTypes objectAtIndex:row];//设置第二列的内容(数组的self不能少)
+    if (row == 0) {
+        return STR;
+    }
+    return [NSString stringWithFormat:@"%@元代金券",[[_pickerViewDataArr objectAtIndex:row -1] content_price]];
+}
+
+-(CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component{
+    return 42.5f;
+}
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
+    if (row == 0) {
+        _serviceTime = STR;
+        _serviceId = 0;
+    }else{
+        ELTDiscountCoupon * model =_pickerViewDataArr[row - 1];
+        NSString * str = model.content_price;
+        _serviceTime = str;
+        _serviceId = model.Id;
+    }
+}
+
+
+
+#pragma mark - 代金券 确定取消键
+- (IBAction)pickerViewOKBtnClicked1:(id)sender {
+    
+    
+    
+    ELTOrderSubscribeOneCell *cell = (ELTOrderSubscribeOneCell *)[_bgTableView viewWithTag:CELL_TAG+1];
+    if([_serviceTime isEqualToString:STR]){
+        cell.label.text = _serviceTime;
+    }else{
+        cell.label.text = [NSString stringWithFormat:@"%@元代金券",_serviceTime];
+    }
+    [UIView animateWithDuration:1 animations:^{
+        self.pickerView_bjView.hidden = YES;
+    }];
+    
+}
+- (IBAction)pickerViewCancleBtnClicked1:(id)sender {
+    [UIView animateWithDuration:1 animations:^{
+        self.pickerView_bjView.hidden = YES;
+    }];
+}
+
+@end

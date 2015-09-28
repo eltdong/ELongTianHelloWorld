@@ -1,0 +1,29 @@
+//
+//  OrderDetailViewController.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/31.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "BaseViewController.h"
+/**
+ *  商品订单详情界面
+ */
+@interface ELTCommodityOrderDetailViewController : BaseViewController
+
+@property (nonatomic,weak) IBOutlet UITableView *tableView;//底层view
+
+@property (weak, nonatomic) IBOutlet UIButton *deleteOrder;//删除按钮
+
+@property (weak, nonatomic) IBOutlet UIButton *evaluate;//评价按钮
+
+@property (nonatomic,copy) NSString *orderId;//订单id
+
+@property (nonatomic,assign) NSInteger order_status;//订单状态
+
+-(IBAction)deleteOrder:(id)sender;
+
+-(IBAction)evaluate:(id)sender;
+
+@end

@@ -1,0 +1,28 @@
+//
+//  CommentListViewController.h
+//  GuoanBuyer
+//
+//  Created by 易龙天 on 15/8/21.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+/**
+   评价详情页
+ */
+#import "BaseViewController.h"
+#import "ELTCommodityDetailThreeCell.h"
+typedef enum {
+    
+    CommodityEvaluation,//商品评价
+    
+    ServiceEvaluation,//服务评价
+    
+    ServicePelple//服务人员评价
+    
+}Type;
+@interface ELTEvaluateListViewController : BaseViewController<sdtDelegate>
+@property (strong, nonatomic) IBOutlet UITableView *mainTableView;
+@property (nonatomic, copy) NSString * shopID;//商品店铺或服务店铺或服务人员id
+@property (nonatomic, copy) NSString * btnType;//评价分类
+@property (nonatomic ,assign)  Type type;//区分从那个界面的评
+-(void)downRequestWithEvaluation;
+@end

@@ -1,0 +1,17 @@
+//
+//  ServeIntroTwoCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/28.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface ELTServicePersonDetailTwoCell : UITableViewCell
+
+@property (nonatomic,strong) UILabel *workExperienceLabel;
+
+-(void)heightWithContent:(NSString *)content;
+
+@end

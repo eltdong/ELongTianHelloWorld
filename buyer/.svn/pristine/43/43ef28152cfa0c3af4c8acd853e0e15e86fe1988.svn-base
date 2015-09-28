@@ -1,0 +1,28 @@
+//
+//  MyShopCart.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/11.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface MyShopCart : NSObject
+
+@property (nonatomic,copy) NSString *shopName;//店铺名称
+
+@property (nonatomic,copy) NSString *time;//20分钟送达
+
+@property (nonatomic,assign) double totalPrice;//总金额
+
+@property (nonatomic,copy) NSString *discountDescribe;//满10元起送
+
+@property (nonatomic,strong) NSMutableArray *commidyList;//商品数组
+
+@property (nonatomic,assign) BOOL isSelect;
+
++(instancetype)myShopCartInitWithDict:(NSDictionary*)dic;
+-(instancetype)initWithDic:(NSDictionary *)dict;
+
+@end

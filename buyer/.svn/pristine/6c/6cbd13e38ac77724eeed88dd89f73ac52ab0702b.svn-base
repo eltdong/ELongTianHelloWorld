@@ -1,0 +1,18 @@
+//
+//  ServeIntroViewController.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/28.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+
+
+#import "BaseViewController.h"
+#import "ELTServicePersonnel.h"
+/**
+ *  服务人员介绍
+ */
+@interface ELTServicePersonDetailViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>
+
+@property (nonatomic,strong) IBOutlet UITableView *bgTable;//底层视图
+@property (nonatomic ,strong)  ELTServicePersonnel *model;//服务人员model
+@end

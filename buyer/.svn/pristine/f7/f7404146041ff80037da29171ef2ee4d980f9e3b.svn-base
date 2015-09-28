@@ -1,0 +1,21 @@
+//
+//  EditeOrderOneCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface ELTEditeOrderOneCell : UITableViewCell
+
+@property (nonatomic,strong) IBOutlet UIImageView *iconImage;
+
+@property (nonatomic,strong) IBOutlet UILabel *nameLabel;
+
+@property (nonatomic,strong) IBOutlet UILabel *telLabel;
+
+@property (nonatomic,strong) IBOutlet UILabel *addLabel;
+
+@end

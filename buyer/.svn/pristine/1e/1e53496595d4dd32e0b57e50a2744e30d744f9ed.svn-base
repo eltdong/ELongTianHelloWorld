@@ -1,0 +1,28 @@
+//
+//  SellerListTwoCell.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTSellerListTwoCell.h"
+#import "Const.h"
+
+@implementation ELTSellerListTwoCell
+
+- (void)awakeFromNib {
+    // Initialization code
+    self.pickImage.layer.masksToBounds =YES;
+    self.pickImage.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.pickImage.layer.borderWidth = 1.0f;
+    
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end

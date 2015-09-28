@@ -1,0 +1,42 @@
+//
+//  shippingAddress.m
+//  Test
+//
+//  Created by elongtian on 15/8/26.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "shippingAddress.h"
+#import "ELRequestSingle.h"
+static shippingAddress *address  = nil;
+@implementation shippingAddress
+
++(shippingAddress *)sharedAddress{
+    @synchronized(self){
+    if (address == nil ) {
+        address = [[super alloc] init];
+        
+      
+    }
+    }
+    return address;
+}
+
++(id)allocWithZone:(struct _NSZone *)zone{
+    @synchronized(self){
+
+    if (address == nil ) {
+        address = [super allocWithZone:zone];
+      
+        
+    }
+    }
+    return address;
+}
+-(id)copyWithZone:(NSZone *)zone{
+
+    return address;
+}
+
+
+@end

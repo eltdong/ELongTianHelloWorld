@@ -1,0 +1,47 @@
+//
+//  MSDetailViewController.h
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/21.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//  服务详情
+
+#import "BaseViewController.h"
+#import "ELTShopDetailTableViewCell.h"
+#import "ELTCommodityDetailTwoCell.h"
+#import "JCTopic.h"
+#import "StyledPageControl.h"
+#import "BBRShopView.h"
+#import "ELTServiceDetailsModel.h"
+@interface ELTServiceDetailViewController : BaseViewController<JCTopicDelegate,shop_Sec_delegate>
+{
+    BBRShopView * shopCar;
+}
+@property (weak, nonatomic) IBOutlet UIView *bottomBar;
+
+@property (nonatomic, strong) UIWebView * mainWebView;
+@property (strong,nonatomic) JCTopic            * Topic;
+@property (strong,nonatomic) UIScrollView       * mainScrollView;
+
+
+@property (nonatomic, retain) StyledPageControl * pageView;
+
+//购物车跳转
+@property (nonatomic, assign) BOOL isShoppingCar;
+- (IBAction)reduce:(id)sender;
+- (IBAction)add:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *displayBox;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIButton *selectedBtn;
+- (IBAction)selectedBtn:(id)sender;
+
+@property (weak, nonatomic) IBOutlet UIButton *unlimitedBtn;
+- (IBAction)unlimitedBtn:(id)sender;
+
+/**
+ *  判断资源有限还是无限  no  无限  yes 有限
+ */
+@property ( nonatomic,assign) BOOL isLimited;
+//数据源
+@property (nonatomic ,strong)  ELTServiceDetailsModel *model;
+@end

@@ -1,0 +1,72 @@
+//
+//  FruitAndVegatableModel.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/12.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface ELTFruitAndVegatableModel : ELTBaseModel
+/**
+ *  商品id
+ */
+@property (nonatomic,copy) NSString * fvId;
+/**
+ *  店主id
+ */
+@property (nonatomic,copy) NSString * member_id;
+/**
+ *  店铺id
+ */
+@property (nonatomic,copy) NSString * shoppe_id;
+/**
+ *  商品库id
+ */
+@property (nonatomic,copy) NSString * product_id;
+/**
+ *  商品名称
+ */
+@property (nonatomic,copy) NSString *content_name;
+/**
+ *  商品图片
+ */
+@property (nonatomic,copy) NSString *content_img;
+/**
+ *  售价
+ */
+@property (nonatomic,copy) NSString * content_preprice;
+/**
+ *  商品状态
+ */
+@property (nonatomic,copy) NSString * content_shelf;
+/**
+ *  销量
+ */
+@property (nonatomic,copy) NSString * sale;
+/**
+ *  E店名称
+ */
+@property (nonatomic,copy) NSString *eshopname;
+/**
+ *  送到时间
+ */
+@property (nonatomic,copy) NSString *reachtime;
+/**
+ *  简介
+ */
+@property (nonatomic,copy) NSString *content_mbody;
+/**
+ *  数组
+ */
+@property (nonatomic,strong) NSMutableArray * show_img;
+//购物车id
+@property (nonatomic,copy) NSString * u_id;
+//购买数量
+@property (nonatomic, copy) NSString * amount;
+//状态
+@property (nonatomic, copy) NSString * status;
+
+@property (nonatomic, copy) NSString * msg;
+@end

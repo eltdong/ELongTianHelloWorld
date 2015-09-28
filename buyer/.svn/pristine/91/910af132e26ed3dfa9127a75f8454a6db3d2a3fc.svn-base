@@ -1,0 +1,23 @@
+//
+//  SDFourSecTableViewCell.h
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/31.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "ELTReivewModel.h"
+#import "ELTEvaluationContentModel.h"
+#import "ELTServiceReivew.h"
+@interface ELTCommodityDetailFourCell : UITableViewCell
+
+-(void)heightWithCell:(NSString *)content pic:(NSArray *)imageArray tag:(int)tag;
+
+#pragma mark - 接受数据
+@property (nonatomic,strong) ELTReivewModel * reviewModel;
+
+@property (nonatomic ,strong) ELTEvaluationContentModel * model;
+
+@property (nonatomic ,copy)  ELTServiceReivew * serModer;
+@end

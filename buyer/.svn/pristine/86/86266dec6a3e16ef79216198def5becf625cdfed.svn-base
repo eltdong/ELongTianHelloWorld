@@ -1,0 +1,15 @@
+//
+//  EvaluationAll.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/2.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface ELTEvaluationListModel : ELTBaseModel
+@property (nonatomic ,strong)  NSMutableArray *review;
+@property (nonatomic ,strong)  NSMutableArray *radio;
+-(instancetype)initDictionary:(NSDictionary *)dic;
+@end

@@ -1,0 +1,20 @@
+//
+//  FooterView.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/24.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+/**
+ *  首页店铺展示
+ */
+@interface ELTMainFooterView : UIView
+
+@property (strong, nonatomic) IBOutlet UICollectionView *collectionView;//展示店铺的cellectionview
+
+@property (strong, nonatomic) IBOutlet UIButton *moreBtn;//更多店铺按钮
+
+@end

@@ -1,0 +1,19 @@
+//
+//  ELTMainCollectionViewCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/19.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+/**
+ *  图片居中的cell
+ */
+@interface ELTMainCollectionViewCell : UICollectionViewCell
+@property (strong, nonatomic) IBOutlet UILabel *nameLabel;//二级分类名称
+
+@property (strong, nonatomic) IBOutlet UILabel *describeLabel;//二级分类描述
+
+@property (strong, nonatomic) IBOutlet UIImageView *image;//二级图片
+@end

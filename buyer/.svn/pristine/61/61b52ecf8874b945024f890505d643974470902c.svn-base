@@ -1,0 +1,24 @@
+//
+//  ServicePersonnel.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/6.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ServicePersonnel.h"
+
+@implementation ServicePersonnel
+-(instancetype)initDictionary:(NSDictionary *)dic{
+    self = [super init];
+    if (self) {
+        self.ID = dic[@"id"];
+        self.name = dic[@"name"];
+        self.content_desc = dic[@"content_desc"];
+        self.order_num = dic[@"order_num"];
+        self.good_lead = dic[@"good_lead"];
+        
+    }
+    return self;
+}
+@end

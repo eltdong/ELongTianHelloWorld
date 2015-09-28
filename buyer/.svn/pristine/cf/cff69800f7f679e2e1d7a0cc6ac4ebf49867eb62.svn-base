@@ -1,0 +1,31 @@
+//
+//  CommentListCenterViewController.h
+//  GuoanBuyer
+//
+//  Created by 易龙天 on 15/8/21.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+/**
+       评价列表页
+ */
+#import "BaseViewController.h"
+#import "QCSlideSwitchView.h"
+#import "ELTEvaluateListViewController.h"
+typedef enum {
+    
+    EvaluationCommodity,//商品评价
+    
+    EvaluationService,//服务评价
+    
+    Evaluationpeople//服务人员评价
+    
+}ServiceType;
+@interface ELTEvaluateListCenterViewController : BaseViewController
+@property (retain, nonatomic) ELTEvaluateListViewController * newsController;
+@property (retain, nonatomic) ELTEvaluateListViewController * bookController;
+@property (retain, nonatomic) ELTEvaluateListViewController * videoController;
+@property (retain, nonatomic) ELTEvaluateListViewController * pptController;
+@property (nonatomic, copy) NSString * shopID;//商品店铺或服务店铺或服务人员id
+@property (nonatomic, copy) NSString * btnType;//评价分类
+@property (nonatomic ,assign)  ServiceType evaluationType;//区分从那个界面的评价
+@end

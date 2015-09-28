@@ -1,0 +1,28 @@
+//
+//  ServeIntroOneCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/28.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "ELTServicePersonnel.h"
+
+@interface ELTServicePersonDetailOneCell : UITableViewCell
+/**
+ *  服务人员cell
+ */
+@property (nonatomic,strong) IBOutlet UIImageView * picImage;
+
+@property (nonatomic,strong) IBOutlet UILabel *nameLabel;
+
+@property (nonatomic,strong) IBOutlet UILabel *goodReputationLabel;
+
+@property (nonatomic,strong) IBOutlet UIImageView *image;
+
+@property (nonatomic,strong) IBOutlet UILabel *orderCountLabel;
+
+@property (nonatomic ,strong)  ELTServicePersonnel *Model;
+
+@end

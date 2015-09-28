@@ -1,0 +1,32 @@
+//
+//  ServeIntroOneCell.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/28.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTServicePersonDetailOneCell.h"
+
+@implementation ELTServicePersonDetailOneCell
+
+- (void)awakeFromNib {
+    // Initialization code
+    self.picImage.layer.masksToBounds =YES;
+    self.picImage.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.picImage.layer.borderWidth = 1.0f;
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+-(void)setModel:(ServicePersonnel *)Model{
+    _Model = Model;
+    self.nameLabel.text = Model.name;
+    self.goodReputationLabel.text = [NSString stringWithFormat:@"好评率: %@",Model.good_lead];
+    self.orderCountLabel.text =[NSString stringWithFormat:@"%@单",Model.order_num];
+    [self.picImage  setImageWithURL:[NSURL URLWithString:Model.img]];
+}
+@end

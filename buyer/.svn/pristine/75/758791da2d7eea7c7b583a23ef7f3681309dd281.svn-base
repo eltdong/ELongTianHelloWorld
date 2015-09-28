@@ -1,0 +1,30 @@
+//
+//  FillOrderViewController.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/19.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "BaseViewController.h"
+/**
+ *  填写订单界面
+ */
+/**
+ *  填写订单页面
+ */
+@interface ELTFillOrderViewController : BaseViewController
+
+@property (strong, nonatomic) IBOutlet UITableView *bgTable;
+
+@property (strong, nonatomic) IBOutlet UIButton *bottomBtn;//确定按钮
+
+@property (strong, nonatomic) IBOutlet UILabel *priceLabel;//价格label
+
+@property (nonatomic,assign) double totalPrice;//总价格
+
+@property (strong,nonatomic) NSMutableArray *dataArray;//数据源
+
+- (IBAction)bottomClick:(id)sender;//确定按钮点击事件
+
+@end

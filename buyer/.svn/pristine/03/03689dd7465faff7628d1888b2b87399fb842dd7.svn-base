@@ -1,0 +1,33 @@
+//
+//  SelectServicePersonelViewController.h
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/28.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//  选择服务人员
+/**
+ *       选择服务人员
+ */
+#import "BaseViewController.h"
+/**
+ *  获取服务人员信息的回调
+ *
+ *  @param img  服务人员头像
+ *  @param name 服务人员name
+ *  @param ID   服务人员id
+ */
+typedef void(^selectBlock) (NSString * img,NSString * name,NSString * ID);
+@interface ELTSelectServicePersonelViewController : BaseViewController
+@property (weak, nonatomic) IBOutlet UITableView *tableview;//基础控件
+@property (weak, nonatomic) IBOutlet UIButton *select;//确定button
+
+@property (nonatomic, copy) NSString * skey;
+@property (nonatomic, copy) NSString * ekey;
+@property (nonatomic, copy) NSString * ID;
+@property (nonatomic, copy) NSString * date;
+
+@property (nonatomic, copy) selectBlock block;
+- (IBAction)slectBtn:(id)sender;
+
+
+@end

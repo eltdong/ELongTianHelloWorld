@@ -1,0 +1,145 @@
+//
+//  MainShoppingView.m
+//  GuoanBuyer
+//
+//  Created by 徐润杰 on 15/8/2.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "MainShoppingView.h"
+
+
+@implementation MainShoppingView
+
+-(instancetype)initWithFrame:(CGRect)frame
+{
+    if (self=[super initWithFrame:frame]) {
+        [self makeView];
+        self.userInteractionEnabled = YES;
+    }
+    return self;
+}
+
+-(void)makeView
+{
+    // register cell
+    [self registerAllKindsCell];
+
+}
+
+
+#pragma mark -- resgister cell
+-(void)registerAllKindsCell
+{
+    UINib *oneCell=[UINib nibWithNibName:@"MainTimeCell" bundle:nil];
+    [self.tableView registerNib:oneCell forCellReuseIdentifier:@"MainTimeCell"];
+    
+    UINib *twoCell=[UINib nibWithNibName:@"MainTwoCell" bundle:nil];
+    [self.tableView registerNib:twoCell forCellReuseIdentifier:@"MainTwoCell"];
+    
+    UINib *threeCell=[UINib nibWithNibName:@"MainThreeCell" bundle:nil];
+    [self.tableView registerNib:threeCell forCellReuseIdentifier:@"MainThreeCell"];
+    
+    UINib *fourCell=[UINib nibWithNibName:@"MainFourCell" bundle:nil];
+    [self.tableView registerNib:fourCell forCellReuseIdentifier:@"MainFourCell"];
+    
+}
+
+#pragma mark -- UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+
+    return 1;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell=nil;
+    
+    switch (indexPath.section)
+    {
+        case 0:
+        {
+            cell=[tableView dequeueReusableCellWithIdentifier:@"MainTimeCell"];
+        }
+            break;
+        case 3:
+        {
+            cell=[tableView dequeueReusableCellWithIdentifier:@"MainTwoCell"];
+            
+        }
+            break;
+            
+        case 1:
+        case 4:
+        {
+            cell=[tableView dequeueReusableCellWithIdentifier:@"MainThreeCell"];
+        }
+            break;
+        case 2:
+        case 5:
+        {
+            cell=[tableView dequeueReusableCellWithIdentifier:@"MainFourCell"];
+        }
+            break;
+        
+        default:
+            break;
+    }
+    
+    
+    return cell;
+    
+    
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 6;
+}
+
+#pragma mark -- UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0.01;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+  
+    return 10;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat cellHeight=0.0;
+    switch (indexPath.section) {
+        case 0:
+            cellHeight=40;
+            break;
+        case 3:
+            cellHeight=120;
+            break;
+        case 1:
+        case 4:
+            cellHeight=85;
+            break;
+        case 2:
+        case 5:
+            cellHeight=193;
+            break;
+            
+        default:
+            break;
+    }
+    return cellHeight;
+}
+
+#pragma mark -- UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [[self viewController] performSelector:@selector(scrollViewDidScroll:) withObject:scrollView];
+}
+
+@end

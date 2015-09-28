@@ -1,0 +1,22 @@
+//
+//  ShopListModel.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/17.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface ELTShopListModel : ELTBaseModel
+
+@property (nonatomic,copy) NSString *time;//时间
+
+@property (nonatomic,strong) NSMutableArray *timeshop;//满足时间的店铺
+
+@property (nonatomic,strong) NSMutableArray *recommend;//推荐的店铺
+
++(instancetype)shopListmodelInitWithDict:(NSDictionary*)dic;
+-(instancetype)initWithDic:(NSDictionary *)dict;
+
+@end

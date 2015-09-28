@@ -1,0 +1,21 @@
+//
+//  SellerListTwoCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface ELTSellerListTwoCell : UITableViewCell
+/**
+ *  店铺列表cell
+ */
+@property (nonatomic,strong) IBOutlet UIImageView *pickImage;//店铺图片
+
+@property (nonatomic,strong) IBOutlet UILabel *nameLabel;//店铺名称
+
+@property (nonatomic,strong) IBOutlet UILabel *timeLabel;//店铺服务时间
+
+@end

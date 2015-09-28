@@ -1,0 +1,63 @@
+//
+//  SellerDetailViewController.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTSellerDetailViewController.h"
+//#import "ShopDetail.h"
+
+@interface ELTSellerDetailViewController (){
+    NSMutableArray *_dataArray;//数据源
+    //ShopDetail *_shopDetailModel;
+}
+
+@end
+
+@implementation ELTSellerDetailViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    
+    self.title = @"商家信息";
+    self.pickImage.layer.masksToBounds =YES;
+    self.pickImage.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.pickImage.layer.borderWidth = 1.0f;
+    [self fillData];
+}
+
+-(void)back:(id)sender{
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
+}
+
+-(void)fillData{
+    
+    [_pickImage  setImageWithURL:[NSURL URLWithString:_shopDetailModel.content_img]];
+    _nameLabel.text = _shopDetailModel.name;
+    _saleCountLabel.text = [NSString stringWithFormat:@"%@",_shopDetailModel.sale_num];
+    _addressLabel.text = [NSString stringWithFormat:@"店铺地址：%@",_shopDetailModel.address];
+    
+}
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

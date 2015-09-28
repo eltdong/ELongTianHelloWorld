@@ -1,0 +1,16 @@
+//
+//  popupboxView.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/13.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface ELTAddressPopupboxView : UIView
++(ELTAddressPopupboxView *)instanceView;
+@property (strong, nonatomic) IBOutlet UIView *popview;
+@property (weak, nonatomic) IBOutlet UIButton *addAddressBtn;
+@property (weak, nonatomic) IBOutlet UIView *botomView;
+@end

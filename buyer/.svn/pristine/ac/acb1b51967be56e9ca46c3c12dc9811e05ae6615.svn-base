@@ -1,0 +1,34 @@
+//
+//  shopDe_Thir_TableViewCell.h
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+@protocol sdtDelegate <NSObject>
+
+-(void)jumpNextVc:(NSString *)str;
+
+@end
+
+
+@interface ELTCommodityDetailThreeCell : UITableViewCell
+#pragma mark - 四个button yd
+@property (weak, nonatomic) IBOutlet UIButton *all;
+@property (weak, nonatomic) IBOutlet UIButton *praise;
+@property (weak, nonatomic) IBOutlet UIButton *evaluation;
+@property (weak, nonatomic) IBOutlet UIButton *bad;
+
+
+@property (nonatomic,assign) id<sdtDelegate>delegate;
+#pragma mark  -全部评价的点击事件
+- (IBAction)allBtn:(id)sender;
+
+@property (nonatomic,strong) UIViewController *vc;
+@property (nonatomic,strong) UIViewController * PushVC;
+
+#pragma mark - 接受的数据模型
+@property (nonatomic,strong) NSMutableArray * radioArr;
+@end

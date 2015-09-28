@@ -1,0 +1,26 @@
+//
+//  MainScrollCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/30.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "MainMultiView.h"
+
+//@protocol MainScrollCellDelegate <NSObject>
+//
+//-(void)pullDownBtnClick:(UIButton *)button;
+//
+//@end
+
+@interface MainScrollCell : UITableViewCell
+
+@property (nonatomic,strong) UIScrollView *scrollView;
+
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier item:(NSArray *)items  arrayData:(NSMutableArray *)dataArray;
+
+//@property (nonatomic,assign) id<MainScrollCellDelegate>delegate;
+
+@end

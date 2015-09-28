@@ -1,0 +1,29 @@
+//
+//  OrderDeatilTopCell.h
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/21.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "ELTOrderDetailModel.h"
+
+@interface ELTOrderDeatilTopCell : UITableViewCell
+
+@property (weak, nonatomic) IBOutlet UIImageView *imageOne;
+
+@property (weak, nonatomic) IBOutlet UIImageView *arrowOne;
+
+@property (weak, nonatomic) IBOutlet UIImageView *iamgeTwo;
+
+@property (weak, nonatomic) IBOutlet UIImageView *arrowTwo;
+
+@property (weak, nonatomic) IBOutlet UIImageView *imageThree;
+@property (weak, nonatomic) IBOutlet UILabel *label1;
+@property (weak, nonatomic) IBOutlet UILabel *label2;
+@property (weak, nonatomic) IBOutlet UILabel *label3;
+
+@property (nonatomic,strong) ELTOrderDetailModel *model;
+
+@end

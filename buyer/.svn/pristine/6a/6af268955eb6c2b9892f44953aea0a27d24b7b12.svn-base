@@ -1,0 +1,26 @@
+//
+//  ServeIntroThreeCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/28.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+@protocol ServeIntro <NSObject>
+-(void)serveIntro:(NSInteger)num;
+@end
+
+@interface ELTServicePersonDetailThreeCell : UITableViewCell
+
+@property (nonatomic,strong) IBOutlet UIButton *buttonOne;
+
+@property (nonatomic,strong) IBOutlet UIButton *buttonTwo;
+
+@property (nonatomic,strong) IBOutlet UIButton *buttonThree;
+
+@property (nonatomic,strong) IBOutlet UIButton *buttonFour;
+@property (nonatomic ,copy)  NSMutableArray *radioArr;
+@property (weak, nonatomic) IBOutlet UILabel *allEvaluation;
+@property (nonatomic ,assign) id<ServeIntro>delegate;
+@end

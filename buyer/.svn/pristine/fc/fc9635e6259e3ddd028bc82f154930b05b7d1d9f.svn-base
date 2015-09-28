@@ -1,0 +1,103 @@
+//
+//  MainPullDownView.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/30.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTMainPullDownView.h"
+#import "ELTMainBtnCollectionViewCell.h"
+#import "ELTClassModel.h"
+
+#define MarginLeft 30
+#define MarginCentre 15
+#define MarginTop 15
+
+@interface ELTMainPullDownView(){
+    
+    UIView *_bgView;
+    
+}
+
+@end
+
+@implementation ELTMainPullDownView
+
+-(instancetype)init{
+    
+    self = [super init];
+    if (self) {
+        
+        UICollectionViewFlowLayout *layout=[UICollectionViewFlowLayout new];
+        layout.minimumInteritemSpacing=10;//行间距
+        layout.minimumLineSpacing=10;//列间距
+        layout.itemSize=CGSizeMake((SCREENWIDTH - 70) / 4, 30);
+        
+        self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
+        _collectionView.backgroundColor=[UIColor colorWithWhite:1.0 alpha:0.9];
+        _collectionView.dataSource=self;
+        _collectionView.delegate=self;
+        [self addSubview:_collectionView];
+        
+        // register cell
+        
+        [_collectionView registerNib:[UINib nibWithNibName:@"ELTMainBtnCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"ELTMainBtnCollectionViewCell"];
+        
+    }
+    return self;
+}
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return self.dataArray.count;
+}
+
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
+}
+
+//每个UICollectionView展示的内容
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    ELTMainBtnCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ELTMainBtnCollectionViewCell" forIndexPath:indexPath];
+    NSString   *model = [self.dataArray objectAtIndex:indexPath.row];
+    
+    cell.nameLabel.text = model ;
+
+    return cell;
+}
+#pragma mark --UICollectionViewDelegateFlowLayout
+
+//定义每个UICollectionView 的 margin
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(20, 20, 10, 20);
+}
+
+#pragma mark --UICollectionViewDelegate
+//UICollectionView被选中时调用的方法
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+   
+    [self.delegate buttonClick:indexPath.item];
+}
+
+// 当前view的视图控制器
+-(UIViewController *)viewController
+{
+    
+    for (UIView *next=self.superview; next; next=next.superview)
+    {
+        UIResponder *nextResponder = [next nextResponder];
+        if ([nextResponder isKindOfClass:[UIViewController class]])
+        {
+            return (UIViewController *)nextResponder;
+        }
+    }
+    return nil;
+}
+
+
+@end

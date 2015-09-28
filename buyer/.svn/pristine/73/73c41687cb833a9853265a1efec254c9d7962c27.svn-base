@@ -1,0 +1,32 @@
+//
+//  FVCollectionViewCell.m
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/21.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTCommodityCollectionViewCell.h"
+#import "UIImageView+AFNetworking.h"
+@implementation ELTCommodityCollectionViewCell
+
+- (void)awakeFromNib {
+    // Initialization code
+}
+
+-(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
+}
+-(void)setModel:(ELTFruitAndVegatableModel *)model{
+    _model=model;
+    self.meta_descLabel.text = model.content_name;
+    self.eshopnameLabel.text = model.eshopname;
+    self.reachtimeLabel.text = model.reachtime;
+  
+    NSArray * arr = [model.content_preprice componentsSeparatedByString:@"."];
+    self.content_preprice1Label.text =[NSString stringWithFormat:@"%@.",arr[0]];
+    self.content_preprice2Label.text =OBJC(arr[1]);
+    [self.iconImageView setImageWithURL:[NSURL URLWithString:model.content_img]];
+    
+    
+}
+@end

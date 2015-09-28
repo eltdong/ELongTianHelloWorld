@@ -1,0 +1,164 @@
+//
+//  ServeIntroFourCell.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/28.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTServicePersonDetailFourCell.h"
+
+@interface ELTServicePersonDetailFourCell (){
+    UIView *_lineView;
+}
+
+@end
+
+@implementation ELTServicePersonDetailFourCell
+
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
+    
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        //self.selectionStyle = UITableViewCellSelectionStyleNone;
+        //self.backgroundColor = [UIColor redColor];
+        self.headImage = [[UIImageView alloc]initWithFrame:CGRectMake(15, 10, 50, 50)];
+        self.headImage.layer.masksToBounds =YES;
+        self.headImage.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+        self.headImage.layer.borderWidth = 1.0f;
+        [self.contentView addSubview:self.headImage];
+        
+        self.nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.headImage.right + 10, self.headImage.bottom - 14, 200, 12)];
+        self.nameLabel.font = [UIFont systemFontOfSize:12.0];
+        self.nameLabel.textColor = UIColorFromRGB(0x666666);
+        [self.contentView addSubview:self.nameLabel];
+        
+        self.timeLabel = [[UILabel alloc]initWithFrame:CGRectMake(SCREENWIDTH - 115, self.headImage.bottom - 14, 100, 12)];
+        self.timeLabel.font = [UIFont systemFontOfSize:12.0];
+        self.timeLabel.textColor = UIColorFromRGB(0x666666);
+        self.timeLabel.textAlignment = NSTextAlignmentRight;
+        [self.contentView addSubview:self.timeLabel];
+        self.commentLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, self.headImage.bottom + 5, SCREENWIDTH - 30, 0)];
+        self.commentLabel.numberOfLines = 0;
+        self.commentLabel.textColor = UIColorFromRGB(0x333333);
+        self.commentLabel.font = [UIFont systemFontOfSize:12.0];
+        [self.contentView addSubview:self.commentLabel];
+        
+
+        _lineView = [[UIView alloc]initWithFrame:CGRectMake(0, self.commentLabel.bottom + 10, SCREENWIDTH, 1)];
+        _lineView.backgroundColor = UIColorFromRGB(0xf1f1f1);
+        [self.contentView addSubview:_lineView];
+    }
+    return self;
+    
+}
+-(void)heightWithCell:(NSString *)content  tag:(int)tag{
+    CGRect rect = [Tools heightWithContent:content font:[UIFont systemFontOfSize:12.0] width:SCREENWIDTH - 30];
+    self.commentLabel.frame = CGRectMake(15, self.headImage.bottom + 10, SCREENWIDTH - 30, rect.size.height);
+
+        
+    _lineView.frame = CGRectMake(15, self.commentLabel.bottom + 10, SCREENWIDTH - 30, 1);
+    self.frame = CGRectMake(0, 0, SCREENWIDTH, _lineView.bottom);
+   
+        
+            
+   
+}
+
+-(void)heightWithCell:(NSString *)content pic:(NSArray *)imageArray  tag:(int)tag{
+    
+    
+
+    CGRect rect = [Tools heightWithContent:content font:[UIFont systemFontOfSize:12.0] width:SCREENWIDTH - 30];
+    self.commentLabel.frame = CGRectMake(15, self.headImage.bottom + 10, SCREENWIDTH - 30, rect.size.height);
+    
+    if (tag == 0) {
+        
+        _lineView.frame = CGRectMake(15, self.commentLabel.bottom + 10, SCREENWIDTH - 30, 1);
+        self.frame = CGRectMake(0, 0, SCREENWIDTH, _lineView.bottom);
+        
+    }else{
+       
+        self.picImageOne = [[UIImageView alloc]initWithFrame:CGRectMake(15, self.commentLabel.bottom + 10, 50, 50)];
+        [self addSubview:_picImageOne];
+        
+        [self.picImageOne setImageWithURL:[NSURL URLWithString:[imageArray firstObject]]];
+        
+        self.picImageTwo = [[UIImageView alloc]initWithFrame:CGRectMake(self.picImageOne.right + 10, self.commentLabel.bottom + 10, 50, 50)];
+        if (tag >1) {
+            [self addSubview:_picImageTwo];
+            [self.picImageTwo setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]]];
+                  }
+
+        self.picImageThree = [[UIImageView alloc]initWithFrame:CGRectMake(self.picImageTwo.right + 10, self.commentLabel.bottom + 10, 50, 50)];
+        if (tag > 2) {
+        [self addSubview:_picImageThree];
+        [self.picImageThree setImageWithURL:[NSURL URLWithString:[imageArray lastObject]]];
+        }
+        
+        _lineView.frame =CGRectMake(15, self.picImageOne.bottom+10, SCREENWIDTH - 30, 1);
+        self.frame = CGRectMake(0, 0, SCREENWIDTH, _lineView.bottom);
+    }
+    
+    self.picImageThree.layer.masksToBounds =YES;
+    self.picImageThree.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.picImageThree.layer.borderWidth = 1.0f;
+    
+    self.picImageOne.layer.masksToBounds =YES;
+    self.picImageOne.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.picImageOne.layer.borderWidth = 1.0f;
+    
+    self.picImageTwo.layer.masksToBounds =YES;
+    self.picImageTwo.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.picImageTwo.layer.borderWidth = 1.0f;
+}
+- (void)awakeFromNib {
+   
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+-(void)setModel:(ELTEvaluationContentModel *)model{
+    
+    _model = model;
+    [self.headImage setImageWithURL:[NSURL URLWithString:_model.content_img]];
+    self.nameLabel.text = model.content_user;
+    self.timeLabel.text = model.create_time;
+    
+    self.commentLabel.text = model.evaluation_content;
+   ;
+   
+    
+    if ([model.review_img isKindOfClass:[NSString class]]||[model.review_img isEqual:[NSNull null]]) {
+        
+        [self heightWithCell:model.evaluation_content pic:model.review_img tag:0];
+        
+    }else{
+    
+    [self heightWithCell:model.evaluation_content pic:model.review_img tag:(int)[model.review_img count]];
+    }
+   
+}
+-(void)setServiceModel:(ELTServiceReivew *)serviceModel{
+    _serviceModel = serviceModel;
+    [self.headImage setImageWithURL:[NSURL URLWithString:serviceModel.content_img]];
+    self.nameLabel.text = serviceModel.content_user;
+    self.timeLabel.text = serviceModel.create_time;
+    
+    self.commentLabel.text = serviceModel.evaluation_content;
+    ;
+    
+    if ([serviceModel.review_img isKindOfClass:[NSString class]] ||[serviceModel.review_img isEqual:[NSNull null]]) {
+        
+        [self heightWithCell:serviceModel.evaluation_content pic:serviceModel.review_img tag:0];
+        
+    }else{
+            
+        [self heightWithCell:serviceModel.evaluation_content pic:serviceModel.review_img tag:(int)[serviceModel.review_img count]];
+        }
+    
+}
+@end

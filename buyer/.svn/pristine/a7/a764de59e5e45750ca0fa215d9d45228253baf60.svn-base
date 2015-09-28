@@ -1,0 +1,13 @@
+//
+//  ShopDetailOneCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/31.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface ShopDetailOneCell : UITableViewCell
+
+@end

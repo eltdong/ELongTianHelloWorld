@@ -1,0 +1,34 @@
+//
+//  PickView.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/19.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "ELTShopCartCouponModel.h"
+
+/**
+ *  购物车代金券pickview
+ */
+
+@protocol PickViewDelegate <NSObject>
+
+-(void)selectNum:(ELTShopCartCouponModel *)selectCoupon;
+
+@end
+
+@interface ELTShopCartCouponPickView : UIView<UIPickerViewDataSource,UIPickerViewDelegate>
+
+@property (nonatomic,strong) NSMutableArray *array;//代金券数据源
+
+@property (nonatomic,strong) UIButton *rightBtn;//确定按钮
+
+@property (nonatomic,strong) UIButton *leftBtn;//取消按钮
+
+@property (nonatomic,strong) UIPickerView *pickView;
+
+@property (nonatomic,assign) id<PickViewDelegate>delegate;
+
+@end

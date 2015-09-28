@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ssts" id="gTV-IL-0wX" customClass="ELTSelectTimeCollectionViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="285" height="199"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="285" height="199"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s7V-Mp-RDf">
+                        <rect key="frame" x="0.0" y="0.0" width="285" height="199"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <inset key="contentEdgeInsets" minX="3" minY="0.0" maxX="3" maxY="0.0"/>
+                        <state key="normal" title="8:00" backgroundImage="elt_timer_bg.png">
+                            <color key="titleColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <state key="selected" backgroundImage="elt_timer_bgcr.png"/>
+                        <connections>
+                            <action selector="time:" destination="gTV-IL-0wX" eventType="touchUpInside" id="y6j-Ni-LcP"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            </view>
+            <constraints>
+                <constraint firstItem="s7V-Mp-RDf" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="2ap-kX-Y94"/>
+                <constraint firstItem="s7V-Mp-RDf" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="lsV-Tu-jGI"/>
+                <constraint firstAttribute="bottom" secondItem="s7V-Mp-RDf" secondAttribute="bottom" id="nys-Z6-rWR"/>
+                <constraint firstAttribute="trailing" secondItem="s7V-Mp-RDf" secondAttribute="trailing" id="udk-lD-moQ"/>
+            </constraints>
+            <size key="customSize" width="285" height="199"/>
+            <connections>
+                <outlet property="timeButton" destination="s7V-Mp-RDf" id="C15-jf-ifc"/>
+            </connections>
+            <point key="canvasLocation" x="361.5" y="381.5"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="elt_timer_bg.png" width="71" height="46"/>
+        <image name="elt_timer_bgcr.png" width="71" height="47"/>
+    </resources>
+</document>

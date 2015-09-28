@@ -1,0 +1,25 @@
+//
+//  FVCollectionViewCell.h
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/21.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "FruitAndVegatableModel.h"
+
+@interface ELTCommodityCollectionViewCell : UICollectionViewCell
+#pragma mark - 接收数据
+@property (nonatomic,strong) FruitAndVegatableModel *model;
+
+@property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
+@property (weak, nonatomic) IBOutlet UILabel *meta_descLabel;
+@property (weak, nonatomic) IBOutlet UILabel *eshopnameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *reachtimeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *content_preprice1Label;
+@property (weak, nonatomic) IBOutlet UILabel *content_preprice2Label;
+@property (strong, nonatomic) IBOutlet UIButton *shoppingCarBtn;
+
+
+@end

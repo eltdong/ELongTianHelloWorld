@@ -1,0 +1,1459 @@
+//
+//  ELRequestSingle.m
+//  BaoJianIphone
+//
+//  Created by elongtian on 15-3-19.
+//  Copyright (c) 2015年 madongkai. All rights reserved.
+//
+
+#import "ELRequestSingle.h"
+#import "ELHttpRequestOperation.h"
+#import "BJObject.h"
+#import "ELTShopListModel.h"
+#import "ELTShopModel.h"
+#import "ELTShopDetailModel.h"
+#import "ELTMyOrderModel.h"
+#import "ELTOrderDetailModel.h"
+#import "ELTCommidyOrderDetailModel.h"
+#import "ELTMyShopCart.h"
+#import "ELTShopDetailModel.h"
+#import "ELTAddressModel.h"
+#import "ELTClassifyModel.h"
+
+#import "ELTFruitAndVegatableModel.h"
+#import "ELTPhotosModel.h"
+
+#import "ELTCommodityDetailModel.h"
+#import "ELTAddress.h"
+#import "ELTAddressModel.h"
+#import "ELTServiceModel.h"
+#import "ELTServiceDetailsModel.h"
+
+#import "ELTEvaluationListModel.h"
+#import "ELTServicePersonnel.h"
+#import "ELTerviceDetailModel.h"
+#import "ELTMyServiceOrderModel.h"
+
+#import "ELTServiceOrderDetailsModel.h"
+#import "ELTWeekTimeModel.h"
+#import "ELTServiceShopDetailModel.h"
+#import "ELTEShopDateModel.h"
+#import "ELTDiscountCoupon.h"
+#import "ELTClassModel.h"
+@implementation ELRequestSingle
+
+#pragma mark - 首页bander图
++ (void)homeBanner_or_ADRequest:(ELRequestSingleCallBack) block andXml:(NSString*)xml andImg_type:(NSString*)img_type{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString * url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appshop&task=getadlists&xml=%@&img_type=%@",HTTP,xml,img_type];
+    //NSLog(@"首页bander图 %@",url);
+    NSMutableArray * dataArray = [[NSMutableArray alloc]init];
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject objectForKey:@"status"]integerValue] == 1) {
+            NSArray *array = [responseObject objectForKey:@"datalist"];
+            for (NSDictionary *dict in array) {
+                NSString *imageUrl = [dict objectForKey:@"content_value"];
+                [dataArray addObject:imageUrl];
+            }
+            if(block){
+                block(YES,dataArray);
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+#pragma mark - 首页分类
++ (void)classifyRequest:(ELRequestSingleCallBack) block{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString * url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appshop&task=classbar",HTTP];
+    NSMutableArray * dataArray = [NSMutableArray array];
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+     
+        
+        if ([[responseObject objectForKey:@"status"]integerValue] == 1) {
+            NSArray *array = [responseObject objectForKey:@"datalist"];
+            for (NSDictionary *dict in array) {
+                ELTClassModel *model = [[ELTClassModel    alloc] initDictionary:dict];
+                
+                [dataArray addObject:model];
+            }
+            
+            
+            if(block){
+                block(YES,dataArray);
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+
+}
+
+#pragma mark - 购物分类展示 ＋ 推荐店铺
++ (void)mainClassifyRequest:(ELRequestSingleCallBack) block{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSDictionary *dic = @{@"method":@"appSev",@"app_com":@"com_appshop",@"task":@"indexpro"};
+    NSMutableArray * dataArray = [[NSMutableArray alloc]init];
+    [[ELHttpRequestOperation sharedClient] POST:HTTP parameters:dic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject objectForKey:@"status"]integerValue] == 1) {
+            NSDictionary *dataDic = [responseObject objectForKey:@"datalist"];
+            NSMutableArray *classArray = [NSMutableArray array];
+            NSMutableArray *recshopArray = [NSMutableArray array];
+            for (NSDictionary *dict in [dataDic objectForKey:@"class"]) {
+                ELTClassifyModel *model = [[ELTClassifyModel alloc]init];
+                [model setValuesForKeysWithDictionary:dict];
+                [classArray addObject:model];
+            }
+            [dataArray addObject:classArray];
+            for (NSDictionary *dict in [dataDic objectForKey:@"recshop"]) {
+                ELTShopModel *model = [[ELTShopModel alloc]init];
+                [model setValuesForKeysWithDictionary:dict];
+                model.ID = [dict objectForKey:@"id"];
+                [recshopArray addObject:model];
+            }
+            [dataArray addObject:recshopArray];
+            
+           // NSLog(@"%@",responseObject);
+            
+            
+            if(block){
+                block(YES,dataArray);
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+       // NSLog(@"%@",error.description);
+    }];
+    
+}
+
+#pragma mark - 服务分类展示 ＋ 推荐店铺
++ (void)mainServiceClassifyRequest:(ELRequestSingleCallBack) block auto_code:(NSString *)auto_code{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString * url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appshop&task=indexsev&auto_code=%@",HTTP,auto_code];
+  
+    NSMutableArray * dataArray = [[NSMutableArray alloc]init];
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        //NSLog(@"－－－－－－－－－－%@",responseObject);
+        //NSLog(@"%@",url);
+        
+        if ([[responseObject objectForKey:@"status"]integerValue] == 1) {
+            NSDictionary *dataDic = [responseObject objectForKey:@"datalist"];
+            NSMutableArray *classArray = [NSMutableArray array];
+            NSMutableArray *recshopArray = [NSMutableArray array];
+            
+            for (NSDictionary *dict in [dataDic objectForKey:@"class"]) {
+                //NSLog(@"%@",dict);
+                
+                if (![dict isEqual:[NSNull null]]) {
+                    ELTClassifyModel *model = [[ELTClassifyModel alloc]init];
+                    [model setValuesForKeysWithDictionary:dict];
+                    [classArray addObject:model];
+                    
+                }
+               
+            }
+            
+            [dataArray addObject:classArray];
+            
+            for (NSDictionary *dict in [dataDic objectForKey:@"recshop"]) {
+                ELTShopModel *model = [[ELTShopModel alloc]init];
+                [model setValuesForKeysWithDictionary:dict];
+                model.ID = dict[@"id"];
+                [recshopArray addObject:model];
+               
+                
+            }
+            [dataArray addObject:recshopArray];
+            
+            if(block){
+                block(YES,dataArray);
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+    
+}
+
+
+#pragma mark - 地址
++ (void)getAddressRequest:(ELRequestSingleCallBack) block andId:(NSString *)ID{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString * url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_apporder&task=getaddress&id=%@",HTTP,ID];
+    NSMutableArray * dataArray = [[NSMutableArray alloc]init];
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject objectForKey:@"status"]integerValue] == 1) {
+            NSArray *array = [responseObject objectForKey:@"datalist"];
+            for (NSDictionary *dict in array) {
+                ELTAddressModel *model = [[ELTAddressModel alloc]init];
+                [model setValuesForKeysWithDictionary:dict];
+                [dataArray addObject:model];
+            }
+            if(block){
+                block(YES,dataArray);
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+    
+}
+
+#pragma mark - 商家列表按时间筛选
++(void)shopListWithTimeRequest:(ELRequestSingleCallBack)block andType:(NSString *)type{
+    
+   [ELHttpRequestOperation getTokenAndTime];
+    NSString *url = [NSString stringWithFormat:@"%@com=com_appService&method=appSev&app_com=com_appshop&task=geteshoplists&type=%@",HTTP,type];
+    [[ELHttpRequestOperation sharedClient] POST:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"商家列表按时间筛选 %@",responseObject);
+        NSMutableArray *dataArray = [NSMutableArray array];
+        if ([[responseObject objectForKey:@"status"]integerValue] == 1) {
+            NSDictionary *dic = [responseObject objectForKey:@"datalist"];
+            NSArray *array = [dic objectForKey:@"timeshop"];
+            for (NSDictionary *dict in array) {
+                ELTShopModel *model = [ELTShopModel shopModelInitWithDict:dict];
+                [dataArray addObject:model];
+            }
+            
+            if(block){
+                block(YES,dataArray);
+            }
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"店铺列表请求失败 %@",error.localizedDescription);
+    }];
+    
+}
+
+#pragma mark - 商家列表按推荐筛选
++(void)shopListWithRecommandRequest:(ELRequestSingleCallBack)block andType:(NSString *)type{
+    [ELHttpRequestOperation getTokenAndTime];
+ 
+    NSString *url = [NSString stringWithFormat:@"%@com=com_appService&method=appSev&app_com=com_appshop&task=reshoplists&type=%@",HTTP,type];
+    [[ELHttpRequestOperation sharedClient] POST:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSMutableArray *dataArray = [NSMutableArray array];
+        //NSLog(@"商家列表按推荐筛选 %@",responseObject);
+        if ([[responseObject objectForKey:@"status"]integerValue] == 1) {
+            NSDictionary *dic = [responseObject objectForKey:@"datalist"];
+            NSArray *array = [dic objectForKey:@"recommend"];
+            for (NSDictionary *dict in array) {
+                ELTShopModel *model = [ELTShopModel shopModelInitWithDict:dict];
+                [dataArray addObject:model];
+            }
+            if(block){
+                block(YES,dataArray);
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"店铺列表请求失败 %@",error.localizedDescription);
+    }];
+    
+}
+
+
+#pragma mark - 店铺详情
++(void)shopDetailWithRequest:(ELRequestSingleCallBack)block andShoppe_id:(NSString *)shoppe_id{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString *url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appyp&task=shopview&shoppe_id=%@",HTTP,shoppe_id];
+    
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSMutableArray *dataArray = [NSMutableArray array];
+        
+        if ([[responseObject objectForKey:@"status"]integerValue] == 1) {
+            if ([[responseObject objectForKey:@"status"]integerValue] == 1) {
+                NSDictionary *dic = [responseObject objectForKey:@"datalist"];
+               
+                ELTShopDetailModel *model = [ELTShopDetailModel shopDetailInitWithDict:dic];
+                
+                
+                [dataArray addObject:model];
+                
+                if(block){
+                    block(YES,dataArray);
+                }
+            }
+            
+        }else{
+            if(block){
+                block(YES,[responseObject objectForKey:@"msg"]);
+            }
+        
+        }
+       
+    
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"店铺详情请求失败 %@",error.localizedDescription);
+    }];
+    
+}
+
+#pragma mark - 首页推荐店铺
+//+(void)MainShopListWithRecommandRequest:(ELRequestSingleCallBack)block{
+//    
+//    NSString *url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appshop&task=reshoplists",HTTP];
+//    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        
+//        NSMutableArray *dataArray = [NSMutableArray array];
+//        if ([[responseObject objectForKey:@"status"]integerValue] == 1) {
+//            NSDictionary *dic = [responseObject objectForKey:@"datalist"];
+//            NSArray *array = [dic objectForKey:@"recommend"];
+//            for (NSDictionary *dict in array) {
+//                ShopModel *model = [ShopModel shopModelInitWithDict:dict];
+//                [dataArray addObject:model];
+//            }
+//            NSLog(@"首页推荐 首页推荐 %@",dataArray);
+//            if(block){
+//                block(YES,dataArray);
+//            }
+//        }
+//        
+//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        NSLog(@"首页推荐店铺请求失败 %@",error.localizedDescription);
+//    }];
+//    
+//}
+
+#pragma mark - 购物车物品数量
++(void)shopCartNumWithRequest:(ELRequestSingleCallBack)block andAuto_code:(NSString *)auto_code{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString *url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_shopCart&task=total&auto_code=%@",HTTP,auto_code];
+    //NSLog(@"%@",url);
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        //NSLog(@"购物车物品数量 %@",responseObject);
+        if ([[responseObject objectForKey:@"status"]integerValue] == 1) {
+            NSDictionary *dic = [responseObject objectForKey:@"datalist"];
+            NSString *num = [dic objectForKey:@"cartnum"];
+            if(block){
+                block(YES,num);
+            }
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"购物车物品数量请求失败 %@",error.localizedDescription);
+    }];
+
+    
+}
+#pragma mark - 购物车商品 增删改
++(void)shopCartEditWithRequest:(ELRequestSingleCallBack)block andUid:(NSString *)uid andPid:(NSString *)pid andTask:(NSString *)task andNum:(NSString *)num{
+    [ELHttpRequestOperation getTokenAndTime];
+    //http://192.168.1.166/zxga/app/index.php?com=com_appService&method=save&app_com=com_shopcart&task=add&pid=148&num=2
+//    http://192.168.1.166/zxga/app/index.php?com=com_appService&method=save&app_com=com_shopcart&task=edit&uid=299444895171&pid=148&num=1
+//    http://192.168.1.166/zxga/app/index.php?com=com_appService&method=save&app_com=com_shopcart&task=del&uid=621957367864
+    NSString *url;
+    if([task isEqualToString:@"add_list"]) {
+        url = [NSString stringWithFormat:@"%@&method=save&app_com=com_appcart&task=%@&pid=%@",HTTP,@"add",pid];
+    }
+    if([task isEqualToString:@"add_detail"]) {
+        url = [NSString stringWithFormat:@"%@&method=save&app_com=com_appcart&task=%@&pid=%@&num=%@",HTTP,@"add",pid,num];
+    }
+    if([task isEqualToString:@"edit"]){
+        url = [NSString stringWithFormat:@"%@&method=save&app_com=com_appcart&task=%@&pid=%@&num=%@",HTTP,@"add",pid,num];
+    }
+    if ([task isEqualToString:@"del"]){
+        url = [NSString stringWithFormat:@"%@&method=save&app_com=com_appcart&task=%@&uid=%@",HTTP,task,uid];
+    }
+    
+    //NSLog(@"------- %@",url);
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+    NSDictionary *dic = responseObject ;
+       // NSLog(@"-------%@",responseObject);
+        if ([[responseObject objectForKey:@"status"]integerValue] == 1) {
+            if(block){
+                block(YES,dic);
+            }
+        }
+      
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"购物车物品数量请求失败 %@",error.localizedDescription);
+    }];
+    
+    
+}
+#pragma mark - 店铺中商品搜索
++(void)changeTheNumOfShoppingCartRequest:(ELRequestSingleCallBack)block andShoppe_id:(NSString *)shoppe_id andAuto_code:(NSString *)auto_code andKeyword:(NSInteger)keyword {
+[ELHttpRequestOperation getTokenAndTime];
+
+}
+#pragma mark - 店铺商品列表
++(void)shopDetailCommodityListWithRequest:(ELRequestSingleCallBack)block andShoppe_id:(NSString *)shoppe_id andAuto_code:(NSString *)auto_code andPage:(NSString *)page andKeyword:(NSString*)keyword{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString *url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appyp&task=shopcpro&shoppe_id=%@&auto_code=%@&page=%@&keyword=%@",HTTP,shoppe_id,auto_code,page,keyword];
+    if(keyword == nil){
+        url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appyp&task=shopcpro&shoppe_id=%@&auto_code=%@&page=%@",HTTP,shoppe_id,auto_code,page];
+    }
+   // NSLog(@"店铺详情商品列表 －－－－－%@",url);
+    
+    
+    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"店铺商品列表 店铺商品列表%@",responseObject);
+        if ([[responseObject objectForKey:@"status"]integerValue] == 1) {
+            NSDictionary *dic = [responseObject objectForKey:@"datalist"];
+            ELTShopDetailModel *modelList = [[ELTShopDetailModel alloc]init];
+            modelList.classArray = [NSMutableArray array];
+            modelList.proArray = [NSMutableArray array];
+            for (NSDictionary * dict in [dic objectForKey:@"class"]) {
+                ELTShopDetailModel *model = [[ELTShopDetailModel alloc]init];
+                model.auto_code = [dict objectForKey:@"auto_code"];
+                model.content_name = [dict objectForKey:@"modules_name"];
+                [modelList.classArray addObject:model];
+            }
+            
+            NSArray *proArray = [dic objectForKey:@"pro"];
+            
+            for (NSDictionary * dicpro in proArray) {
+              
+                ELTShopDetailModel *model = [[ELTShopDetailModel alloc]init];
+                model.fvId = [dicpro objectForKey:@"id"];
+                model.member_id = [dicpro objectForKey:@"member_id"];
+                model.shoppe_id = [dicpro objectForKey:@"shoppe_id"];
+                model.product_id = [dicpro objectForKey:@"product_id"];
+                model.content_name = [dicpro objectForKey:@"content_name"];
+                model.auto_code = [dicpro objectForKey:@"auto_code"];
+                model.content_preprice = [dicpro objectForKey:@"content_preprice"];
+                model.content_img = [dicpro objectForKey:@"content_img"];
+                [modelList.proArray addObject:model];
+            }
+            
+            if(block){
+                block(YES,modelList);
+            }
+        }else{
+            if(block){
+                block(YES,[responseObject objectForKey:@"msg"]);
+            }
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"店铺详情请求失败 %@",error.localizedDescription);
+    }];
+    
+}
+
+#pragma mark - 删除商品订单
++(void)deleteOrderWithRequest:(ELRequestSingleCallBack)block andOrder_id:(NSString *)order_id{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString *url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appcenter&task=delporder&order_id=%@",HTTP,order_id];
+    //NSLog(@"删除订单   %@",url);
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        if ([[responseObject objectForKey:@"status"]integerValue] == 1) {
+            NSString *msg = [responseObject objectForKey:@"msg"];
+            if(block){
+                block(YES,msg);
+            }
+        }else{
+            NSString *msg = [responseObject objectForKey:@"msg"];
+            if(block){
+                block(NO,msg);
+            }
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"删除订单请求失败 %@",error.localizedDescription);
+    }];
+    
+}
+
+#pragma mark - 删除服务订单
++(void)deleteServiceOrderWithRequest:(ELRequestSingleCallBack)block andOrder_id:(NSString *)order_id{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString *url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appcenter&task=delsorder&order_id=%@",HTTP,order_id];
+    //NSLog(@"删除订单   %@",url);
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        if ([[responseObject objectForKey:@"status"]integerValue] == 1) {
+            NSString *msg = [responseObject objectForKey:@"msg"];
+            if(block){
+                block(YES,msg);
+            }
+        }else{
+            NSString *msg = [responseObject objectForKey:@"msg"];
+            if(block){
+                block(NO,msg);
+            }
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"删除订单请求失败 %@",error.localizedDescription);
+    }];
+    
+}
+
+#pragma mark - 产品列表
++ (void)typeListWithRequest:(ELRequestSingleCallBack)block andAuto_code:(NSString *)auto_code andSort:(NSString *)sort andPage:(NSString *)page andUrl:(NSString *)screenUrl andKeyword:(NSString *)keyword{
+    [ELHttpRequestOperation getTokenAndTime];
+    //http://192.168.1.153/tryy/app/index.php?com=com_appService&method=appSev&app_com=com_appshop&task=plists&auto_code=1003&sort=3
+    /*
+     keyword  搜索
+     auto_id  分类
+     screeUrl 筛选
+     */
+    NSString * url;
+    if (keyword != nil && auto_code != nil) {
+        url = [NSString stringWithFormat:@"%@%@&page=%@&keyword=%@",HTTP,@"&method=appSev&app_com=com_appshop&task=proview",page,keyword];
+    }else if(auto_code != nil && keyword == nil){
+        url = [NSString stringWithFormat:@"%@%@&auto_code=%@&sort=%@&page=%@%@",HTTP,@"&method=appSev&app_com=com_appshop&task=proview",auto_code,sort,page,screenUrl];
+    }else{
+       url = [NSString stringWithFormat:@"%@%@&page=%@&sort=%@%@",HTTP,@"&method=appSev&app_com=com_appshop&task=proview",page,sort,screenUrl];
+    }
+//    url = [NSString stringWithFormat:@"http://192.168.1.166/zxga/app/index.php?com=com_appService&method=appSev&app_com=com_appshop&task=proview&id=%@",auto_code];
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary * dic       = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject[@"datalist"]);
+        NSMutableArray * dataArr = [[NSMutableArray alloc]init];
+        ELTFruitAndVegatableModel *model = [[ELTFruitAndVegatableModel alloc]init];
+        [model setValuesForKeysWithDictionary:dic];
+        [dataArr addObject:model];
+        if(block){
+            block(YES,dataArr);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"erroryd:%@",error.localizedDescription);
+    }];
+}
+
+
+#pragma mark - 产品详情
++ (void)typeDetailWithRequest:(ELRequestSingleCallBack)block andAuto_code:(NSString *)auto_code andAuto_id:(NSString *)auto_id{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString * url = [NSString stringWithFormat:@"%@%@&auto_code=%@&auto_id=%@",HTTP,@"&method=appSev&app_com=com_appshop&task=pview",auto_code,auto_id];
+
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary * dic = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+//        NSMutableArray * dataArr = [[NSMutableArray alloc]init];
+        NSDictionary * datalistDic = [dic objectForKey:@"datalist"];
+        BJObject * object = [[BJObject alloc]init];
+        object.picture          = OBJC([datalistDic objectForKey:@"picture"]);
+        object.content_price    = OBJC([datalistDic objectForKey:@"content_price"]);
+        object.content_preprice = OBJC([datalistDic objectForKey:@"content_preprice"]);
+        object.content_name     = OBJC([datalistDic objectForKey:@"content_name"]);
+        object.content_desc     = OBJC([datalistDic objectForKey:@"content_desc"]);
+        if(block){
+            block(YES,object);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
+
+#pragma mark - 我的购物车列表
++ (void)ShoppingCartWithRequest:(ELRequestSingleCallBack)block{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSDictionary *dic = @{@"method":@"save",@"app_com":@"com_appcart",@"task":@"appList"};
+    
+    [[ELHttpRequestOperation sharedClient] POST:HTTP parameters:dic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSArray *datalist = (NSArray *)([responseObject isEqual:[NSNull null]]?nil:[responseObject objectForKey:@"datalist"]);
+        NSMutableArray *dataArray = [NSMutableArray array];
+        for (NSDictionary *dic in datalist) {
+            ELTMyShopCart *shopCart = [ELTMyShopCart myShopCartInitWithDict:dic];
+            
+            [dataArray addObject:shopCart];
+        }
+        if(block){
+        block(YES,dataArray);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
+#pragma mark - 删除购物车物品
++(void)deleteShoppingCartRequest:(ELRequestSingleCallBack)block andUid:(NSString *)uid{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSDictionary *dic = @{@"method":@"save",@"app_com":@"com_appcart",@"task":@"del",@"uid":uid};
+    
+    [[ELHttpRequestOperation sharedClient] GET:HTTP parameters:dic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *dic = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+        NSString *string = [dic objectForKey:@"msg"];
+        NSMutableArray *dataArray = [NSMutableArray array];
+        [dataArray addObject:string];
+        if(block){
+        block(YES,dataArray);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+
+}
+
+
+#pragma mark - 购物车数量增减
++(void)changeTheNumOfShoppingCartRequest:(ELRequestSingleCallBack)block andUid:(NSString *)uid andPid:(NSString *)pid andNum:(NSInteger)num andSele:(BOOL)sele{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSDictionary *dic = @{@"method":@"save",@"app_com":@"com_appcart",@"task":@"edit",@"uid":uid,@"pid":pid,@"num":[NSString stringWithFormat:@"%ld",(long)num],@"sele":[NSString stringWithFormat:@"%d",sele]};
+    //NSLog(@"购物车数量增减 ----  %@",dic);
+    [[ELHttpRequestOperation sharedClient] GET:HTTP parameters:dic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *dic = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+        NSMutableArray *array = [NSMutableArray array];
+        [array addObject:dic];
+        if(block){
+            block(YES,array);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+    
+}
+
+#pragma mark - 店铺勾选
++(void)shopSelectRequest:(ELRequestSingleCallBack)block andSele:(BOOL)sele andeID:(NSString *)eID{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSDictionary *dic = @{@"method":@"save",@"app_com":@"com_appcart",@"task":@"sele",@"sele":[NSString stringWithFormat:@"%d",sele],@"eID":eID};
+    
+    [[ELHttpRequestOperation sharedClient] GET:HTTP parameters:dic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *dic = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+        
+        if ([[dic objectForKey:@"status"] integerValue] == 1) {
+            NSMutableArray *array = [NSMutableArray array];
+            [array addObject:dic];
+            if(block){
+                block(YES,array);
+            }
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+    
+}
+
+#pragma mark - 全选
++(void)allSelectRequest:(ELRequestSingleCallBack)block andSele:(BOOL)sele{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSDictionary *dic = @{@"method":@"save",@"app_com":@"com_appcart",@"task":@"seleall",@"sele":[NSString stringWithFormat:@"%d",sele]};
+    [[ELHttpRequestOperation sharedClient] GET:HTTP parameters:dic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *dic = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+        NSMutableArray *array = [NSMutableArray array];
+        [array addObject:dic];
+        if(block){
+            block(YES,array);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+    
+}
+
+#pragma mark - 商品勾选
++(void)commoditySelectRequest:(ELRequestSingleCallBack)block andUid:(NSString *)uid andPid:(NSString *)pid andSele:(BOOL)sele andNum:(NSInteger)num{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSDictionary *dic = @{@"method":@"save",@"app_com":@"com_appcart",@"task":@"edit",@"sele":[NSString stringWithFormat:@"%d",sele],@"pid":pid,@"uid":uid,@"num":[NSString stringWithFormat:@"%ld",(long)num]};
+    
+    [[ELHttpRequestOperation sharedClient] GET:HTTP parameters:dic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *dict = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+        NSMutableArray *array = [NSMutableArray array];
+        [array addObject:dic];
+        if(block){
+            block(YES,array);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+    
+}
+
+#pragma mark - 填写订单
++ (void)editeOrderWithRequest:(ELRequestSingleCallBack)block{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString *url = [NSString stringWithFormat:@"%@&method=save&app_com=com_appcart&task=appList&sele=1",HTTP];
+    
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSArray *datalist = (NSArray *)([responseObject isEqual:[NSNull null]]?nil:[responseObject objectForKey:@"datalist"]);
+        NSMutableArray *dataArray = [NSMutableArray array];
+        for (NSDictionary *dic in datalist) {
+            ELTMyShopCart *shopCart = [ELTMyShopCart myShopCartInitWithDict:dic];
+            
+            [dataArray addObject:shopCart];
+        }
+        if(block){
+            block(YES,dataArray);
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
+
+#pragma mark - 收货地址
++ (void)addressWithRequest:(ELRequestSingleCallBack)block{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString *url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_apporder&task=getaddress",HTTP];
+    
+    //NSLog(@"收货地址 %@",url);
+    
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSArray *array = [responseObject objectForKey:@"datalist"];
+        NSDictionary *dic = array[0];
+        ELTAddressModel *model = [[ELTAddressModel alloc] initDicyionary:dic];
+        ELTAddress *address = [ELTAddress sharedAddress];
+        address.AddressModel = model;
+        
+        if(block){
+            block(YES,responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
+#pragma mark - 提交订单
++ (void)submitOrderWithRequest:(ELRequestSingleCallBack)block andStore:(NSString *)store andAddConsignee:(NSString *)addConsignee andAddPhone:(NSString *)addPhone andAddress:(NSString *)address andAddProvince:(NSString *)province andAddCity:(NSString *)city andAddCounty:(NSString *)county andTown:(NSString *)town andVillage:village andTinyVillage:(NSString *)tinyVillage andHouse:(NSString *)house{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSDictionary *dic = @{@"method":@"save",@"app_com":@"com_apporder",@"task":@"appOrder",@"store":store,@"address[consignee]":addConsignee,@"address[consignee_phone]":addPhone,@"address[address]":address,@"address[province_id]":province,@"address[city_id]":city,@"address[county_id]":county,@"address[town_id]":town,@"address[village_id]":village,@"address[tiny_village_id]":tinyVillage,@"address[house_id]":house};
+    
+    //NSString *url = [NSString stringWithFormat:@"%@&method=save&app_com=com_apporder&task=appOrder&"]
+    //NSLog(@"%@  提交订单 提交订单%@",HTTP,dic);
+    [[ELHttpRequestOperation sharedClient] GET:HTTP parameters:dic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+       // NSLog(@"%@",responseObject);
+        if(block){
+            block(YES,[responseObject objectForKey:@"msg"]);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+#pragma mark - 订单列表
++ (void)orderListWithRequest:(ELRequestSingleCallBack)block andOrder_id:(NSString *)order_id andPage:(NSString *)page{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString *url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appcenter&task=orderlist&order_id=%@&page=%@",HTTP,order_id,page];
+    NSLog(@"订单列表 m订单列表%@",url);
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"订单列表 订单列表%@",responseObject);
+        
+        if ([[responseObject objectForKey:@"status"]integerValue] == 1){
+            
+            NSMutableArray *dataArray = [NSMutableArray array];
+            NSArray *array = [responseObject objectForKey:@"datalist"];
+            for (NSDictionary *dict in array) {
+                ELTMyOrderModel *model = [ELTMyOrderModel orderModelInitWithDict:dict];
+                model.order_status = [dict objectForKey:@"order_status"];
+                model.orderStatus = [[dict objectForKey:@"_order_status"]integerValue];
+                [dataArray addObject:model];
+            }
+            if(block){
+                block(YES,dataArray);
+            }
+            
+        }else{
+            
+            
+            
+            if(block){
+                block(YES,[responseObject objectForKey:@"msg"]);
+            }
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        NSLog(@"error:%@",error.localizedDescription);
+    }];
+
+}
+#pragma mark - 取消订单
++ (void)cancleOrderWithRequest:(ELRequestSingleCallBack)block andID:(NSString *)ID andPWD:(NSString *)pwd andAuto_id:(NSString *)auto_id{
+    [ELHttpRequestOperation getTokenAndTime];
+    //http://192.168.1.159/tryy/app/index.php?com=com_appService&method=appSev&app_com=com_pcenter&task=appCancelOrder&auto_id=306&ID=elongtian&PWD=e10adc3949ba59abbe56e057f20f883e
+    NSString * url = [NSString stringWithFormat:@"%@%@&auto_id=%@&ID=%@&PWD=%@",HTTP,@"&method=appSev&app_com=com_appcenter&task=appCancelOrder",auto_id,ID,pwd];
+    
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary * dic = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+        BJObject * object    = [[BJObject alloc]init];
+        object.status        = OBJC([dic objectForKey:@"status"]);
+        object.msg  = OBJC([dic objectForKey:@"msg"]);
+        if(block){
+            block(YES,object);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
+
+
+#pragma mark - 订单详情
++ (void)orderDetailWithRequest:(ELRequestSingleCallBack)block andID:(NSString *)ID{
+    [ELHttpRequestOperation getTokenAndTime];
+    //NSDictionary *dic = @{@"method":@"appSev",@"app_com":@"com_appcenter",@"task":@"orderview",@"id":ID};
+    NSString *url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appcenter&task=orderview&id=%@",HTTP,ID];
+    //NSLog(@"订单详情 订单详情 订单详情 %@",url);
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary * dic = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:[responseObject objectForKey:@"datalist"]);
+        //NSLog(@"订单详情 responseObject %@",responseObject);
+        ELTOrderDetailModel *model = [[ELTOrderDetailModel alloc]init];
+        [model setValuesForKeysWithDictionary:dic];
+        model.ID = [dic objectForKey:@"id"];
+        model.picArray = [NSMutableArray array];
+        model.evaluation_value = [[[dic objectForKey:@"evaluation"] objectForKey:@"evaluation_value"]integerValue];
+        for (NSDictionary *dict in [dic objectForKey:@"pro"]) {
+            ELTCommidyOrderDetailModel *commidyModel = [[ELTCommidyOrderDetailModel alloc]init];
+            [commidyModel setValuesForKeysWithDictionary:dict];
+            commidyModel.evaluation_value = 0;
+            commidyModel.evaluationvalue = [[responseObject objectForKey:@"evaluation_value"]integerValue];
+            commidyModel.evaluation_content = @"";
+            commidyModel.review_img = [NSMutableArray array];
+            [model.picArray addObject:commidyModel];
+        }
+        NSMutableArray *array = [NSMutableArray array];
+        [array addObject:model];
+        if(block){
+        block(YES,array);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+
+}
+
+#pragma mark - 提交商品订单评价
++(void)judgeOrderRequest:(ELRequestSingleCallBack)block andComment:(NSString *)comment andStaff:(NSString *)staff andOrder_id:(NSString *)order_id{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString * url = [NSString stringWithFormat:@"%@&method=save&app_com=com_appcenter&task=ordercomment&comment=%@&staff=%@&order_id=%@",HTTP,comment,staff,order_id];
+    NSDictionary *dic;
+    if (staff) {
+        dic = @{@"method":@"save",@"app_com":@"com_appcenter",@"task":@"ordercomment",@"comment":comment,@"staff":staff,@"order_id":order_id};
+    }else{
+        dic = @{@"method":@"save",@"app_com":@"com_appcenter",@"task":@"ordercomment",@"comment":comment,@"order_id":order_id};
+    }
+    
+    NSLog(@"提交商品订单评价 提交商品订单评价%@",dic);
+    NSLog(@"提交商品订单评价 提交商品订单评价%@",url);
+    
+    [[ELHttpRequestOperation sharedClient] POST:HTTP parameters:dic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if(block){
+            block(YES,responseObject);
+        }
+        
+        NSLog(@"提交商品订单评价 提交商品订单评价 %@",responseObject);
+        NSLog(@"提交商品订单评价 %@",[responseObject objectForKey:@"msg"]);
+        
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+
+}
+
+#pragma mark - 评价订单
+//+ (void)judgeOrderWithRequest:(ELRequestSingleCallBack)block andLink_id:(NSString *)link_id andType:(NSString *)type{
+//    
+//    NSString * url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appshop&task=reviewlists&link_id=%@&plugin=com_shopProduct",HTTP,link_id,];
+//    
+//}
+
+#pragma mark - 筛选
++ (void)screenRequestWithBlock:(ELRequestSingleCallBack)block andAuto_code:(NSString *)auto_code{
+    [ELHttpRequestOperation getTokenAndTime];
+//    http://192.168.1.153/tryy/app/index.php?com=com_appService&method=appSev&app_com=com_appshop&task=psearch&auto_code=100210001000
+    NSString * url = [NSString stringWithFormat:@"%@%@&auto_code=%@",HTTP,@"&method=appSev&app_com=com_appshop&task=psearch",auto_code];
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary * dataDic = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+        NSArray * typeArr = [dataDic objectForKey:@"datalist"];
+        NSMutableArray * dataArr = [NSMutableArray array];
+        for (NSDictionary * dic in typeArr) {
+            BJObject * object = [[BJObject alloc]init];
+            object.content_name = OBJC([dic objectForKey:@"label"]);
+            object.picture = [NSMutableArray array];
+            for (NSDictionary * subDic in OBJC([dic objectForKey:@"sub"])) {
+                BJObject * obj = [[BJObject alloc]init];
+                obj.content_name = OBJC([subDic objectForKey:@"label"]);
+                obj.content_value = OBJC([subDic objectForKey:@"value"]);
+                obj.vars = OBJC([subDic objectForKey:@"vars"]);
+                [object.picture addObject:obj];
+            }
+            [dataArr addObject:object];
+        }
+        if (block) {
+            block(YES,dataArr);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}           
+#pragma mark - 分类 yd
++ (void)typeRequestWithBlock:(ELRequestSingleCallBack)block andSort:(NSString *)sort andAuto_code:(NSString *)auto_code andPage:(NSString *)page andKeyWord:(NSString *)keyWord{
+    [ELHttpRequestOperation getTokenAndTime];
+    //http://192.168.1.153/tryy/app/index.php?com=com_appService&method=appSev&app_com=com_appshop&task=pctglist
+//    prolists&sort=4&auto_code=10001001&row=10
+    NSString * url = [NSString stringWithFormat:@"%@%@&sort=%@&auto_code=%@&row=10&page=%@&keyword=%@",HTTP,@"&method=appSev&app_com=com_appshop&task=prolists",sort,auto_code,page,keyWord];
+    if (keyWord == nil || [keyWord isEqualToString:@""]) {
+        url = [NSString stringWithFormat:@"%@%@&sort=%@&auto_code=%@&row=10&page=%@",HTTP,@"&method=appSev&app_com=com_appshop&task=prolists",sort,auto_code,page];
+    }
+//    NSLog(@"分类 yd 分类 yd分类 yd%@",url);
+    
+    NSMutableArray * dataArr = [NSMutableArray array];
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject objectForKey:@"status"]integerValue] == 1) {
+            NSArray * typeArr = (NSArray *)([responseObject isEqual:[NSNull null]]?nil:responseObject[@"datalist"]);
+            //NSLog(@"分类  分类 %@",dataArr);
+            for (NSDictionary* dic in typeArr) {
+                ELTFruitAndVegatableModel *model = [[ELTFruitAndVegatableModel alloc]init];
+                
+                [model setValuesForKeysWithDictionary:dic];
+                
+                model.fvId = dic[@"id"];
+                [dataArr addObject:model];
+            }
+            if (block) {
+                block(YES,dataArr);
+            }
+
+        }else{
+            if (block) {
+                block(YES,[responseObject objectForKey:@"msg"]);
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"yd--error:%@",error.localizedDescription);
+    }];
+}
+#pragma mark - 商品详情 yd
++(void)typeDetailWithRequest:(ELRequestSingleCallBack)block andid:(NSString *)detailId
+{   [ELHttpRequestOperation getTokenAndTime];
+    NSString * url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appshop&task=proview&id=%@",HTTP,detailId];
+    NSLog(@"商品详情  商品详情  商品详情%@",url);
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary * dic = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+        NSMutableArray *dataArr =[ NSMutableArray array];
+        
+        if ([[dic objectForKey:@"status"] integerValue] == 1) {
+            NSDictionary * detailDic = [dic objectForKey:@"datalist"];
+#pragma mark - 模型中的数组
+            NSMutableArray * photoArr =[NSMutableArray array];
+            for (NSDictionary * dic in detailDic[@"show_img"]) {
+                ELTPhotosModel * pmode = [[ELTPhotosModel alloc]init];
+                pmode.content_img  = dic[@"content_img"];
+                [photoArr addObject:pmode];
+            }
+            ELTFruitAndVegatableModel *model = [[ELTFruitAndVegatableModel alloc]init];
+            [model setValuesForKeysWithDictionary:detailDic];
+            model.show_img = photoArr;
+            if ([[dic objectForKey:@"status"] isKindOfClass:[NSString class]]) {
+                model.status = [dic objectForKey:@"status"];
+            }else{
+                model.status = [[dic objectForKey:@"status"] stringValue];
+            }
+            [dataArr addObject:model];
+
+        }else{
+            ELTFruitAndVegatableModel *model = [[ELTFruitAndVegatableModel alloc]init];
+            if ([[dic objectForKey:@"status"] isKindOfClass:[NSString class]]) {
+                model.status = [dic objectForKey:@"status"];
+            }else{
+                model.status = [[dic objectForKey:@"status"] stringValue];
+            }
+            model.msg = [dic objectForKey:@"msg"];
+            [dataArr addObject:model];
+        }
+        
+        if (block) {
+            block(YES,dataArr);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"yd--error:%@",error.localizedDescription);
+    }];
+
+}
+#pragma mark - 商品评价 yd
++(void)typeDetailWithREquest:(ELRequestSingleCallBack)block andid:(NSString *)typeId andtype:(NSString *)type andPage:(NSString *)page{
+    /**
+     *  typeId暂用@“416”代替 服务器返回的无数据
+     */
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString * url =[NSString stringWithFormat:@"%@&method=appSev&app_com=com_appshop&task=reviewlists&link_id=%@&plugin=com_shopProduct&type=%@&page=%@&row=10",HTTP,typeId,type,page];
+
+    [[ELHttpRequestOperation sharedClient]GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary * detailDic = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject[@"datalist"]);
+        NSMutableArray * dataArr = [NSMutableArray array];
+        ELTCommodityDetailModel *cdMOdel =  [ELTCommodityDetailModel commodityDetailModelInitWithDict:detailDic];
+        [dataArr addObject:cdMOdel];
+         if (block) {
+            block(YES,dataArr);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"error:%@",error.localizedDescription);
+    }];
+}
+#pragma mark -买家服务项目列表
++ (void)screenRequestWithBlock:(ELRequestSingleCallBack)block andAuto_code:(NSString *)auto_code andSort:(NSString *)sort andRow:(NSInteger)row andPage:(NSInteger)page andKeyWord:(NSString *)keyWord{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString *url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appserve&task=servelists&auto_code=%@&sort=%@&row=%ld&page=%ld&keyword=%@",HTTP,auto_code,sort,(long)row,(long)page,keyWord];
+    
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSMutableArray *serviceArray = [NSMutableArray array];
+        NSArray *array = responseObject[@"datalist"];
+        NSDictionary * dics = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+        //NSLog(@"@@@@@@@@@@@@@-----------%@",url);
+        
+        
+        if ([[dics objectForKey:@"status"] integerValue] == 1) {
+            for (NSDictionary *dic in array) {
+                
+                ELTServiceModel *serviceModel = [[ELTServiceModel alloc] initDictionary:dic];
+            
+                [serviceArray addObject:serviceModel];
+            }
+            
+            
+            if(block){
+                block(YES,serviceArray);
+            }
+
+        }else{
+         
+            if (block) {
+                block(YES,[responseObject objectForKey:@"msg"]);
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+         NSLog(@"error:%@",error.localizedDescription);
+    }];
+
+}
+
+#pragma mark - 买家端服务项目详情页面
++ (void)screenRequestWithBlock:(ELRequestSingleCallBack)block andId:(NSString *)ID{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString *url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appserve&task=serveview&id=%@",HTTP,ID];
+    
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+      
+        NSDictionary * dic = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+        if ([[dic objectForKey:@"status"] integerValue] == 1) {
+            NSDictionary *dics = dic[@"datalist"];
+            ELTServiceDetailsModel *model = [[ELTServiceDetailsModel alloc] initDictionary:dics];
+            //NSLog(@"@@@@@@@@@@@@@-----------%@",url);
+            NSLog(@"@@@@@@@@@@@@@-----------%@",responseObject);
+            
+            if(block){
+                block(YES,model);
+            }
+        }else{
+            if(block) {
+                block(YES,nil);
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+         NSLog(@"error:%@",error.localizedDescription);
+    }];
+}
+#pragma mark - 买家端服务评价
++ (void)screenRequestWithBlock:(ELRequestSingleCallBack)block andLink_id:(NSString *)link_id andType:(NSInteger)type andPlugin:(NSString *)plugin andRow:(NSInteger)row andPage:(NSInteger)page{
+    [ELHttpRequestOperation getTokenAndTime];
+  NSString *url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appserve&task=reviewlists&link_id=%@&type=%ld&plugin=%@&row=%ld&page=%ld",HTTP,link_id,type,plugin,row,page];
+    NSLog(@"%@",url);
+    
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"%@",responseObject);
+        
+        
+        NSDictionary *dic = responseObject[@"datalist"];
+        ELTEvaluationListModel *model = [[ELTEvaluationListModel alloc] initDictionary:dic];
+      
+        
+        if(block){
+            block(YES,model);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"error:%@",error.localizedDescription);
+    }];
+}
+#pragma mark - 获取服务人员
++(void)getWaiterListsRequestWithBlock:(ELRequestSingleCallBack)block andid:(NSString *)ID andSkey:(NSString *)skey andEkey:(NSString *)ekey andDate:(NSString *)date{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString *url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appserve&task=getwaiterlists&ser_id=%@&skey=%@&ekey=%@&date=%@",HTTP,ID,skey,ekey,date];
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary * dics = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+        NSMutableArray * dataArr = [NSMutableArray array];
+        for (NSDictionary * dic in OBJC([dics objectForKey:@"datalist"])) {
+            ELTServicePersonnel * model = [[ELTServicePersonnel alloc]init];
+            model.ID = OBJC([dic objectForKey:@"id"]);
+            model.name = OBJC([dic objectForKey:@"name"]);
+            model.revirew_num = OBJC([dic objectForKey:@"revirew_num"]);
+            model.good_lead = OBJC([dic objectForKey:@"good_lead"]);
+            model.order_num = OBJC([dic objectForKey:@"order_num"]);
+            model.sex = OBJC([dic objectForKey:@"sex"]);
+            model.content_desc = OBJC([dic objectForKey:@"content_desc"]);
+            model.img = OBJC([dic objectForKey:@"photo"]);
+            [dataArr addObject:model];
+        }
+        
+        if (block) {
+            block(YES,dataArr);
+        }
+
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"error:%@",error.localizedDescription);
+    }];
+}
+#pragma mark - 服务人员介绍
++(void)screenRequestWithBlock:(ELRequestSingleCallBack)block andid:(NSString *)ID{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString *url = [NSString stringWithFormat:@"%@com=com_appService&method=appSev&app_com=com_appserve&task=getwaiter&id=%@",HTTP,ID];
+   
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+       NSDictionary * dics = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+        if ([[dics objectForKey:@"status"] integerValue] == 1) {
+            NSDictionary *dic = dics[@"datalist"];
+            ELTServicePersonnel *model = [[ELTServicePersonnel alloc] initDictionary:dic];
+
+            
+            if (block) {
+                block(YES,model);
+            }
+        }else{
+            if (block) {
+                block(YES,nil);
+            }
+        
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"error:%@",error.localizedDescription);
+    }];
+}
+#pragma mark - 服务人员评价列表
++(void)screenRequestWithBlock:(ELRequestSingleCallBack)block andSerper_id:(NSString *)serper_id andType:(NSInteger)type andPlugin:(NSString *)plugin andRow:(NSInteger)row andPage:(NSInteger)page{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString *url = [NSString stringWithFormat:@"%@com=com_appService&method=appSev&app_com=com_appserve&task=Waitereview&plugin=%@&serper_id=%@&type=%ld&row=%ld&page=%ld",HTTP,plugin,serper_id,(long)type,(long)row,(long)page];
+    
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary * dics = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+        if ([[dics objectForKey:@"status"] integerValue] == 1) {
+            NSDictionary *dic = dics[@"datalist"];
+            //NSLog(@"----------*----------%@",responseObject);
+            //NSLog(@"%@",url);
+            
+            ELTerviceDetailModel *model = [[ELTerviceDetailModel alloc]initWithDic:dic];
+            
+            
+            if (block) {
+                block(YES,model);
+            }
+            
+        }else{
+            if (block) {
+                block(YES,nil);
+            }
+            
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"error:%@",error.localizedDescription);
+    }];
+
+}
+#pragma mark --  服务订单列表
++(void)serviceOrderListWithRequest:(ELRequestSingleCallBack)block andOrder_id:(NSString *)order_id  andpage:(NSInteger )page{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString *url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appcenter&task=serordlist&order_id=%@&page=%ld&row=10",HTTP,order_id,page];
+    
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary * dics = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+        NSLog(@"------------%@",url);
+
+        if ([[dics objectForKey:@"status"] integerValue] == 1) {
+            NSArray *arr = dics[@"datalist"];
+            NSMutableArray *array = [NSMutableArray array];
+            for (NSDictionary *dic in arr) {
+                ELTMyServiceOrderModel *model = [[ELTMyServiceOrderModel alloc] initWithDic:dic];
+                [array addObject:model];
+            }
+            
+            if (block) {
+                block(YES,array);
+            }
+            
+        }else{
+            
+            if(block){
+                block(YES,[responseObject objectForKey:@"msg"]);
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"error:%@",error.localizedDescription);
+    }];
+}
+#pragma mark - 提交服务订单评价
++(void)judgeServiceOrderRequest:(ELRequestSingleCallBack)block andReview:(NSString *)review{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString * url = [NSString stringWithFormat:@"%@&method=save&app_com=com_appcenter&task=sercomment&review=%@",HTTP,review];
+    
+    NSDictionary *dic = @{@"method":@"save",@"app_com":@"com_appcenter",@"task":@"sercomment",@"review":review};
+    NSLog(@"HTTP   HTTP %@",HTTP);
+    NSLog(@"提交服务订单评价 提交服务订单评价%@",dic);
+    [[ELHttpRequestOperation sharedClient] POST:HTTP parameters:dic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"提交服务订单评价 提交服务订单评价 %@",responseObject);
+        NSLog(@"提交服务订单评价 %@",[responseObject objectForKey:@"msg"]);
+        
+        if(block){
+            block(YES,responseObject);
+        }
+        
+       
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+    
+}
+#pragma mark -- 服务订单详情
++(void)serviceOrderDetails:(ELRequestSingleCallBack)block andId:(NSString *)ID{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString *url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appcenter&task=serordview&id=%@",HTTP,ID];
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary * dics = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+        NSLog(@"----------*----------%@",responseObject);
+//        NSLog(@"%@",url);
+        
+        if ([[dics objectForKey:@"status"] integerValue] == 1) {
+            NSDictionary *dic= dics[@"datalist"];
+            NSDictionary *diction = dic[@"ser"];
+            ELTServiceOrderDetailsModel *model = [[ELTServiceOrderDetailsModel alloc] init];
+            model.review_img = [NSMutableArray array];
+            model.evaluation_content = @"";
+            [model  setValuesForKeysWithDictionary:diction];
+            [model setValuesForKeysWithDictionary:dic];
+            
+            NSArray *array = @[model];
+            
+            if (block) {
+                block(YES,array);
+            }
+            
+        }else{
+            
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"error:%@",error.localizedDescription);
+    }];
+    
+}
+
+#pragma mark -- 获取一周时间
++(void)getWeekTimeWithRequestBlock:(ELRequestSingleCallBack)block andShoppe_id:(NSString *)shoppe_id{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString *url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appserveorder&task=getweek&shoppe_id=%@",HTTP,shoppe_id];
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary * dics = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+       // NSLog(@"----------*----------%@",responseObject);
+        //NSLog(@"%@",url);
+        
+        NSMutableArray * dataArr = [NSMutableArray array];
+        if ([[dics objectForKey:@"status"] integerValue] == 1) {
+            for (NSDictionary * dic in OBJC([dics objectForKey:@"datalist"])) {
+                ELTWeekTimeModel * weekTime = [[ELTWeekTimeModel alloc]init];
+                weekTime.label = OBJC([dic objectForKey:@"label"]);
+                weekTime.date = OBJC([dic objectForKey:@"date"]);
+                weekTime.name = OBJC([dic objectForKey:@"name"]);
+                [dataArr addObject:weekTime];
+            }
+            if (block) {
+                block(YES,dataArr);
+            }
+ 
+        }else{
+        
+            if (block) {
+                block(YES,[responseObject objectForKey:@"msg"]);
+
+            }
+        }
+} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"error:%@",error.localizedDescription);
+    }];
+    
+}
+#pragma mark -- 获取店铺资源日历 （task = serschedule  无限   eshopcalendar  有限）
++(void)getEshopCalendarWithRequestBlock:(ELRequestSingleCallBack)block andShoppe_id:(NSString *)shoppe_id andDate:(NSString *)date andTask:(NSString *)task andNum:(NSString *)num andSerper_id:(NSString *)serper_id{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString * url = [NSString stringWithFormat:@"%@&method=appSev&app_com=com_appserveorder&task=%@&shoppe_id=%@&date=%@",HTTP,task,shoppe_id,[date stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    if([task isEqualToString:@"eshopcalendar"]){
+        url = [url stringByAppendingString:[NSString stringWithFormat:@"&num=%@&serper_id=%@",num,[serper_id stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+    }
+    // NSLog(@"%@",url);
+    
+    
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary * dics = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+       // NSLog(@"----------*----------%@",responseObject);
+       
+        NSMutableArray * dataArr = [NSMutableArray array];
+        if ([[dics objectForKey:@"status"] integerValue] == 1) {
+            if([task isEqualToString:@"serschedule"]){
+                for (NSDictionary * dic in OBJC([dics objectForKey:@"datalist"])) {
+                    ELTEShopDateModel * model = [[ELTEShopDateModel alloc]init];
+                    model.sDate = OBJC([dic objectForKey:@"sDate"]);
+                    [dataArr addObject:model];
+                }
+            }else if([task isEqualToString:@"eshopcalendar"]){
+                for (NSDictionary * dic in OBJC([dics objectForKey:@"datalist"])) {
+                    ELTEShopDateModel * model = [[ELTEShopDateModel alloc]init];
+                    model.skey = OBJC([[dic objectForKey:@"skey"] stringValue]);
+                    model.ekey = OBJC([[dic objectForKey:@"ekey"] stringValue]);
+                    model.sDate = OBJC([dic objectForKey:@"sDate"]);
+                    model.eDate = OBJC([dic objectForKey:@"eDate"]);
+                    model.hold = OBJC([dic objectForKey:@"hold"]);
+                    [dataArr addObject:model];
+                }
+            }
+        }
+        if (block) {
+            block(YES,dataArr);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"error:%@",error.localizedDescription);
+    }];
+    
+}
+
+#pragma mark - 获取代金券列表
++ (void)getCouponListRequestBlock:(ELRequestSingleCallBack)block andShoppe_id:(NSString *)shoppe_id andPrice:(NSString *)price{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString * url = [NSString stringWithFormat:@"%@%@&shoppe_id=%@&price=%@",HTTP,@"&method=appSev&app_com=com_appshop&task=couponlists",shoppe_id,price];
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary * dataDic = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+        if ([[dataDic objectForKey:@"status"] integerValue] == 1) {
+            NSMutableArray * arr = [NSMutableArray   array];
+            for (NSDictionary * dic in [dataDic objectForKey:@"datalist"]) {
+                ELTDiscountCoupon * model = [[ELTDiscountCoupon alloc]init];
+                model.Id = OBJC([dic objectForKey:@"id"]);
+                model.content_price = OBJC([dic objectForKey:@"content_price"]);
+                [arr addObject:model];
+            }
+            if (block) {
+                block(YES,arr);
+            }
+        }else{
+            block(YES,nil);
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
+#pragma mark -- 无限资源提交订单（服务）
++(void)infiniteorderRequestWithBlock:(ELRequestSingleCallBack)block andDic:(NSMutableDictionary *)dic{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString * url=[NSString stringWithFormat:@"%@&method=save&app_com=com_appserveorder",HTTP];
+//    http://192.168.1.166/zxga/app/index.php?com=com_appService&method=save&app_com=com_appserveorder&task=limitedorder
+    [[ELHttpRequestOperation sharedClient] POST:url parameters:dic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+       // NSLog(@"%@",responseObject);
+        if ([[responseObject objectForKey:@"status"] integerValue] == 1) {
+            if(block){
+                block(YES,[responseObject objectForKey:@"msg"]);
+            }
+        }else{
+            if(block){
+                block(YES,nil);
+            }
+        }
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
+#pragma mark - 服务时长
+/**
+ *  服务时长
+ *
+ *  @param block  block
+ *  @param ser_id 服务id
+ */
++ (void)getServiceChoosetimeRequestWithBlock:(ELRequestSingleCallBack)block andSer_id:(NSString *)ser_id{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString * url = [NSString stringWithFormat:@"%@%@&ser_id=%@",HTTP,@"&method=appSev&app_com=com_appserveorder&task=choosetime",ser_id];
+    //NSLog(@"-----%@",url);
+    
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary * dataDic = (NSDictionary *)([responseObject isEqual:[NSNull null]]?nil:responseObject);
+        if ([[dataDic objectForKey:@"status"] integerValue] == 1) {
+            if (block) {
+                block(YES,OBJC([dataDic objectForKey:@"datalist"]));
+            }
+        }
+
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
+
+#pragma mark -- 服务店铺(分类和分类按钮)
+
++(void)serviceShopWithRequest:(ELRequestSingleCallBack)block andID:(NSString *)ID andAuto_code:(NSString *)auto_code andPage:(NSString *)page andKeyword:(NSString *)keyword{
+    [ELHttpRequestOperation getTokenAndTime];
+    NSString *url = [[NSString alloc] init];
+    if (keyword==nil) {
+        url=[NSString stringWithFormat:@"%@&com=com_appService&method=appSev&app_com=com_appyp&task=shopserve&shoppe_id=%@&auto_code=%@&row=10&page=%@",HTTP,ID,auto_code,page];
+    }else{
+    url = [NSString stringWithFormat:@"%@&com=com_appService&method=appSev&app_com=com_appyp&task=shopserve&shoppe_id=%@&auto_code=%@&row=10&page=%@&keyword=%@",HTTP,ID,auto_code,page,keyword];
+    }
+    
+    
+    //NSLog(@"店铺详情服务列表 －－－－－%@",url);
+    
+    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    [[ELHttpRequestOperation sharedClient] GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        //NSLog(@"服务店铺列表 服务店铺列表%@",responseObject);
+        
+        if ([[responseObject objectForKey:@"status"]integerValue] == 1) {
+            NSDictionary *dic = [responseObject objectForKey:@"datalist"];
+            ELTServiceShopDetailModel *modelList = [[ELTServiceShopDetailModel alloc]init];
+            NSMutableArray *arrayss = [NSMutableArray array];
+            NSMutableArray *arrayaa = [NSMutableArray array];
+            
+            for (NSDictionary * dict in [dic objectForKey:@"class"]) {
+                ELTServiceShopDetailModel *model = [[ELTServiceShopDetailModel alloc]init];
+                model.auto_code = [dict objectForKey:@"auto_code"];
+                model.modules_name = [dict objectForKey:@"modules_name"];
+                
+                [arrayss addObject:model];
+            }
+            
+            for (NSDictionary * dicpro in [dic objectForKey:@"service"]) {
+                ELTServiceShopDetailModel *model = [[ELTServiceShopDetailModel alloc]init];
+                model.auto_code = dicpro[@"auto_code"];
+                model.modules_name = dicpro[@"modules_name"];
+                model.Id = dicpro[@"id"];
+                model.service_name = dicpro[@"service_name"];
+                model.unit_price = dicpro[@"unit_price"];
+                model.content_img = [dicpro objectForKey:@"content_img"];
+                [arrayaa addObject:model];
+            }
+            
+            modelList.classArray = arrayss;
+            modelList.proArray = arrayaa;
+            
+            if(block){
+                block(YES,modelList);
+            }
+            
+        }else{
+            if(block){
+                block(YES,[responseObject objectForKey:@"msg"]);
+            }
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"店铺详情请求失败 %@",error.localizedDescription);
+    }];
+}
+
+
+
+@end

@@ -1,0 +1,31 @@
+//
+//  MainPullDownView.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/30.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@protocol  MainPullDownViewDelegate<NSObject>
+
+- (void)buttonClick:(NSInteger)num;
+
+@end
+
+@interface MainPullDownView : UIView<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
+
+@property (nonatomic,strong) UICollectionView *collectionView;
+
+@property (nonatomic,assign) NSArray *dataArray;
+
+@property (nonatomic, assign) id<MainPullDownViewDelegate>delegate;
+
+-(instancetype)init;
+
+#pragma mark -- 对外接口
+/** 当前view的视图控制器 */
+-(UIViewController *)viewController;
+
+@end

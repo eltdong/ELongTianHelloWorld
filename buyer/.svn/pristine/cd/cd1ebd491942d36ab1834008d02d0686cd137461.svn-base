@@ -1,0 +1,16 @@
+//
+//  OrderDetailcustomServiceCell.h
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/21.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface ELTOrderDetailCustomCell : UITableViewCell
+/**
+ *  商品订单详情和服务订单详情cell
+ */
+@property (strong, nonatomic) IBOutlet UILabel *telLabel;
+@end

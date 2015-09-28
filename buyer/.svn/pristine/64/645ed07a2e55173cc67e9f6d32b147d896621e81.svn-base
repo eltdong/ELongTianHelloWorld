@@ -1,0 +1,27 @@
+//
+//  CouponModel.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/19.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTShopCartCouponModel.h"
+
+@implementation ELTShopCartCouponModel
+
++(instancetype)couponInitWithDict:(NSDictionary*)dic{
+    return [[self alloc]initWithDic:dic];
+}
+
+-(instancetype)initWithDic:(NSDictionary *)dict{
+    self = [super init];
+    if (self) {
+        [self setValuesForKeysWithDictionary:dict];
+        _status = [[dict objectForKey:@"content_status"]boolValue];
+        _ID = [dict objectForKey:@"id"];
+    }
+    return self;
+}
+
+@end

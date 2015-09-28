@@ -1,0 +1,25 @@
+//
+//  ShopDetailCollectionReusableView.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/22.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface ELTShopDetailCollectionReusableView : UICollectionReusableView
+
+@property (strong, nonatomic) IBOutlet UILabel *nameLabel;
+
+@property (strong, nonatomic) IBOutlet UILabel *timeLabel;
+
+@property (strong, nonatomic) IBOutlet UILabel *describeLabel;
+
+@property (strong, nonatomic) IBOutlet UIImageView *shopImage;
+
+@property (strong, nonatomic) IBOutlet UIView *bottomView;
+
+@property (strong, nonatomic) IBOutlet UIImageView *starImage;
+
+@end

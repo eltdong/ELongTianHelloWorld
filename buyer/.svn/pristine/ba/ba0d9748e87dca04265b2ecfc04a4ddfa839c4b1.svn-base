@@ -1,0 +1,17 @@
+//
+//  ELTDiscountCoupon.h
+//  GuoanBuyer
+//
+//  Created by 易龙天 on 15/9/11.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface ELTDiscountCoupon : ELTBaseModel
+
+@property (nonatomic, copy) NSString *content_price;
+
+@property (nonatomic, copy) NSString *Id;
+
+@end

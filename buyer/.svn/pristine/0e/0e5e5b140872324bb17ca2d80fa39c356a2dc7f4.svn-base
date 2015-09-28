@@ -1,0 +1,43 @@
+//
+//  shop_Sec_TableViewCell.h
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+/**
+ *  商品详情和服务详情界面cell
+ */
+#import <UIKit/UIKit.h>
+@protocol shop_Sec_delegate <NSObject>
+
+-(void)btnClicked:(BOOL)isYesOrNo;
+
+@end
+
+@interface ELTCommodityDetailTwoCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIButton *introduction;
+@property (weak, nonatomic) IBOutlet UIButton *evaluation;
+- (IBAction)introduction:(id)sender;
+- (IBAction)evaluation:(id)sender;
+/**
+ *  下划线
+ */
+@property (weak, nonatomic) IBOutlet UIView *underLine;
+
+
+
+@property ( nonatomic,assign) id<shop_Sec_delegate>delegate;
+
+/**
+ *  初始化
+ */
++(instancetype)tabbleViewCell:(UITableView*)tableView;
+/**
+ *  判断选中的状态
+ */
+@property (nonatomic,assign) BOOL isYesOrNO;
+//用来区分是商品列表使用还是服务列表使用
+
+@end

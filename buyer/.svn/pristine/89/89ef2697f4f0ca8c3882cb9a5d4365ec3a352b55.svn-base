@@ -1,0 +1,23 @@
+//
+//  ClassifyModel.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/24.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface ELTClassifyModel : ELTBaseModel
+
+@property (nonatomic,copy) NSString *auto_code;//二级分类编码
+
+@property (nonatomic,copy) NSString *content_img;//图片
+
+@property (nonatomic,copy) NSString *modules_name;//一级分类名称
+
+@property (nonatomic,copy) NSString *content_desc;//描述
+
+@property (nonatomic,copy) NSString *content_color;//颜色
+
+@end

@@ -1,0 +1,85 @@
+//
+//  JudgeTableViewCell.m
+//  Guoan Test
+//
+//  Created by 王波 on 15/7/31.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTServiceJudgeTableViewCell.h"
+
+@interface ELTServiceJudgeTableViewCell ()<UITextViewDelegate>{
+    
+    UIButton *_selectBtn;
+    
+}
+@end
+
+@implementation ELTServiceJudgeTableViewCell
+
+- (void)awakeFromNib {
+    // Initialization code
+    self.textView.layer.borderColor = [UIColor colorWithRed:245.0/255.0 green:245.0/255.0 blue:245.0/255.0 alpha:1].CGColor;
+    self.textView.layer.borderWidth= 1.2f;
+    self.textView.delegate = self;
+    
+    self.picimage.layer.masksToBounds =YES;
+    self.picimage.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.picimage.layer.borderWidth = 1.0f;
+
+}
+
+-(void)setModel:(ELTServiceOrderDetailsModel *)model{
+    
+    _model = model;
+    if (_model.evaluation_content) {
+        _textView.text = _model.evaluation_content;
+        _describeLabel.hidden = YES;
+    }
+    if ([_model.evaluation_content isEqualToString:@""]) {
+        _describeLabel.hidden = NO;
+    }
+    if (_model.evaluation_value == 1) {
+        _goodBtn.selected = YES;
+    }else if(model.evaluation_value == 2){
+        _middleBtn.selected = YES;
+    }else if (model.evaluation_value == 3){
+        _badBtn.selected = YES;
+    }
+    
+}
+
+
+-(IBAction)judgeClick:(id)sender{
+    
+    UIButton *button = sender;
+    button.selected = YES;
+    _selectBtn.selected = NO;
+    _selectBtn = button;
+    _model.evaluation_value = _selectBtn.tag - 200;
+    
+}
+
+- (void)textViewDidChange:(UITextView *)textView{
+    
+    if ([textView.text length] == 0) {
+        _describeLabel.hidden = NO;
+    }
+    else
+    {
+        _describeLabel.hidden = YES;
+    }
+    _model.evaluation_content = textView.text;
+    
+}
+
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+
+
+@end

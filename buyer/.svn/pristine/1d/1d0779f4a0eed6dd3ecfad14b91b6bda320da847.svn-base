@@ -1,0 +1,36 @@
+//
+//  ServeIntroFourCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/28.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "ELTEvaluationContentModel.h"
+#import "ELTServiceReivew.h"
+
+@interface ELTServicePersonDetailFourCell : UITableViewCell
+/**
+ *  服务人员cell
+ */
+@property (nonatomic,strong) UIImageView *headImage;
+
+@property (nonatomic,strong) UILabel *nameLabel;
+
+@property (nonatomic,strong) UILabel *timeLabel;
+
+@property (nonatomic,strong) UILabel *commentLabel;
+
+@property (nonatomic,strong) UIImageView *picImageOne;
+
+@property (nonatomic,strong) UIImageView *picImageTwo;
+
+@property (nonatomic,strong) UIImageView *picImageThree;
+
+
+-(void)heightWithCell:(NSString *)content  tag:(int)tag;
+-(void)heightWithCell:(NSString *)content pic:(NSArray *)imageArray tag:(int)tag;
+@property (nonatomic ,strong)  ELTEvaluationContentModel *model;
+@property (nonatomic ,strong)  ELTServiceReivew *serviceModel;
+@end

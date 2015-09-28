@@ -1,0 +1,30 @@
+//
+//  CouponModel.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/19.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface ELTShopCartCouponModel : ELTBaseModel
+
+@property (nonatomic,copy) NSString *ID;//优惠券id
+
+@property (nonatomic,copy) NSString *shoppe_id;
+
+@property (nonatomic,copy) NSString *content_price;//优惠金额
+
+@property (nonatomic,copy) NSString *member_id;//会员id
+
+@property (nonatomic,assign) BOOL status;//状态
+
+@property (nonatomic,copy) NSString *content_buyprice;
+
+@property (nonatomic,copy) NSString *content_maturity;
+
++(instancetype)couponInitWithDict:(NSDictionary*)dic;
+-(instancetype)initWithDic:(NSDictionary *)dict;
+
+@end

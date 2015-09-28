@@ -1,0 +1,27 @@
+//
+//  EditeOrderThreeCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/27.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "ELTShopCartCommodityModel.h"
+
+/**
+ *  填写订单页面，展示地址cell
+ */
+@interface ELTEditeOrderThreeCell : UITableViewCell
+
+@property (weak, nonatomic) IBOutlet UIImageView *image;//商品图
+
+@property (weak, nonatomic) IBOutlet UILabel *Name;//商品名
+
+@property (weak, nonatomic) IBOutlet UILabel *price;//价格
+
+@property (weak, nonatomic) IBOutlet UILabel *Number;//数值
+
+@property (nonatomic,strong) ELTShopCartCommodityModel *model;
+
+@end

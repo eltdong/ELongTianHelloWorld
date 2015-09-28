@@ -1,0 +1,78 @@
+//
+//  ShoppingZhongTableViewCell.m
+//  Guoan Test
+//
+//  Created by 王波 on 15/7/30.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTShoppingCartTableViewCell.h"
+
+@implementation ELTShoppingCartTableViewCell
+
+- (void)awakeFromNib {
+    // Initialization code
+    self.image.layer.masksToBounds =YES;
+    self.image.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.image.layer.borderWidth = 1.0f;
+}
+
+-(void)setModel:(ELTShopCartCommodityModel *)model{
+    _model = model;
+    _selectBtn.selected = model.select;
+    _Name.text = _model.content_name;
+    _price.text = [NSString stringWithFormat:@"¥ %@",_model.content_preprice];
+    [_image setImageWithURL:[NSURL URLWithString:_model.content_img]];
+    _Number.text = [NSString stringWithFormat:@"%ld",(long)_model.count];
+    NSString *oldPrice;
+    if ([_model.unit_price integerValue] == [_model.content_preprice integerValue]) {
+        oldPrice = @"";
+        _line.hidden = YES;
+    }else{
+        oldPrice = [NSString stringWithFormat:@"原价 ¥ %@",_model.unit_price];
+        _line.hidden = NO;
+    }
+    _oldPriceLabel.text = oldPrice;
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+- (IBAction)addMinusClick:(id)sender {
+    
+    UIButton *button = sender;
+    
+    if (button.tag - 200 == 1) {
+        
+        if (_model.count == 1) {
+            return;
+        }
+        _model.count = --_model.count;
+    }else{
+        _model.count = ++_model.count;
+    }
+    
+    [self postNotification];//购物车物品数量发生改变时，发送通知，通知控制器进行网络请求
+    
+}
+
+//勾选
+- (IBAction)TickoffBtn:(id)sender {
+    _model.select = !_model.select;
+    [self postSelectNotification];//物品勾选按钮状态发生改变时，发送通知，通知控制器进行网络请求
+}
+
+-(void)postSelectNotification{
+    NSDictionary *dic = @{@"model":_model};
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadSelect" object:nil userInfo:dic];
+}
+
+-(void)postNotification{
+    NSDictionary *dic = @{@"model":_model};
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadPrice" object:nil userInfo:dic];
+}
+
+@end

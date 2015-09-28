@@ -1,0 +1,34 @@
+//
+//  MyServiceOrder.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/6.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTMyServiceOrderModel.h"
+
+@implementation ELTMyServiceOrderModel
++(instancetype)serviceOrderModelInitWithDict:(NSDictionary*)dic{
+    return [[self alloc]initWithDic:dic];
+    
+}
+-(instancetype)initWithDic:(NSDictionary *)dic{
+    self = [super init];
+    if (self) {
+         _ID = [dic objectForKey:@"id"];
+        self.content_sn = dic[@"content_sn"];
+        self.create_time = dic[@"create_time"];
+        self.personal_name = dic[@"personal_name"];
+        self.total_price = dic[@"total_price"];
+        self.order_status = dic[@"order_status"];
+        self.service_time = dic[@"service_time"];
+        self.service_name =dic[@"ser"][@"service_name"];
+        self.service_img =dic[@"ser"][@"service_img"];
+        self.service_id = dic[@"ser"][@"service_id"];
+        self.orderStatus = [[dic objectForKey:@"_order_status"]integerValue];
+    }
+   
+    return self;
+}
+@end

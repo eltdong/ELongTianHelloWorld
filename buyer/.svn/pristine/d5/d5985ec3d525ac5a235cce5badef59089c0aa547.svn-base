@@ -1,0 +1,31 @@
+//
+//  AZFoucsImageView.h
+//  AZTestDemo
+//
+//  Created by Andrew on 15/3/31.
+//  Copyright (c) 2015年 Andrew. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+#define AZ_AUTO_TIMEOUT  3 // 3 second
+
+@protocol  AZFoucsImageViewDelegate <NSObject>
+
+@optional
+-(void)choseFoucsImageIndex:(NSInteger )index;
+
+@end
+
+
+
+/**
+    need thirdfarme SDWebImage
+ */
+@interface AZFoucsImageView : UIView
+
+@property(nonatomic,assign)id<AZFoucsImageViewDelegate>delegate;
+
+-(instancetype)initWithImageItems:(NSArray *)imageItemNames isLocal:(BOOL)isLocal andFrame:(CGRect )frame;
+
+@end

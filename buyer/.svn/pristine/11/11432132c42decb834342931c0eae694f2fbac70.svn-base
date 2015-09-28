@@ -1,0 +1,91 @@
+//
+//  ServiceViewCell.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/8.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTServiceOrderViewCell.h"
+#import "ELTOrderImageCollectionViewCell.h"
+
+@interface ELTServiceOrderViewCell()<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
+
+@end
+
+@implementation ELTServiceOrderViewCell
+
+- (void)awakeFromNib {
+    
+    _collectionView.dataSource=self;
+    _collectionView.delegate=self;
+    _collectionView.scrollEnabled = YES;
+    [_collectionView registerNib:[UINib nibWithNibName:@"ELTOrderImageCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"MyOrderCollectionViewCell"];
+    _collectionView.scrollEnabled = NO;
+    
+}
+
+-(void)setModel:(ELTMyServiceOrderModel *)model{
+    _model = model;
+    if (![_model.total_price isEqual:[NSNull null]]) {
+         _priceLabel.text = model.total_price;
+    }
+    
+    if ([_model.personal_name isEqual:[NSNull null]]) {
+        _numLabel.text =[NSString stringWithFormat:@"%@                    服务时长: %@小时",model.service_name,model.service_time];
+    }else{
+        _numLabel.text = [NSString stringWithFormat:@"%@                   %@",model.service_name,model.personal_name];
+
+    }
+    _timeLabel.text = model.create_time;
+    [_collectionView reloadData];
+    
+    
+}
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return 1;
+}
+
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
+}
+
+//每个UICollectionView展示的内容
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    ELTOrderImageCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MyOrderCollectionViewCell" forIndexPath:indexPath];
+        [cell.picImage setImageWithURL:[NSURL URLWithString:_model.service_img]];
+    
+    return cell;
+}
+#pragma mark --UICollectionViewDelegateFlowLayout
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return CGSizeMake((SCREENWIDTH - 60)/4, SCREENWIDTH / 4.27);
+    
+}
+
+//定义每个UICollectionView 的 margin
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(0, 0, 0, 0);
+}
+
+#pragma mark --UICollectionViewDelegate
+//UICollectionView被选中时调用的方法
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+    
+    // Configure the view for the selected state
+}
+
+- (IBAction)button:(UIButton *)sender {
+    if (self.delegates && [self.delegates respondsToSelector:@selector(serSelectItemAtIndexPath:)]) {
+        [self.delegates serSelectItemAtIndexPath:_model];
+    }
+}
+@end

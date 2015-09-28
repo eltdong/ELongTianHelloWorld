@@ -1,0 +1,62 @@
+//
+//  ServeIntroThreeCell.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/28.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTServicePersonDetailThreeCell.h"
+#import "ELTServiceRadio.h"
+
+@implementation ELTServicePersonDetailThreeCell
+
+- (void)awakeFromNib {
+    // Initialization code
+    self.buttonOne.layer.masksToBounds =YES;
+    self.buttonOne.tag = 0;
+    self.buttonOne.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.buttonOne.layer.borderWidth = 1.0f;
+    
+    self.buttonTwo.layer.masksToBounds =YES;
+    self.buttonTwo.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.buttonTwo.tag = 1;
+    self.buttonTwo.layer.borderWidth = 1.0f;
+    
+    self.buttonThree.layer.masksToBounds =YES;
+    self.buttonThree.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.buttonThree.tag = 2;
+    self.buttonThree.layer.borderWidth = 1.0f;
+    
+    self.buttonFour.layer.masksToBounds =YES;
+    self.buttonFour.layer.borderColor = UIColorFromRGB(0xf1f1f1).CGColor;
+    self.buttonFour.tag = 3;
+    self.buttonFour.layer.borderWidth = 1.0f;
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+- (void)setRadioArr:(NSMutableArray *)radioArr{
+    _radioArr = radioArr;
+    ELTServiceRadio * radioModel = [[ELTServiceRadio alloc]init];
+    radioModel = radioArr[0];
+    self.allEvaluation.text = [NSString stringWithFormat:@"全部评论(%@)",radioModel.num];
+    [self.buttonTwo setTitle:[self strWithRadioArr:radioArr withTag:1] forState:UIControlStateNormal];
+    [self.buttonThree setTitle:[self strWithRadioArr:radioArr withTag:2] forState:UIControlStateNormal];
+    [self.buttonFour setTitle:[self strWithRadioArr:radioArr withTag:3] forState:UIControlStateNormal];
+}
+-(NSString *)strWithRadioArr:(NSMutableArray * )radioArr withTag :(NSInteger)tag{
+   ELTServiceRadio * radioModel = [[ELTServiceRadio alloc]init];
+    radioModel = radioArr[tag];
+    return [NSString stringWithFormat:@"%@(%@)",radioModel.label,radioModel.num];
+    
+}
+- (IBAction)button:(UIButton *)sender {
+     [self.delegate serveIntro:sender.tag];
+}
+
+@end

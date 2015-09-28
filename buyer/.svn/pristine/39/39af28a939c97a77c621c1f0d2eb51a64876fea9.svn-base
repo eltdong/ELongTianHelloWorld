@@ -1,0 +1,21 @@
+//
+//  AdrressModel.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/24.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface ELTAdrressModel : ELTBaseModel
+
+@property (nonatomic,copy) NSString *address;
+
+@property (nonatomic,copy) NSString *mobilephone;
+
+@property (nonatomic,copy) NSString *name;
+
+@property (nonatomic,copy) NSString *ID;
+
+@end

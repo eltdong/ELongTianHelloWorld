@@ -1,0 +1,32 @@
+//
+//  shop_First_TableViewCell.h
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/24.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "ELTFruitAndVegatableModel.h"
+#import "ELTServiceDetailsModel.h"
+@interface ELTCommodityDetailOneCell : UITableViewCell
+
+@property (nonatomic,weak) UIViewController * vc;
+@property (weak, nonatomic) IBOutlet UILabel *priceLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *clock;
+@property (weak, nonatomic) IBOutlet UILabel *stroreLabel;
+#pragma mark - 各个控件
+@property (weak, nonatomic) IBOutlet UILabel *content_nameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *content_priceLabel;
+@property (weak, nonatomic) IBOutlet UILabel *content_saleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *reachtimeLabel;
+
+@property (weak,nonatomic) IBOutlet UIButton *storeBtn;
+@property (weak, nonatomic) IBOutlet UILabel *num;
+
+@property (weak, nonatomic) IBOutlet UILabel *eshopnameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *unit_price;
+
+@property (nonatomic,strong) ELTFruitAndVegatableModel * model;
+@property (nonatomic,strong) ELTServiceDetailsModel *serviceModel;
+@end

@@ -1,0 +1,44 @@
+//
+//  ServiceDetailsModel.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/31.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTServiceDetailsModel.h"
+#import "ELTServiceImageModel.h"
+
+@implementation ELTServiceDetailsModel
+-(instancetype)initDictionary:(NSDictionary *)dic{
+    self = [super init];
+    if (self) {
+        self.Id = dic[@"id"];
+        self.eshopname = dic[@"eshopname"];
+        self.eshop_id = dic[@"eshop_id"];
+        self.unit_price = OBJCINT(dic[@"unit_price"]);
+        self.promotion_price = OBJCINT(dic[@"promotion_price"]);
+        self.service_time = dic[@"service_time"];
+        self.service_name  = dic[@"service_name"];
+        self.content_sale = dic[@"content_sale"];
+        self.content_body = dic[@"content_body"];
+        self.is_limit = dic[@"is_limit"];
+        self.serviceper = dic[@"serviceper"];
+        if (![dic[@"show"] isEqual:@""]) {
+          self.content_img = [self addShowModel:dic[@"show"]];
+        }
+
+       
+    }
+    
+    return self;
+}
+- (NSArray *)addShowModel:(NSArray *)arr{
+    NSMutableArray *array =[NSMutableArray array];
+    for (NSDictionary *dic in arr) {
+        ELTServiceImageModel *model = [[ELTServiceImageModel alloc] initDictionary:dic];
+        [array  addObject:model];
+    }
+    return array;
+}
+@end

@@ -1,0 +1,17 @@
+//
+//  MassageViewController.h
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/28.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//  服务详情
+
+#import "BaseViewController.h"
+
+@interface ELTServiceListViewController : BaseViewController
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet UIView *gotop;
+
+@property (nonatomic,copy) NSString * classificationName;
+@property (nonatomic,copy) NSString *ID;
+@end

@@ -1,0 +1,504 @@
+//
+//  FVDetailViewController.m
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/21.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTServiceDetailViewController.h"
+
+#import "ELTShopDetailTableViewCell.h"
+#import "ELTCommodityDetailOneCell.h"
+#import "ELTCommodityDetailTwoCell.h"
+#import "ELTCommodityDetailThreeCell.h"
+#import "ELTCommodityDetailFourCell.h"
+#import "ELTCommodityListViewController.h"
+#import "ELTServicePersonDetailFourCell.h"
+
+#import "ELTSelectServicePersonelViewController.h"
+#import "ELTOrderSubLimitViewController.h"
+#import "ELTOrderSubUnlimitedViewController.h"
+
+#import "ELTServiceImageModel.h"
+#import "ELTEvaluationContentModel.h"
+#import "ELTEvaluationListModel.h"
+#import "ELTEvaluateListCenterViewController.h"
+#import "ELTServiceShopDeatilViewController.h"
+@interface ELTServiceDetailViewController ()<UITableViewDataSource,UITableViewDelegate,shop_Sec_delegate,sdtDelegate,UIWebViewDelegate>
+{
+    ELTEvaluationListModel *_ALlModel;
+    NSString *_shoppe_id;//店铺id
+}
+@property ( nonatomic,assign) BOOL isClicked;
+@property (nonatomic,assign) CGFloat webViewHeght;//webview的高度
+@property (nonatomic ,strong) NSMutableArray  *dataArr;
+@end
+
+@implementation ELTServiceDetailViewController
+
+- (void)viewDidLoad {
+    
+    [super viewDidLoad];
+    self.tableView.backgroundColor = UIColorFromRGB(0xf5f5f5);
+    _mainWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 0)];
+    _mainWebView.delegate = self;
+    _mainWebView.scrollView.bounces = NO;
+    _mainWebView.scrollView.showsHorizontalScrollIndicator = NO;
+    _mainWebView.scrollView.scrollEnabled = NO;
+    [_mainWebView sizeToFit];
+    
+    [self.indicator startAnimatingActivit];
+    NSString * xml = [[NSString alloc] init];
+    if ([self.model.content_body isEqual:[NSNull null]]) {
+        xml = [NSString stringWithFormat:@"<div id=\"webview_content_wrapper\">暂无介绍</div>"];
+    }else{
+        xml = [NSString stringWithFormat:@"<div id=\"webview_content_wrapper\">%@</div>",self.model.content_body];
+
+    }
+    [_mainWebView loadHTMLString:xml baseURL:nil];
+    
+    self.title = @"服务详情";
+    self.isClicked = NO;
+    self.view .backgroundColor =[UIColor whiteColor];
+    [self.view bringSubviewToFront:self.selectedBtn];
+    self.selectedBtn.layer.masksToBounds = YES;
+    self.selectedBtn.layer.borderWidth = 0.1f;
+    self.selectedBtn.layer.cornerRadius = 5.0f;
+    [self.selectedBtn setTitle:@"马上预约" forState: UIControlStateNormal];
+    self.unlimitedBtn.hidden = YES;
+    [self createUI];
+    _dataArr = [NSMutableArray array];
+    if ([self.model.is_limit integerValue] == 1) {
+        self.isLimited = NO;
+    }
+    else{
+        self.isLimited =YES;
+    }
+    [self downRequest];
+}
+-(void)home:(id)sender{
+    
+}
+#pragma mark -- 评价数据
+- (void)downRequest{
+     [self.indicator LoadSuccess];
+    [ELRequestSingle screenRequestWithBlock:^(BOOL sucess, id objc) {
+        _ALlModel= objc;
+        [_dataArr addObject:_ALlModel.radio];
+        [_dataArr addObjectsFromArray:_ALlModel.review];
+        [_tableView reloadData];
+        
+    } andLink_id:_model.Id andType:0 andPlugin:@"com_shopService" andRow:10 andPage:1];
+ 
+}
+
+-(void)back:(id)sender{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+-(void)createUI{
+
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.showsVerticalScrollIndicator = NO;
+    
+    
+}
+#pragma mark - tabbleViewDelegate yd
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 2 ;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    switch (section) {
+        case 0:
+        {
+            return 3;
+        }
+            break;
+        case 1:
+        {
+            if (_isClicked) {
+                return  OBJC(_dataArr)?_dataArr.count:2;
+            }else{
+                return 1;
+            }
+    
+          
+        }
+            break;
+        default:{
+            return 0;
+        }
+            break;
+    }
+
+}
+-(UITableViewCell * )tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+   
+    switch (indexPath.section) {
+        case 0:
+        {
+            switch (indexPath.row) {
+                case 0:
+                {
+                    ELTShopDetailTableViewCell * cell = [[[NSBundle mainBundle] loadNibNamed:@"ELTShopDetailTableViewCell" owner:self options:nil]lastObject];
+                    self.mainScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 210)];
+                    [cell addSubview:self.mainScrollView];
+                    NSMutableArray *arr = [NSMutableArray array];
+                    for (ELTServiceImageModel *model  in _model.content_img) {
+                        [arr addObject:model.content_img];
+                    }
+                   
+                    [self createBanner:arr];
+                    
+                    return cell;
+                }
+                    break;
+                case 1:
+                {
+                    ELTCommodityDetailOneCell * cell = [[[NSBundle mainBundle]loadNibNamed:@"ELTCommodityDetailOneCell" owner:self options:nil]lastObject];
+                    cell.vc = self;
+                    cell.serviceModel = self.model;
+                    cell.clock.hidden = YES;
+                    _shoppe_id = self.model.eshop_id;
+                    [cell.storeBtn addTarget:self action:@selector(storeBtnClick) forControlEvents:UIControlEventTouchUpInside];
+                    return cell;
+                }
+                    break;
+                case 2:
+                {
+                    ELTCommodityDetailTwoCell * cell = [ELTCommodityDetailTwoCell tabbleViewCell:tableView];
+                    if (self.isClicked) {
+                        cell.isYesOrNO = self.isClicked;
+                    }
+                    
+                  cell.delegate = self;
+                    return cell;
+                }
+                    break;
+                default:
+                    return 0;
+                    break;
+            }
+
+        }
+            break;
+         case 1:
+        
+        {
+            if (!_isClicked) {
+                
+                switch (indexPath.row) {
+                    case 0:
+                    {
+                        ELTShopDetailTableViewCell * cell = [[[NSBundle mainBundle] loadNibNamed:@"ELTShopDetailTableViewCell" owner:self options:nil]lastObject];
+                    
+                        cell.backgroundColor = [UIColor greenColor];
+                        [cell addSubview:_mainWebView];
+                        cell.selectionStyle =
+                        UITableViewCellSelectionStyleNone;
+                        return cell;
+                    }
+                        break;
+                    default:
+                        return 0;
+                        break;
+                }
+
+            }
+            else{
+                switch (indexPath.row) {
+                    case 0:
+                    {
+                        
+                        
+                        ELTCommodityDetailThreeCell * cell = [[[NSBundle mainBundle]loadNibNamed:@"ELTCommodityDetailThreeCell" owner:self options:nil]lastObject];
+                       
+                        if (_ALlModel) {
+                            cell.radioArr = _ALlModel.radio;
+                        }
+                        cell.delegate = self;
+                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                        return cell;
+                    }
+                        break;
+                        
+                    default:
+                    {
+                        static  NSString * cellId = @"SDFF";
+                        ELTServicePersonDetailFourCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId ];
+                        if (!cell) {
+                            cell = [[ELTServicePersonDetailFourCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+                        }
+                        
+                        ELTEvaluationContentModel  *model = _dataArr[indexPath.row];
+                         cell.model = model;
+                         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                        return cell;
+                    }
+                        break;
+                }
+
+            
+            }
+            
+
+        }
+            break;
+        default:
+        {
+            return 0;
+        }
+            break;
+    }
+
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    switch (indexPath.section) {
+        case 0:
+        {
+            switch (indexPath.row) {
+                case 0:
+                    return 210 ;
+                    break;
+                case 1:
+                    return 135;
+                    break;
+                case 2:
+                    return 45;
+                    break;
+                default:
+                    return 0;
+                    break;
+            }
+            
+        }
+            break;
+        case 1:
+        {
+            
+            if (!self.isClicked) {
+                switch (indexPath.row) {
+                    case 0:
+                    {
+                        return _mainWebView.frame.size.height;
+                    }
+                        break;
+                        
+                    default:
+                    {
+                        return 0;
+                    }
+                        break;
+                }
+            }
+            else{
+                switch (indexPath.row) {
+                    case 0:
+                    {
+                        return 41.5;
+                    }
+                        break;
+                        
+                    default:
+                    {
+                        UITableViewCell *cell = [self tableView: tableView cellForRowAtIndexPath:indexPath ];
+                        return cell.frame.size.height ;
+                    }
+                        break;
+                }
+                
+            }
+            
+            
+            
+        }
+            break;
+        default:
+        {
+            return 0;
+        }
+            break;
+    }
+    
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.section==1&&indexPath.row!=0) {
+        ELTEvaluateListCenterViewController * commentList = [[ELTEvaluateListCenterViewController alloc]init];
+        commentList.btnType = @"0";
+        commentList.shopID = _model.Id;
+        commentList.evaluationType = ServiceEvaluation;
+        [self.navigationController pushViewController:commentList animated:YES];
+        
+    }
+}
+#pragma mark - 轮播图得代理方法  yd
+- (void)createBanner:(NSMutableArray *)arr
+{
+    
+    _Topic = [[JCTopic alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 210)];
+    //代理
+    _Topic.JCdelegate = self;
+    //创建数据
+    NSMutableArray * tempArray = arr;
+    _Topic.pics = tempArray;
+    //_Topic.isWidth = YES;
+    _Topic.isURL = YES;
+    [_Topic upDate];
+    _Topic.userInteractionEnabled = YES;
+    [_mainScrollView addSubview:_Topic];
+    
+    UIView * page_bjView = [[UIView alloc]initWithFrame:CGRectMake(0, _mainScrollView.frame.size.height-13, _Topic.frame.size.width, 13)];
+    page_bjView.alpha = 0.3;
+    [_mainScrollView addSubview:page_bjView];
+    
+    _pageView = [[StyledPageControl alloc]initWithFrame:CGRectMake(_Topic.frame.origin.x+20, _mainScrollView.frame.size.height-13, _Topic.frame.size.width-40, 13)];
+    
+    [_mainScrollView addSubview:_pageView];
+    
+    [_pageView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    
+    [_pageView setPageControlStyle:5];
+    [_pageView setThumbImage:[UIImage imageNamed:@"elt_circles"]];
+    [_pageView setSelectedThumbImage:[UIImage imageNamed:@"elt_circle_cr"]];
+    [_pageView setNumberOfPages:(int)[tempArray count]];
+    [_pageView setCurrentPage:0];
+}
+-(void)currentPage:(int)page total:(NSUInteger)total withscrollview:(JCTopic *)jc
+{
+    if(jc == _Topic)
+    {
+        [_pageView setCurrentPage:page];
+    }
+}
+
+- (void)didClick:(id)data withscrollview:(UIScrollView *)jc
+{
+    if(jc == _Topic)
+    {
+        UIButton * btn = (UIButton *)data;
+        DLog(@"+++%ld",(long)btn.tag);
+        switch (btn.tag) {
+            case 1:
+            {
+                
+            }
+                break;
+            case 2:
+            {
+                
+            }
+                break;
+            case 3:
+            {
+                
+            }
+                break;
+            case 4:
+            {
+                
+            }
+                break;
+                
+            default:
+                break;
+        }
+        
+    }
+    else
+    {
+        
+    }
+}
+
+#pragma mark - 评价和简介 yd
+-(void)btnClicked:(BOOL )isYesOrNo{
+   
+    
+    self.isClicked  = isYesOrNo;
+    NSIndexSet *indexSet=[[NSIndexSet alloc]initWithIndex:1];
+    
+    [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
+    
+}
+
+#pragma  mark - 下一级跳转
+- (IBAction)selectedBtn:(id)sender {
+    
+
+    
+    _isLimited = ([_model.is_limit isEqualToString:@"1"]?NO:YES);
+    if(_isLimited){
+        ELTOrderSubLimitViewController *view = [[ELTOrderSubLimitViewController alloc]init];
+        
+        view.shoppe_id = _model.eshop_id;
+        view.isLimited = _isLimited;
+        view.price = _model.unit_price;
+        view.model = _model;
+        
+        [self.navigationController pushViewController:view animated:YES];
+    }else{
+        ELTOrderSubUnlimitedViewController *osl =[[ELTOrderSubUnlimitedViewController alloc]init];
+        osl.isLimited = _isLimited;
+        osl.model = _model;
+        [self.navigationController pushViewController:osl animated:YES];
+    }
+}
+#pragma mark - 无限资源跳转 （没用  可以删除）
+- (IBAction)unlimitedBtn:(id)sender {
+
+}
+-(void)jumpNextVc:(NSString *)str{
+ 
+    ELTEvaluateListCenterViewController * commentList = [[ELTEvaluateListCenterViewController alloc]init];
+    commentList.btnType = str;
+    commentList.shopID = _model.Id;
+    commentList.evaluationType = ServiceEvaluation;
+    [self.navigationController pushViewController:commentList animated:YES];
+
+}
+#pragma mark -- 服务详情页店铺跳转
+- (void)storeBtnClick{
+    
+   [self.indicator setIndicatorType:ActivityIndicatorLogin];
+    [self.indicator startAnimatingActivit];
+    ELTServiceShopDeatilViewController *view = [[ELTServiceShopDeatilViewController alloc]init];
+    view.shoppe_id = _shoppe_id;
+    [ELRequestSingle shopDetailWithRequest:^(BOOL sucess, id objc) {
+        view.dataArray = objc;
+        
+        [self.navigationController pushViewController:view animated:YES];
+    [self.indicator LoadSuccess];
+    } andShoppe_id:_shoppe_id];
+    
+
+
+}
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    
+    //获取页面高度（像素）
+    NSString * clientheight_str = [webView stringByEvaluatingJavaScriptFromString: @"document.body.offsetHeight"];
+    float clientheight = [clientheight_str floatValue];
+    //设置到WebView上
+    webView.frame = CGRectMake(0, 0, self.view.frame.size.width, clientheight);
+    //获取WebView最佳尺寸（点）
+    CGSize frame = [webView sizeThatFits:webView.frame.size];
+    //获取内容实际高度（像素）
+    NSString * height_str= [webView stringByEvaluatingJavaScriptFromString: @"document.getElementById('webview_content_wrapper').offsetHeight + parseInt(window.getComputedStyle(document.getElementsByTagName('body')[0]).getPropertyValue('margin-top'))  + parseInt(window.getComputedStyle(document.getElementsByTagName('body')[0]).getPropertyValue('margin-bottom'))"];
+    float height = [height_str floatValue];
+    //内容实际高度（像素）* 点和像素的比
+    height = height * frame.height / clientheight;
+    //再次设置WebView高度（点）
+    webView.frame = CGRectMake(0, 0, self.view.frame.size.width, height+40);
+    
+    [self.tableView reloadData];
+    [self.indicator LoadSuccess];
+    
+    
+}
+
+@end

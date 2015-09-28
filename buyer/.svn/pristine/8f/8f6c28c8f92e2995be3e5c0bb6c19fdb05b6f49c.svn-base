@@ -1,0 +1,17 @@
+//
+//  ServiceRadio.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/6.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface ELTServiceRadio : ELTBaseModel
+//"label": "全部",
+//"value": "0"
+@property (nonatomic,copy) NSString * label;
+@property (nonatomic,copy) NSString * value;
+@property (nonatomic, copy) NSString * num;
+@end

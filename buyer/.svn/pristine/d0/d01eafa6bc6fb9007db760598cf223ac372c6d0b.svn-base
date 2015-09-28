@@ -1,0 +1,20 @@
+//
+//  ServiceShopDetailModel.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/9.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface ELTServiceShopDetailModel : ELTBaseModel
+@property (nonatomic ,copy)  NSString *auto_code;//分类编码
+@property (nonatomic ,copy)  NSString *modules_name;//一级服务分类名称
+@property (nonatomic ,copy)  NSString *Id;//服务ID
+@property (nonatomic ,copy)  NSString *service_name;//服务名称
+@property (nonatomic ,copy)  NSString *content_img;//服务图片
+@property (nonatomic ,copy)  NSString *unit_price;//服务单价
+@property (nonatomic ,copy)  NSMutableArray *classArray;
+@property (nonatomic ,copy)  NSMutableArray *proArray;
+@end

@@ -1,0 +1,15 @@
+//
+//  MainCollectionViewCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/3.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface MainCollectionViewCell : UICollectionViewCell
+
+@property (nonatomic,strong) IBOutlet UILabel *nameLabel;
+
+@end

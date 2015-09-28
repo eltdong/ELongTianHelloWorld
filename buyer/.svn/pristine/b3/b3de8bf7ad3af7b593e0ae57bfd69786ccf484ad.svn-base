@@ -1,0 +1,38 @@
+//
+//  OrderSuccessViewController.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/1.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "BaseViewController.h"
+/**
+ *  填写订单界面cell
+ */
+/**
+ *  下单成功提示页面
+ */
+@protocol OrderSuccessViewControllerDelegate <NSObject>
+
+@optional
+
+-(void)first:(UIButton *)button;//我的订单按钮点击
+
+-(void)second:(UIButton *)button;//继续购物按钮点击
+
+@end
+
+@interface ELTOrderSuccessViewController : BaseViewController
+
+@property (nonatomic,strong) UIImageView *topImage;//成功图片
+
+@property (nonatomic,strong) UILabel *label;
+
+@property (nonatomic,strong) UIButton *firstBtn;//我的订单按钮点击
+
+@property (nonatomic,strong) UIButton *secondBtn;//继续购物按钮点击
+
+@property (nonatomic, assign) id<OrderSuccessViewControllerDelegate>delegate;
+
+@end

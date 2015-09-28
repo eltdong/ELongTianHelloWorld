@@ -1,0 +1,64 @@
+//
+//  MassageCollectionViewCell.m
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/28.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTServiceListCollectionViewCell.h"
+#import "ELTServiceModel.h"
+
+@implementation ELTServiceListCollectionViewCell
+
+- (void)awakeFromNib {
+    // Initialization code
+  
+    
+}
+-(void)setModel:(ELTServiceModel *)model{
+    _model = model;
+    self.title.text = model.service_name;
+   self.ShopLabel.text = model.eshopname;
+    self.SaleLabel.text =  [NSString    stringWithFormat:@"月销量%@", model.month_sale];
+    
+    if ([_model.service_time isEqual:[NSNull null]]) {
+        self.timeLabel.text = [NSString stringWithFormat:@"时长:0小时"];
+    }else{
+     self.timeLabel.text = [NSString stringWithFormat:@"时长: %@小时",model.service_time];
+    }
+    
+    
+    if (![model.promotion_price isEqual:[NSNull null]]) {
+        NSArray * arr = [model.promotion_price  componentsSeparatedByString:@"."];
+        
+        self.PriceLabel.text =[NSString stringWithFormat:@"%@.",arr[0]];
+        
+        if ([model.is_limit isEqualToString:@"1"]) {
+            self.PriceLables.text =[NSString  stringWithFormat:@"%@/小时",arr[1]];
+            self.timeLabel.hidden =YES;
+        }else{
+            self.timeLabel.hidden =NO;
+            self.PriceLables.text = self.PriceLables.text =[NSString  stringWithFormat:@"%@",arr[1]];
+            ;
+        }
+        
+ 
+    }else{
+     self.PriceLabel.text =@"0";
+     self.PriceLables.hidden = YES;
+    
+    }
+    self.ShowImage.contentMode = UIViewContentModeScaleAspectFit;
+    [self.ShowImage setImageWithURL:[NSURL URLWithString:model.content_img] placeholderImage:nil];
+ 
+
+    
+}
+
+-(void)setSerModel:(ServiceShopDetailModel *)SerModel{
+
+
+
+}
+@end

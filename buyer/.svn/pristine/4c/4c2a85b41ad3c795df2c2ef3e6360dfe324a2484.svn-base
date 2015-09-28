@@ -1,0 +1,52 @@
+//
+//  MyShopCart.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/11.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "MyShopCart.h"
+#import "ELTShopCartCommodityModel.h"
+#import "ELTShopCartCouponModel.h"
+
+@implementation MyShopCart
+
+-(void)setValue:(id)value forUndefinedKey:(NSString *)key{
+    
+    
+}
+
++(instancetype)myShopCartInitWithDict:(NSDictionary*)dic{
+    
+    return [[self alloc]initWithDic:dic];
+    
+}
+-(instancetype)initWithDic:(NSDictionary *)dict{
+    
+    [self setValuesForKeysWithDictionary:dict];
+    _msg = [[dict objectForKey:@"expresspay"] objectForKey:@"msg"];
+    _sele = [[dict objectForKey:@"sele"]boolValue];
+    _ID = [dict objectForKey:@"id"];
+    _realCouponPay = _realPay;
+    _remark = @"";
+    _selectCouponId = @"";
+    NSMutableArray *array = [NSMutableArray array];
+    for (NSDictionary *dic in _pro) {
+        ELTShopCartCommodityModel *model = [ELTShopCartCommodityModel commidyModelInitWithDict:dic];
+        [array addObject:model];
+    }
+    _pro = array;
+    
+    NSMutableArray *couponArray = [NSMutableArray array];
+    for (NSDictionary *dic in _coupon) {
+        ELTShopCartCouponModel *model = [ELTShopCartCouponModel couponInitWithDict:dic];
+        [couponArray addObject:model];
+    }
+    _coupon = couponArray;
+
+    return self;
+    
+}
+
+@end

@@ -1,0 +1,23 @@
+//
+//  MainTimeView.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/25.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+@protocol MainTimeViewButton <NSObject>
+- (void)mainTimeButton:(UIButton *)button;
+@end
+@interface MainTimeView : UIView
+
+@property (strong, nonatomic) IBOutlet UIButton *buttonOne;
+
+@property (strong, nonatomic) IBOutlet UIButton *buttonTwo;
+
+@property (strong, nonatomic) IBOutlet UIButton *buttonThree;
+
+@property (strong, nonatomic) IBOutlet UIButton *buttonFour;
+@property (nonatomic ,assign)  id<MainTimeViewButton>delegate;
+@end

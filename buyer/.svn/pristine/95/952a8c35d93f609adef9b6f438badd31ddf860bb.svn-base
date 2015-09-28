@@ -1,0 +1,24 @@
+//
+//  EvaluationModel.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/2.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface ELTEvaluationContentModel : ELTBaseModel
+@property (nonatomic ,strong)  NSString *ID;//评价id
+@property (nonatomic ,strong)  NSString *content_user;//评价用户
+@property (nonatomic ,strong)  NSString *evaluation_content;//评价内容
+@property (nonatomic ,strong)  NSString *content_img;//头像
+@property (nonatomic ,strong)  NSString *create_time;//评价时间
+@property (nonatomic ,strong)  NSArray *review_img;//评价图片
+
+@property (nonatomic ,strong)  NSString *label;//筛选按钮名称
+@property (nonatomic ,strong)  NSString *value;//筛选条件
+@property (nonatomic ,strong)  NSString *num;//评论数量
+
+- (instancetype)initDictionary:(NSDictionary *)dic;
+@end

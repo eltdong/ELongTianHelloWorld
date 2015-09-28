@@ -1,0 +1,92 @@
+//
+//  ShopDetailModel.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/22.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+#import "ELTPhotosModel.h"
+
+@interface ELTShopDetailModel : ELTBaseModel
+
+@property (nonatomic,copy) NSString *ID;//店铺列表
+
+@property (nonatomic,copy) NSString *name;//店铺名称
+
+@property (nonatomic,copy) NSString *content_img;//店铺头像
+
+@property (nonatomic,copy) NSString *send_price;//店铺起送价格
+
+@property (nonatomic,copy) NSString *sale_num;//店铺销量
+
+@property (nonatomic,copy) NSString *address;//店铺地址
+
+@property (nonatomic,copy) NSString *closeTime;//店铺关门时间
+
+@property (nonatomic,copy) NSString *openTime;//店铺开门时间
+
+@property (nonatomic,strong) NSMutableArray *show;//店铺图片
+
+@property (nonatomic,strong) NSMutableArray * photoArray;
+
+@property (nonatomic, copy) NSString * auto_code;
+/**
+ *  商品id
+ */
+@property (nonatomic,copy) NSString * fvId;
+/**
+ *  店主id
+ */
+@property (nonatomic,copy) NSString * member_id;
+/**
+ *  店铺id
+ */
+@property (nonatomic,copy) NSString * shoppe_id;
+/**
+ *  商品库id
+ */
+@property (nonatomic,copy) NSString * product_id;
+/**
+ *  商品名称
+ */
+@property (nonatomic,copy) NSString *content_name;
+
+/**
+ *  售价
+ */
+@property (nonatomic,copy) NSString * content_preprice;
+/**
+ *  商品状态
+ */
+@property (nonatomic,copy) NSString * content_shelf;
+/**
+ *  销量
+ */
+@property (nonatomic,copy) NSString * Content_sale;
+/**
+ *  E店名称
+ */
+@property (nonatomic,copy) NSString *eshopname;
+/**
+ *  送到时间
+ */
+@property (nonatomic,copy) NSString *reachtime;
+/**
+ *  简介
+ */
+@property (nonatomic,copy) NSString *content_mbody;
+/**
+ *  数组
+ */
+@property (nonatomic,strong) NSMutableArray * proArray;
+
+
+@property (nonatomic,strong) NSMutableArray * classArray;
+
++(instancetype)shopDetailInitWithDict:(NSDictionary*)dic;
++(instancetype)shopListInitWithDict:(NSDictionary*)dic;
+-(instancetype)initWithDic:(NSDictionary *)dict;
+
+@end

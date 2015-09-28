@@ -1,0 +1,24 @@
+//
+//  PrefixHeader.pch
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/7/28.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#ifndef GuoanBuyer_PrefixHeader_pch
+#define GuoanBuyer_PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import "Const.h"
+#import "UIView+additional.h"
+#import "UIImageView+AFNetworking.h"
+#import "ELRequestSingle.h"
+#import "ELHttpRequestOperation.h"
+#import "JSONKit.h"
+#import "Tools.h"
+#import "CommonFunc.h"
+
+#endif

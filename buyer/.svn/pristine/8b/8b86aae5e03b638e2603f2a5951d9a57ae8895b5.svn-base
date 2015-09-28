@@ -1,0 +1,34 @@
+//
+//  ELNavBarSearch.h
+//  TangRen
+//
+//  Created by 易龙天 on 15/6/9.
+//  Copyright (c) 2015年 易龙天. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "ELButton.h"
+
+@protocol ELNavBarSearchDelegate <NSObject>
+
+@optional
+//种类点击事件
+- (void)typeBtnClicked:(id)sender;
+//扫一扫点击事件
+-(void)sweepBtnClicked:(id)sender;
+//搜索框点击事件
+-(void)searchTextClicked:(id)sender;
+
+@end
+
+
+@interface ELNavBarSearch : UIView
+
+@property (nonatomic, retain) ELButton * typeBtn;
+@property (nonatomic, retain) UIImageView * searchText;
+@property (nonatomic, retain) ELButton * sweepBtn;
+@property (nonatomic, assign) BOOL typeBtnHidden;
+@property (nonatomic, retain) UILabel * aLabel;
+
+@property (nonatomic, assign) id<ELNavBarSearchDelegate>delegate;
+@end

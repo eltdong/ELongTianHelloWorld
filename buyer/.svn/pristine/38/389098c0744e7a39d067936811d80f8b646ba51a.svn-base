@@ -1,0 +1,29 @@
+//
+//  SSTSCollectionViewCell.h
+//  Guoan Test
+//
+//  Created by elongtian on 15/7/29.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+/**
+ *  选着服务时间cell
+ */
+#import <UIKit/UIKit.h>
+@class ELTSelectTimeCollectionViewCell;
+@protocol builtinBtnDelegate <NSObject>
+
+-(void)btnClicked:(UIButton * )btn;
+
+@end
+
+
+
+@interface ELTSelectTimeCollectionViewCell : UICollectionViewCell
+@property (weak, nonatomic) IBOutlet UIButton *timeButton;
+
+- (IBAction)time:(id)sender;
+
+
+@property (nonatomic,assign) id<builtinBtnDelegate>delegate;
+@end

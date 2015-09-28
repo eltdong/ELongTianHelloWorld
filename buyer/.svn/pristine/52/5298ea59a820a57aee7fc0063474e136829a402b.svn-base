@@ -1,0 +1,25 @@
+//
+//  ShopDetailTwoCell.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/3.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@protocol ShopDetailTwoCellDelegate <NSObject>
+
+-(void)didSelect:(NSIndexPath *)indexPath;
+
+@end
+
+@interface ShopDetailTwoCell : UITableViewCell<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
+
+@property (nonatomic,strong) IBOutlet UICollectionView *collectionView;
+
+@property (nonatomic,assign) id<ShopDetailTwoCellDelegate>delegate;
+
+
+
+@end

@@ -1,0 +1,19 @@
+//
+//  ServiceShowModel.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/31.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTServiceImageModel.h"
+
+@implementation ELTServiceImageModel
+-(instancetype)initDictionary:(NSDictionary *)dic{
+    self = [super init];
+    if (self) {
+        self.content_img = dic[@"content_img"];
+    }
+    return self;
+}
+@end

@@ -1,0 +1,41 @@
+//
+//  OrderDetailModel.h
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/13.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTBaseModel.h"
+
+@interface OrderDetailModel : ELTBaseModel
+
+@property (nonatomic,copy) NSString *ID;//订单id
+
+@property (nonatomic,copy) NSString *eshop_id;//店铺ID
+
+@property (nonatomic,copy) NSString *order_status;//订单状态
+
+@property (nonatomic,copy) NSString *label;//店名
+
+@property (nonatomic,copy) NSString *consignee;//收货人
+
+@property (nonatomic,copy) NSString *consignee_phone;//收货人电话
+
+@property (nonatomic,copy) NSString *address;//收货地址
+
+@property (nonatomic,copy) NSString *amount;//应付金额
+
+@property (nonatomic,copy) NSString *order_remarks;//下单备注
+
+@property (nonatomic,copy) NSString *create_time;//下单时间
+
+@property (nonatomic,copy) NSString *total_price;//订单金额
+
+@property (nonatomic,strong) NSMutableArray *picArray;//商品列表
+
+@property (nonatomic,copy) NSString *tel;//电话
+
+@property (nonatomic,copy) NSString *coupon_id;//代金券
+
+@end

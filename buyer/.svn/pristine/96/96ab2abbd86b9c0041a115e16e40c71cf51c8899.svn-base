@@ -1,0 +1,45 @@
+//
+//  ServiceDetailModel.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/9/6.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTerviceDetailModel.h"
+#import "ELTServiceRadio.h"
+#import "ELTServiceReivew.h"
+@implementation ELTerviceDetailModel
++(instancetype)ServiceDetailModelInitWithDict:(NSDictionary*)dic{
+    
+    return [[self alloc]initWithDic:dic];
+    
+}
+-(instancetype)initWithDic:(NSDictionary *)dict{
+    self.review= [NSMutableArray array];
+    self.radio = [NSMutableArray array];
+    
+   
+    if ([dict[@"review"] isKindOfClass:[NSString class]]) {
+        
+    }else{
+        
+        for (NSDictionary * dic in dict[@"review"]) {
+            ELTServiceReivew * reviewModel =[[ELTServiceReivew alloc]initDictionary:dic];
+            [self.review addObject:reviewModel];
+        }
+
+    }
+    for (NSDictionary * dic in dict[@"radio"]) {
+       ELTServiceRadio * radioModel =[[ELTServiceRadio alloc]init];
+        
+        [radioModel setValuesForKeysWithDictionary:dic];
+        [self.radio addObject:radioModel];
+    }
+    
+    return self;
+    
+}
+
+
+@end

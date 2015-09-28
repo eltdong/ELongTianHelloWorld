@@ -1,0 +1,44 @@
+//
+//  CommodityDetailModel.m
+//  GuoanBuyer
+//
+//  Created by elongtian on 15/8/14.
+//  Copyright (c) 2015年 elongtian. All rights reserved.
+//
+
+#import "ELTCommodityDetailModel.h"
+#import "ReivewModel.h"
+#import "Radio.h"
+@implementation ELTCommodityDetailModel
++(instancetype)commodityDetailModelInitWithDict:(NSDictionary*)dic{
+    
+    return [[self alloc]initWithDic:dic];
+    
+}
+-(instancetype)initWithDic:(NSDictionary *)dict{
+    /**
+     * 在.h文件中声明的数组要初始化
+     */
+     self.review= [NSMutableArray array];
+    self.radio = [NSMutableArray array];
+    if (![dict[@"review"] isEqual:[NSNull null]]) {
+        for (NSDictionary * dic in dict[@"review"]) {
+            ReivewModel * reviewModel =[[ReivewModel alloc]init];
+            
+            [reviewModel setValuesForKeysWithDictionary:dic];
+            
+            [self.review addObject:reviewModel];
+        }
+    }
+    
+    for (NSDictionary * dic in dict[@"radio"]) {
+        Radio * radioModel =[[Radio alloc]init];
+        
+        [radioModel setValuesForKeysWithDictionary:dic];
+        [self.radio addObject:radioModel];
+    }
+    return self;
+    
+}
+
+@end
